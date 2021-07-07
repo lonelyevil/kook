@@ -7,7 +7,7 @@ A low level library for interacting with kaiheila(开黑啦) bot API. Currently,
 
 ## Get Started
 
-It is not recommended use it in production until it released `v1.0.0`.
+It is not recommended to use it in production until it releases `v1.0.0`.
 
 ### Installing
 
