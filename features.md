@@ -40,19 +40,19 @@
     - [x] 获取频道消息某个回应的用户列表 `message/reaction-list`
     - [x] 给某个消息添加回应 `message/add-reaction`
     - [x] 删除消息的某个回应 `message/delete-reaction`
-  - [ ] 私信聊天会话接口 `user-chat`
-    - [ ] 获取私信聊天会话列表 `user-chat/list`
-    - [ ] 获取私信聊天会话详情 `user-chat/view`
+  - [x] 私信聊天会话接口 `user-chat`
+    - [x] 获取私信聊天会话列表 `user-chat/list`
+    - [x] 获取私信聊天会话详情 `user-chat/view`
     - [x] 创建私信聊天会话 `user-chat/create`
     - [x] 删除私信聊天会话 `user-chat/delete`
-  - [ ] 用户私聊消息接口 `direct-message`
-    - [ ] 获取私信聊天消息列表 `direct-message/list`
+  - [x] 用户私聊消息接口 `direct-message`
+    - [x] 获取私信聊天消息列表 `direct-message/list`
     - [x] 发送私信聊天消息 `direct-message/create`
     - [x] 更新私信聊天消息 `direct-message/update`
     - [x] 删除私信聊天消息 `direct-message/delete`
-    - [ ] 获取频道消息某个回应的用户列表 `direct-message/reaction-list`
-    - [ ] 给某个消息添加回应 `direct-message/add-reaction`
-    - [ ] 删除消息的某个回应 `direct-message/delete-reaction`
+    - [x] 获取频道消息某个回应的用户列表 `direct-message/reaction-list`
+    - [x] 给某个消息添加回应 `direct-message/add-reaction`
+    - [x] 删除消息的某个回应 `direct-message/delete-reaction`
   - [x] Gateway `gateway`
     - [x] 获取网关连接地址 `gateway/index`
   - [x] 用户相关接口 `user`
