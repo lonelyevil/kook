@@ -2,6 +2,10 @@
 
 KHL 是一个低级的和开黑啦机器人交互的软件库。目前她还在开发中。
 
+[![Go Reference](https://pkg.go.dev/badge/github.com/lonelyevil/khl.svg)](https://pkg.go.dev/github.com/lonelyevil/khl)
+[![Go Report Card](https://goreportcard.com/badge/github.com/lonelyevil/khl)](https://goreportcard.com/report/github.com/lonelyevil/khl)
+
+
 ## 开始
 
 直到 `v1.0.0` 发布为止，不建议在生产中使用。
