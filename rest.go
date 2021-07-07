@@ -383,6 +383,45 @@ func (s *Session) ChannelRoleDelete(crd *ChannelRoleDelete) (err error) {
 	return err
 }
 
+// UserChatList returns a list of user chats that bot owns.
+//
+// Note: for User in TargetInfo, only ID, Username, Online, Avatar is filled
+//
+// FYI: https://developer.kaiheila.cn/doc/http/user-chat#%E8%8E%B7%E5%8F%96%E7%A7%81%E4%BF%A1%E8%81%8A%E5%A4%A9%E4%BC%9A%E8%AF%9D%E5%88%97%E8%A1%A8
+func (s *Session) UserChatList(page *PageSetting) (ucs []*UserChat, meta *PageInfo, err error) {
+	var response []byte
+	response, meta, err = s.RequestWithPage("GET", EndpointUserChatList, page)
+	if err != nil {
+		return nil, nil, err
+	}
+	err = json.Unmarshal(response, &ucs)
+	if err != nil {
+		return nil, nil, err
+	}
+	return ucs, meta, err
+}
+
+// UserChatView returns a detailed user chat.
+//
+// FYI: https://developer.kaiheila.cn/doc/http/user-chat#%E8%8E%B7%E5%8F%96%E7%A7%81%E4%BF%A1%E8%81%8A%E5%A4%A9%E4%BC%9A%E8%AF%9D%E8%AF%A6%E6%83%85
+func (s *Session) UserChatView(chatCode string) (uc *UserChat, err error) {
+	var response []byte
+	u, _ := url.Parse(EndpointUserChatView)
+	q := u.Query()
+	q.Set("chat_code", chatCode)
+	u.RawQuery = q.Encode()
+	response, err = s.Request("GET", u.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+	uc = &UserChat{}
+	err = json.Unmarshal(response, uc)
+	if err != nil {
+		return nil, err
+	}
+	return uc, nil
+}
+
 // UserChatCreate creates a direct chat session.
 // FYI: https://developer.kaiheila.cn/doc/http/user-chat#%E5%88%9B%E5%BB%BA%E7%A7%81%E4%BF%A1%E8%81%8A%E5%A4%A9%E4%BC%9A%E8%AF%9D
 func (s *Session) UserChatCreate(UserID string) (uc *UserChat, err error) {
