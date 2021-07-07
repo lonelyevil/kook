@@ -449,6 +449,78 @@ func (s *Session) UserChatDelete(ChatCode string) (err error) {
 	return err
 }
 
+// DirectMessageListOption is the type for optional arguments for DirectMessageList request.
+type DirectMessageListOption func(values url.Values)
+
+// DirectMessageListWithChatCode adds optional `chat_code` argument to DirectMessageList request.
+func DirectMessageListWithChatCode(chatCode string) DirectMessageListOption {
+	return func(values url.Values) {
+		values.Set("chat_code", chatCode)
+	}
+}
+
+// DirectMessageListWithTargetID adds optional `target_id` argument to DirectMessageList request.
+func DirectMessageListWithTargetID(targetID string) DirectMessageListOption {
+	return func(values url.Values) {
+		values.Set("target_id", targetID)
+	}
+}
+
+// DirectMessageListWithMsgID adds optional `msg_id` argument to DirectMessageList request.
+func DirectMessageListWithMsgID(msgID string) DirectMessageListOption {
+	return func(values url.Values) {
+		values.Set("msg_id", msgID)
+	}
+}
+
+// DirectMessageListWithFlag adds optional `flag` argument to DirectMessageList request.
+func DirectMessageListWithFlag(flag MessageListFlag) DirectMessageListOption {
+	return func(values url.Values) {
+		values.Set("flag", string(flag))
+	}
+}
+
+// DirectMessageResp is the type for direct messages.
+type DirectMessageResp struct {
+	Id          string              `json:"id"`
+	Type        MessageType         `json:"type"`
+	Content     string              `json:"content"`
+	Embeds      []map[string]string `json:"embeds"`
+	Attachments []Attachment        `json:"attachments"`
+	CreateAt    MilliTimeStamp      `json:"create_at"`
+	UpdatedAt   MilliTimeStamp      `json:"updated_at"`
+	Reactions   []ReactionItem      `json:"reactions"`
+	ImageName   string              `json:"image_name"`
+	ReadStatus  bool                `json:"read_status"`
+	Quote       *User               `json:"quote"`
+	MentionInfo struct {
+		MentionPart     []*User `json:"mention_part"`
+		MentionRolePart []*Role `json:"mention_role_part"`
+	} `json:"mention_info"`
+}
+
+// DirectMessageList returns the messages in direct chat.
+//
+// FYI: https://developer.kaiheila.cn/doc/http/direct-message#%E8%8E%B7%E5%8F%96%E7%A7%81%E4%BF%A1%E8%81%8A%E5%A4%A9%E6%B6%88%E6%81%AF%E5%88%97%E8%A1%A8
+func (s *Session) DirectMessageList(options ...DirectMessageListOption) (dmrs []*DirectMessageResp, err error) {
+	var response []byte
+	u, _ := url.Parse(EndpointDirectMessageList)
+	q := u.Query()
+	for _, item := range options {
+		item(q)
+	}
+	u.RawQuery = q.Encode()
+	response, err = s.Request("GET", u.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(response, &dmrs)
+	if err != nil {
+		return nil, err
+	}
+	return dmrs, nil
+}
+
 // DirectMessageCreate is the struct for settings of creating a message in direct chat.
 type DirectMessageCreate struct {
 	MessageCreateBase
@@ -486,6 +558,49 @@ func (s *Session) DirectMessageDelete(msgID string) (err error) {
 	_, err = s.Request("POST", EndpointDirectMessageDelete, struct {
 		MsgID string `json:"msg_id"`
 	}{msgID})
+	return err
+}
+
+// DirectMessageReactionList returns the list of the reacted users with a specific emoji to a message.
+//
+// FYI: https://developer.kaiheila.cn/doc/http/direct-message#%E8%8E%B7%E5%8F%96%E9%A2%91%E9%81%93%E6%B6%88%E6%81%AF%E6%9F%90%E5%9B%9E%E5%BA%94%E7%9A%84%E7%94%A8%E6%88%B7%E5%88%97%E8%A1%A8
+func (s *Session) DirectMessageReactionList(msgID, emoji string) (us []*ReactedUser, err error) {
+	u, _ := url.Parse(EndpointDirectMessageReactionList)
+	q := u.Query()
+	q.Add("msg_id", msgID)
+	q.Add("emoji", emoji)
+	u.RawQuery = q.Encode()
+	var response []byte
+	response, err = s.Request("GET", u.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(response, &us)
+	if err != nil {
+		return nil, err
+	}
+	return us, nil
+}
+
+// DirectMessageAddReaction add a reaction to a message as the bot.
+//
+// FYI: https://developer.kaiheila.cn/doc/http/direct-message#%E7%BB%99%E6%9F%90%E4%B8%AA%E6%B6%88%E6%81%AF%E6%B7%BB%E5%8A%A0%E5%9B%9E%E5%BA%94
+func (s *Session) DirectMessageAddReaction(msgID, emoji string) (err error) {
+	_, err = s.Request("POST", EndpointDirectMessageAddReaction, struct {
+		MsgID string `json:"msg_id"`
+		Emoji string `json:"emoji"`
+	}{msgID, emoji})
+	return err
+}
+
+// DirectMessageDeleteReaction deletes a reaction of a user from a message.
+//
+// FYI: https://developer.kaiheila.cn/doc/http/direct-message#%E5%88%A0%E9%99%A4%E6%B6%88%E6%81%AF%E7%9A%84%E6%9F%90%E4%B8%AA%E5%9B%9E%E5%BA%94
+func (s *Session) DirectMessageDeleteReaction(msgID, emoji string) (err error) {
+	_, err = s.Request("POST", EndpointDirectMessageDeleteReaction, struct {
+		MsgID string `json:"msg_id"`
+		Emoji string `json:"emoji"`
+	}{msgID, emoji})
 	return err
 }
 
