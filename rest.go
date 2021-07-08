@@ -1113,6 +1113,93 @@ func (s *Session) GuildEmojiDelete(id string) (err error) {
 	return err
 }
 
+// InviteListOption is the optional arguments for InviteList requests.
+type InviteListOption func(values url.Values)
+
+// InviteListWithGuildID adds optional `guild_id` argument to InviteList request.
+func InviteListWithGuildID(guildID string) InviteListOption {
+	return func(values url.Values) {
+		values.Set("guild_id", guildID)
+	}
+}
+
+// InviteListWithChannelID adds optional `channel_id` argument to InviteList request.
+func InviteListWithChannelID(channelID string) InviteListOption {
+	return func(values url.Values) {
+		values.Set("channel_id", channelID)
+	}
+}
+
+// InviteListResp is the type for response of InviteList request.
+type InviteListResp struct {
+	GuildID   string `json:"guild_id"`
+	ChannelID string `json:"channel_id"`
+	URLCode   string `json:"url_code"`
+	URL       string `json:"url"`
+	User      User   `json:"user"`
+}
+
+// InviteList lists invite links of a guild.
+//
+// FYI: https://developer.kaiheila.cn/doc/http/invite#%E8%8E%B7%E5%8F%96%E9%82%80%E8%AF%B7%E5%88%97%E8%A1%A8
+func (s *Session) InviteList(page *PageSetting, options ...InviteListOption) (ilrs []*InviteListResp, meta *PageInfo, err error) {
+	u, _ := url.Parse(EndpointInviteList)
+	q := u.Query()
+	for _, item := range options {
+		item(q)
+	}
+	u.RawQuery = q.Encode()
+	var response []byte
+	response, meta, err = s.RequestWithPage("GET", u.String(), page)
+	if err != nil {
+		return nil, nil, err
+	}
+	err = json.Unmarshal(response, &ilrs)
+	if err != nil {
+		return nil, nil, err
+	}
+	return ilrs, meta, err
+}
+
+// InviteCreate is the type for arguments of InviteCreate request.
+type InviteCreate struct {
+	GuildID   string `json:"guild_id,omitempty"`
+	ChannelID string `json:"channel_id,omitempty"`
+}
+
+// InviteCreate creates an invite link.
+//
+// FYI: https://developer.kaiheila.cn/doc/http/invite#%E5%88%9B%E5%BB%BA%E9%82%80%E8%AF%B7%E9%93%BE%E6%8E%A5
+func (s *Session) InviteCreate(ic *InviteCreate) (URL string, err error) {
+	var response []byte
+	response, err = s.Request("POST", EndpointInviteCreate, ic)
+	if err != nil {
+		return "", err
+	}
+	a := &struct {
+		URL string `json:"url"`
+	}{}
+	err = json.Unmarshal(response, a)
+	if err != nil {
+		return "", err
+	}
+	return a.URL, nil
+}
+
+// InviteDelete is the type for arguments of InviteDelete request.
+type InviteDelete struct {
+	InviteCreate
+	URLCode string `json:"url_code"`
+}
+
+// InviteDelete deletes an invite link.
+//
+// FYI: https://developer.kaiheila.cn/doc/http/invite#%E5%88%A0%E9%99%A4%E9%82%80%E8%AF%B7%E9%93%BE%E6%8E%A5
+func (s *Session) InviteDelete(id *InviteDelete) (err error) {
+	_, err = s.Request("POST", EndpointInviteDelete, id)
+	return err
+}
+
 // UserMe returns the bot info.
 // FYI: https://developer.kaiheila.cn/doc/http/user
 func (s *Session) UserMe() (u *User, err error) {
