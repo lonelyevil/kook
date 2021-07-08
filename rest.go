@@ -145,7 +145,7 @@ type MessageUpdateBase struct {
 
 // MessageUpdate is the request data for MessageUpdate.
 type MessageUpdate struct {
-	MessageCreateBase
+	MessageUpdateBase
 	TempTargetID string `json:"temp_target_id,omitempty"`
 }
 
