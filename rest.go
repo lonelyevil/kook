@@ -3,7 +3,9 @@ package khl
 import (
 	"bytes"
 	"encoding/json"
+	"io"
 	"io/ioutil"
+	"mime/multipart"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -593,6 +595,43 @@ func (s *Session) DirectMessageAddReaction(msgID, emoji string) (err error) {
 	return err
 }
 
+// AssetCreate uploads attachments to khl server.
+//
+// FYI: https://developer.kaiheila.cn/doc/http/asset#%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6/%E5%9B%BE%E7%89%87
+func (s *Session) AssetCreate(name string, file []byte) (url string, err error) {
+	b := &bytes.Buffer{}
+	w := multipart.NewWriter(b)
+	var fw io.Writer
+	fw, err = w.CreateFormFile("file", name)
+	if err != nil {
+		return "", err
+	}
+	_, err = fw.Write(file)
+	if err != nil {
+		return "", err
+	}
+	err = w.Close()
+	if err != nil {
+		return "", err
+	}
+	var f assetFile
+	f.Payload = b.Bytes()
+	f.ContentType = w.FormDataContentType()
+	var response []byte
+	response, err = s.Request("POST", EndpointAssetCreate, &f)
+	if err != nil {
+		return "", err
+	}
+	urlStruct := struct {
+		Url string `json:"url"`
+	}{}
+	err = json.Unmarshal(response, &urlStruct)
+	if err != nil {
+		return "", err
+	}
+	return urlStruct.Url, nil
+}
+
 // DirectMessageDeleteReaction deletes a reaction of a user from a message.
 //
 // FYI: https://developer.kaiheila.cn/doc/http/direct-message#%E5%88%A0%E9%99%A4%E6%B6%88%E6%81%AF%E7%9A%84%E6%9F%90%E4%B8%AA%E5%9B%9E%E5%BA%94
@@ -875,12 +914,23 @@ func (s *Session) Request(method, url string, data interface{}) (response []byte
 	return s.request(method, url, data, 0)
 }
 
+type assetFile struct {
+	Payload     []byte
+	ContentType string
+}
+
 func (s *Session) request(method, url string, data interface{}, sequence int) (response []byte, err error) {
 	var body []byte
+	var dataMultipart bool
 	if data != nil {
-		body, err = json.Marshal(data)
-		if err != nil {
-			return
+		if d, ok := data.(*assetFile); ok {
+			body = d.Payload
+			dataMultipart = true
+		} else {
+			body, err = json.Marshal(data)
+			if err != nil {
+				return
+			}
 		}
 	}
 	//s.log(LogTrace, "Api Request %s %s\n", method, url)
@@ -896,7 +946,11 @@ func (s *Session) request(method, url string, data interface{}, sequence int) (r
 	}
 	req.Header.Set("Authorization", s.Identify.Token)
 	if len(body) > 0 {
-		req.Header.Set("Content-Type", "application/json")
+		if dataMultipart {
+			req.Header.Set("Content-Type", data.(*assetFile).ContentType)
+		} else {
+			req.Header.Set("Content-Type", "application/json")
+		}
 	}
 	e = addCaller(s.Logger.Trace())
 	for k, v := range req.Header {

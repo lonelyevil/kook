@@ -57,8 +57,8 @@
     - [x] 获取网关连接地址 `gateway/index`
   - [x] 用户相关接口 `user`
     - [x] 获取当前用户信息 `user/me`
-  - [ ] 媒体模块 `asset`
-    - [ ] 上传文件/图片 `asset/create`
+  - [x] 媒体模块 `asset`
+    - [x] 上传文件/图片 `asset/create`
   - [ ] 服务器角色权限相关接口 `guild-role`
     - [x] 获取服务器角色列表 `guild-role/list`
     - [ ] 创建服务器角色 `guild-role/create`
