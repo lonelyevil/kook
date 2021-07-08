@@ -66,9 +66,9 @@
     - [x] 删除服务器角色 `guild-role/delete`
     - [x] 赋予用户角色 `guild-role/grant`
     - [x] 删除用户角色 `guild-role/revoke`
-  - [ ] 亲密度相关接口 `intimacy`
-    - [ ] 获取用户的亲密度 `intimacy/index`
-    - [ ] 更新用户的亲密度 `intimacy/update`
+  - [x] 亲密度相关接口 `intimacy`
+    - [x] 获取用户的亲密度 `intimacy/index`
+    - [x] 更新用户的亲密度 `intimacy/update`
   - [ ] 服务器表情相关接口 `guild-emoji`
     - [ ] 获取服务器表情列表 `guild-emoji/list`
     - [ ] 创建服务器表情 `guild-emoji/create`

@@ -965,6 +965,52 @@ func (s *Session) guildRoleGrantRevoke(guildID, userID string, roleID int64, gra
 	return grr, err
 }
 
+type IntimacyIndexResp struct {
+	ImgURL     string         `json:"img_url"`
+	SocialInfo string         `json:"social_info"`
+	LastRead   MilliTimeStamp `json:"last_read"`
+	ImgList    struct {
+		ID  string `json:"id"`
+		URL string `json:"url"`
+	} `json:"img_list"`
+}
+
+// IntimacyIndex returns the intimacy info for a user.
+//
+// FYI: https://developer.kaiheila.cn/doc/http/intimacy#%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E4%BA%B2%E5%AF%86%E5%BA%A6
+func (s *Session) IntimacyIndex(userID string) (iir *IntimacyIndexResp, err error) {
+	var response []byte
+	u, _ := url.Parse(EndpointIntimacyIndex)
+	q := u.Query()
+	q.Set("user_id", userID)
+	u.RawQuery = q.Encode()
+	response, err = s.Request("GET", u.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+	iir = &IntimacyIndexResp{}
+	err = json.Unmarshal(response, iir)
+	if err != nil {
+		return nil, err
+	}
+	return iir, err
+}
+
+type IntimacyUpdate struct {
+	UserId     string `json:"user_id"`
+	Score      *int   `json:"score,omitempty"`
+	SocialInfo string `json:"social_info,omitempty"`
+	ImgID      int    `json:"img_id,omitempty"`
+}
+
+// IntimacyUpdate updates the intimacy info for a user.
+//
+// FYI: https://developer.kaiheila.cn/doc/http/intimacy#%E6%9B%B4%E6%96%B0%E7%94%A8%E6%88%B7%E4%BA%B2%E5%AF%86%E5%BA%A6
+func (s *Session) IntimacyUpdate(iu *IntimacyUpdate) (err error) {
+	_, err = s.Request("POST", EndpointIntimacyUpdate, iu)
+	return err
+}
+
 // UserMe returns the bot info.
 // FYI: https://developer.kaiheila.cn/doc/http/user
 func (s *Session) UserMe() (u *User, err error) {
