@@ -965,6 +965,7 @@ func (s *Session) guildRoleGrantRevoke(guildID, userID string, roleID int64, gra
 	return grr, err
 }
 
+// IntimacyIndexResp is the type for intimacy info.
 type IntimacyIndexResp struct {
 	ImgURL     string         `json:"img_url"`
 	SocialInfo string         `json:"social_info"`
@@ -996,8 +997,9 @@ func (s *Session) IntimacyIndex(userID string) (iir *IntimacyIndexResp, err erro
 	return iir, err
 }
 
+// IntimacyUpdate is the type for arguments for IntimacyUpdate request.
 type IntimacyUpdate struct {
-	UserId     string `json:"user_id"`
+	UserID     string `json:"user_id"`
 	Score      *int   `json:"score,omitempty"`
 	SocialInfo string `json:"social_info,omitempty"`
 	ImgID      int    `json:"img_id,omitempty"`
@@ -1008,6 +1010,106 @@ type IntimacyUpdate struct {
 // FYI: https://developer.kaiheila.cn/doc/http/intimacy#%E6%9B%B4%E6%96%B0%E7%94%A8%E6%88%B7%E4%BA%B2%E5%AF%86%E5%BA%A6
 func (s *Session) IntimacyUpdate(iu *IntimacyUpdate) (err error) {
 	_, err = s.Request("POST", EndpointIntimacyUpdate, iu)
+	return err
+}
+
+// GuildEmojiResp is the type for response of GuildEmojiList request.
+type GuildEmojiResp struct {
+	Name     string `json:"name"`
+	ID       string `json:"id"`
+	UserInfo User   `json:"user_info"`
+}
+
+// GuildEmojiList returns the list of emojis in a guild
+//
+// FYI: https://developer.kaiheila.cn/doc/http/guild-emoji#%E8%8E%B7%E5%8F%96%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%A1%A8%E6%83%85%E5%88%97%E8%A1%A8
+func (s *Session) GuildEmojiList(guildID string, page *PageSetting) (gers []*GuildEmojiResp, meta *PageInfo, err error) {
+	var response []byte
+	u, _ := url.Parse(EndpointGuildEmojiList)
+	q := u.Query()
+	q.Set("guild_id", guildID)
+	u.RawQuery = q.Encode()
+	response, meta, err = s.RequestWithPage("GET", u.String(), page)
+	if err != nil {
+		return nil, nil, err
+	}
+	err = json.Unmarshal(response, &gers)
+	if err != nil {
+		return nil, nil, err
+	}
+	return gers, meta, err
+}
+
+// GuildEmojiCreate uploads emoji to guild.
+//
+// FYI: https://developer.kaiheila.cn/doc/http/guild-emoji#%E5%88%9B%E5%BB%BA%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%A1%A8%E6%83%85
+func (s *Session) GuildEmojiCreate(name, guildID string, emoji []byte) (ger *GuildEmojiResp, err error) {
+	b := &bytes.Buffer{}
+	w := multipart.NewWriter(b)
+	var fw io.Writer
+	fw, err = w.CreateFormFile("emoji", "emoji.png")
+	if err != nil {
+		return nil, err
+	}
+	_, err = fw.Write(emoji)
+	if err != nil {
+		return nil, err
+	}
+	if len(name) <= 32 && len(name) >= 2 {
+		fw, err = w.CreateFormField("name")
+		if err != nil {
+			return nil, err
+		}
+		_, err = fw.Write([]byte(name))
+		if err != nil {
+			return nil, err
+		}
+	}
+	fw, err = w.CreateFormField("guild_id")
+	if err != nil {
+		return nil, err
+	}
+	_, err = fw.Write([]byte(guildID))
+	if err != nil {
+		return nil, err
+	}
+	err = w.Close()
+	if err != nil {
+		return nil, err
+	}
+	var f assetFile
+	f.Payload = b.Bytes()
+	f.ContentType = w.FormDataContentType()
+	var response []byte
+	response, err = s.Request("POST", EndpointGuildEmojiCreate, &f)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(response, ger)
+	if err != nil {
+		return nil, err
+	}
+	return ger, nil
+}
+
+// GuildEmojiUpdate updates an emoji's info in a guild.
+//
+// FYI: https://developer.kaiheila.cn/doc/http/guild-emoji#%E6%9B%B4%E6%96%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%A1%A8%E6%83%85
+func (s *Session) GuildEmojiUpdate(name, id string) (err error) {
+	_, err = s.Request("POST", EndpointGuildEmojiUpdate, struct {
+		Name string `json:"name"`
+		ID   string `json:"id"`
+	}{name, id})
+	return err
+}
+
+// GuildEmojiDelete deletes an emoji from a guild.
+//
+// FYI: https://developer.kaiheila.cn/doc/http/guild-emoji#%E5%88%A0%E9%99%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%A1%A8%E6%83%85
+func (s *Session) GuildEmojiDelete(id string) (err error) {
+	_, err = s.Request("POST", EndpointGuildEmojiDelete, struct {
+		ID string `json:"id"`
+	}{id})
 	return err
 }
 
