@@ -892,7 +892,7 @@ func (s *Session) GuildRoleCreate(name, guildID string) (r *Role, err error) {
 // FYI: https://developer.kaiheila.cn/doc/http/guild-role#%E6%9B%B4%E6%96%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%A7%92%E8%89%B2
 func (s *Session) GuildRoleUpdate(guildID string, role *Role) (r *Role, err error) {
 	var response []byte
-	response, err = s.Request("POST", EndpointChannelRoleUpdate, struct {
+	response, err = s.Request("POST", EndpointGuildRoleUpdate, struct {
 		*Role
 		GuildID string `json:"guild_id"`
 	}{
@@ -947,7 +947,7 @@ func (s *Session) guildRoleGrantRevoke(guildID, userID string, roleID int64, gra
 	if grant {
 		endpoint = EndpointGuildRoleGrant
 	} else {
-		endpoint = EndpointGuildRoleDelete
+		endpoint = EndpointGuildRoleRevoke
 	}
 	response, err = s.Request("POST", endpoint, struct {
 		GuildID string `json:"guild_id"`
