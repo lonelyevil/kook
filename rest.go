@@ -484,7 +484,7 @@ func DirectMessageListWithFlag(flag MessageListFlag) DirectMessageListOption {
 
 // DirectMessageResp is the type for direct messages.
 type DirectMessageResp struct {
-	Id          string              `json:"id"`
+	ID          string              `json:"id"`
 	Type        MessageType         `json:"type"`
 	Content     string              `json:"content"`
 	Embeds      []map[string]string `json:"embeds"`
@@ -623,13 +623,13 @@ func (s *Session) AssetCreate(name string, file []byte) (url string, err error) 
 		return "", err
 	}
 	urlStruct := struct {
-		Url string `json:"url"`
+		URL string `json:"url"`
 	}{}
 	err = json.Unmarshal(response, &urlStruct)
 	if err != nil {
 		return "", err
 	}
-	return urlStruct.Url, nil
+	return urlStruct.URL, nil
 }
 
 // DirectMessageDeleteReaction deletes a reaction of a user from a message.
