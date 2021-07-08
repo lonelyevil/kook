@@ -131,12 +131,12 @@ func (g Guild) GetMasterID() string {
 // Role is the struct for a role in the guild.
 type Role struct {
 	RoleID      int64          `json:"role_id"`
-	Name        string         `json:"name"`
-	Color       int            `json:"color"`
+	Name        string         `json:"name,omitempty"`
+	Color       int            `json:"color,omitempty"`
 	Position    int            `json:"position"`
-	Hoist       int            `json:"hoist"`
-	Mentionable int            `json:"mentionable"`
-	Permissions RolePermission `json:"permissions"`
+	Hoist       int            `json:"hoist,omitempty"`
+	Mentionable int            `json:"mentionable,omitempty"`
+	Permissions RolePermission `json:"permissions,omitempty"`
 }
 
 // Channel is the struct for a channel in guild. For different channels, some fields may be empty.

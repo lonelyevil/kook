@@ -867,6 +867,104 @@ func (s *Session) GuildRoleList(guildID string, page *PageSetting) (rs []*Role, 
 	return rs, p, err
 }
 
+// GuildRoleCreate creates a role for a guild.
+//
+// FYI: https://developer.kaiheila.cn/doc/http/guild-role#%E5%88%9B%E5%BB%BA%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%A7%92%E8%89%B2
+func (s *Session) GuildRoleCreate(name, guildID string) (r *Role, err error) {
+	var response []byte
+	response, err = s.Request("POST", EndpointGuildRoleCreate, struct {
+		Name    string `json:"name,omitempty"`
+		GuildID string `json:"guild_id"`
+	}{name, guildID})
+	if err != nil {
+		return nil, err
+	}
+	r = &Role{}
+	err = json.Unmarshal(response, r)
+	if err != nil {
+		return nil, err
+	}
+	return r, nil
+}
+
+// GuildRoleUpdate updates a role for a guild.
+//
+// FYI: https://developer.kaiheila.cn/doc/http/guild-role#%E6%9B%B4%E6%96%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%A7%92%E8%89%B2
+func (s *Session) GuildRoleUpdate(guildID string, role *Role) (r *Role, err error) {
+	var response []byte
+	response, err = s.Request("POST", EndpointChannelRoleUpdate, struct {
+		*Role
+		GuildID string `json:"guild_id"`
+	}{
+		role, guildID,
+	})
+	if err != nil {
+		return nil, err
+	}
+	r = &Role{}
+	err = json.Unmarshal(response, r)
+	if err != nil {
+		return nil, err
+	}
+	return r, nil
+}
+
+// GuildRoleDelete deletes a role from a guild.
+//
+// FYI: https://developer.kaiheila.cn/doc/http/guild-role#%E5%88%A0%E9%99%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%A7%92%E8%89%B2
+func (s *Session) GuildRoleDelete(guildID, roleID string) (err error) {
+	_, err = s.Request("POST", EndpointGuildRoleDelete, struct {
+		GuildID string `json:"guild_id"`
+		RoleID  string `json:"role_id"`
+	}{guildID, roleID})
+	return err
+}
+
+// GuildRoleResp is the response of GuildRoleGrant request.
+type GuildRoleResp struct {
+	GuildID string  `json:"guild_id"`
+	UserID  string  `json:"user_id"`
+	Roles   []int64 `json:"roles"`
+}
+
+// GuildRoleGrant grants a role to a user.
+//
+// FYI: https://developer.kaiheila.cn/doc/http/guild-role#%E8%B5%8B%E4%BA%88%E7%94%A8%E6%88%B7%E8%A7%92%E8%89%B2
+func (s *Session) GuildRoleGrant(guildID, userID string, roleID int64) (grr *GuildRoleResp, err error) {
+	return s.guildRoleGrantRevoke(guildID, userID, roleID, true)
+}
+
+// GuildRoleRevoke revokes a role from a user.
+//
+// FYI: https://developer.kaiheila.cn/doc/http/guild-role#%E5%88%A0%E9%99%A4%E7%94%A8%E6%88%B7%E8%A7%92%E8%89%B2
+func (s *Session) GuildRoleRevoke(guildID, userID string, roleID int64) (grr *GuildRoleResp, err error) {
+	return s.guildRoleGrantRevoke(guildID, userID, roleID, false)
+}
+
+func (s *Session) guildRoleGrantRevoke(guildID, userID string, roleID int64, grant bool) (grr *GuildRoleResp, err error) {
+	var response []byte
+	var endpoint string
+	if grant {
+		endpoint = EndpointGuildRoleGrant
+	} else {
+		endpoint = EndpointGuildRoleDelete
+	}
+	response, err = s.Request("POST", endpoint, struct {
+		GuildID string `json:"guild_id"`
+		UserID  string `json:"user_id"`
+		RoleID  int64  `json:"role_id"`
+	}{guildID, userID, roleID})
+	if err != nil {
+		return nil, err
+	}
+	grr = &GuildRoleResp{}
+	err = json.Unmarshal(response, grr)
+	if err != nil {
+		return nil, err
+	}
+	return grr, err
+}
+
 // UserMe returns the bot info.
 // FYI: https://developer.kaiheila.cn/doc/http/user
 func (s *Session) UserMe() (u *User, err error) {

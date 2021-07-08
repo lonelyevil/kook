@@ -59,13 +59,13 @@
     - [x] 获取当前用户信息 `user/me`
   - [x] 媒体模块 `asset`
     - [x] 上传文件/图片 `asset/create`
-  - [ ] 服务器角色权限相关接口 `guild-role`
+  - [x] 服务器角色权限相关接口 `guild-role`
     - [x] 获取服务器角色列表 `guild-role/list`
-    - [ ] 创建服务器角色 `guild-role/create`
-    - [ ] 更新服务器角色 `guild-role/update`
-    - [ ] 删除服务器角色 `guild-role/delete`
-    - [ ] 赋予用户角色 `guild-role/grant`
-    - [ ] 删除用户角色 `guild-role/revoke`
+    - [x] 创建服务器角色 `guild-role/create`
+    - [x] 更新服务器角色 `guild-role/update`
+    - [x] 删除服务器角色 `guild-role/delete`
+    - [x] 赋予用户角色 `guild-role/grant`
+    - [x] 删除用户角色 `guild-role/revoke`
   - [ ] 亲密度相关接口 `intimacy`
     - [ ] 获取用户的亲密度 `intimacy/index`
     - [ ] 更新用户的亲密度 `intimacy/update`
