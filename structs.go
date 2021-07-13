@@ -2,6 +2,7 @@ package khl
 
 import (
 	"encoding/json"
+	"errors"
 	"github.com/gorilla/websocket"
 	"net/http"
 	"sync"
@@ -112,8 +113,8 @@ type Guild struct {
 	Icon             string          `json:"icon"`
 	NotifyType       GuildNotifyType `json:"notify_type"`
 	Region           string          `json:"region"`
-	EnableOpen       bool            `json:"enable_open"`
-	OpenID           string          `json:"open_id"`
+	EnableOpen       IntBool         `json:"enable_open"`
+	OpenID           int64           `json:"open_id"`
 	DefaultChannelID string          `json:"default_channel_id"`
 	WelcomeChannelID string          `json:"welcome_channel_id"`
 	Roles            []Role          `json:"roles"`
@@ -126,6 +127,34 @@ func (g Guild) GetMasterID() string {
 		return g.MasterID
 	}
 	return g.UserID
+}
+
+// IntBool is the type for some int value in response which only has two valid values.
+type IntBool bool
+
+// MarshalJSON is used to marshal IntBool for reqeust.
+func (i *IntBool) MarshalJSON() ([]byte, error) {
+	switch *i {
+	case true:
+		return []byte("1"), nil
+	case false:
+		return []byte("0"), nil
+	default:
+		return []byte(""), nil
+	}
+}
+
+// UnmarshalJSON is used to unmarshal IntBool from response.
+func (i *IntBool) UnmarshalJSON(bytes []byte) error {
+	switch bytes[0] {
+	case '0':
+		*i = false
+	case '1':
+		*i = true
+	default:
+		return errors.New("unable to unmarshal int-bool")
+	}
+	return nil
 }
 
 // Role is the struct for a role in the guild.
