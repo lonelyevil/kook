@@ -147,9 +147,9 @@ func (i *IntBool) MarshalJSON() ([]byte, error) {
 // UnmarshalJSON is used to unmarshal IntBool from response.
 func (i *IntBool) UnmarshalJSON(bytes []byte) error {
 	switch bytes[0] {
-	case '0':
+	case '0', 'f':
 		*i = false
-	case '1':
+	case '1', 't':
 		*i = true
 	default:
 		return errors.New("unable to unmarshal int-bool")
