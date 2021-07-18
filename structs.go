@@ -114,7 +114,7 @@ type Guild struct {
 	NotifyType       GuildNotifyType `json:"notify_type"`
 	Region           string          `json:"region"`
 	EnableOpen       IntBool         `json:"enable_open"`
-	OpenID           int64           `json:"open_id"`
+	OpenID           string          `json:"open_id"`
 	DefaultChannelID string          `json:"default_channel_id"`
 	WelcomeChannelID string          `json:"welcome_channel_id"`
 	Roles            []Role          `json:"roles"`
