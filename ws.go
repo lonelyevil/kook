@@ -185,9 +185,10 @@ func (s *Session) onEvent(messageType int, message []byte) (e *Event, err error)
 			//s.log(LogError, "unmarshal system event extra.body error: %s\nsignal: %d, seq: %d, data: %s", err, e.Signal, e.SequenceNumber, string(e.Data))
 			return
 		}
-		if eh, ok := registeredSystemEventHandler[sys.Type]; ok {
+		if eh, ok := registeredEventHandler[sys.Type]; ok {
 			t := eh.New()
-			if err = json.Unmarshal(sys.Body, t); err != nil {
+			ex := t.GetExtra()
+			if err = json.Unmarshal(sys.Body, ex); err != nil {
 				addCaller(s.Logger.Error()).Int("signal", int(e.Signal)).Int64("seq", e.SequenceNumber).Bytes("data", e.Data).Err("err", err).Msg("unmarshal extra error")
 				//s.log(LogError, "unmarshal extra error: %s\nsignal: %d, seq: %d, data: %s", err, e.Signal, e.SequenceNumber, string(e.Data))
 			}
@@ -197,9 +198,10 @@ func (s *Session) onEvent(messageType int, message []byte) (e *Event, err error)
 			//s.log(LogWarning, "unknown system message event: signal: %d, seq: %d, data: %s", e.Signal, e.SequenceNumber, string(e.Data))
 		}
 	} else {
-		if eh, ok := registeredMessageEventHandler[strconv.Itoa(int(data.Type))]; ok {
+		if eh, ok := registeredEventHandler[strconv.Itoa(int(data.Type))]; ok {
 			t := eh.New()
-			if err = json.Unmarshal(data.Extra, t); err != nil {
+			ex := t.GetExtra()
+			if err = json.Unmarshal(data.Extra, ex); err != nil {
 				addCaller(s.Logger.Error()).Int("signal", int(e.Signal)).Int64("seq", e.SequenceNumber).Bytes("data", e.Data).Err("err", err).Msg("unmarshal extra error")
 
 				//s.log(LogError, "unmarshal extra error: %s\nsignal: %d, seq: %d, data: %s", err, e.Signal, e.SequenceNumber, string(e.Data))

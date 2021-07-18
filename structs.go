@@ -460,3 +460,9 @@ type PageSetting struct {
 	PageSize *int    `json:"page_size"`
 	Sort     *string `json:"sort"`
 }
+
+// EventHandlerCommonContext is the common context for event handlers.
+type EventHandlerCommonContext struct {
+	Session *Session
+	Common  *EventDataGeneral
+}

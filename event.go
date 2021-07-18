@@ -3,32 +3,28 @@ package khl
 // EventHandler is the interface for objects handling event.
 type EventHandler interface {
 	Type() string
-	Handle(*Session, *EventDataGeneral, interface{})
+	Handle(EventContext)
 }
 
 // EventHandlerProvider is the interface for objects providing event handlers.
 type EventHandlerProvider interface {
 	Type() string
-	New() interface{}
+	New() EventContext
 }
 
-var registeredSystemEventHandler = map[string]EventHandlerProvider{}
-
-func registerSystemEventHandler(seh EventHandlerProvider) {
-	if _, ok := registeredSystemEventHandler[seh.Type()]; ok {
-		return
-	}
-	registeredSystemEventHandler[seh.Type()] = seh
-	return
+// EventContext is the interface for objects containing context for event handlers.
+type EventContext interface {
+	GetExtra() interface{}
+	GetCommon() *EventHandlerCommonContext
 }
 
-var registeredMessageEventHandler = map[string]EventHandlerProvider{}
+var registeredEventHandler = map[string]EventHandlerProvider{}
 
-func registerMessageEventHandler(meh EventHandlerProvider) {
-	if _, ok := registeredMessageEventHandler[meh.Type()]; ok {
+func registerEventHandler(eh EventHandlerProvider) {
+	if _, ok := registeredEventHandler[eh.Type()]; ok {
 		return
 	}
-	registeredMessageEventHandler[meh.Type()] = meh
+	registeredEventHandler[eh.Type()] = eh
 	return
 }
 
@@ -78,14 +74,18 @@ func (s *Session) removeEventHandler(t string, ehi *eventHandlerInstance) {
 	}
 }
 
-func (s *Session) handle(t string, edg *EventDataGeneral, i interface{}) {
+func (s *Session) handle(t string, i EventContext) {
+
 	for _, eh := range s.handlers[t] {
-		eh.eventHandler.Handle(s, edg, i)
+		eh.eventHandler.Handle(i)
 	}
 }
 
-func (s *Session) handleEvent(t string, edg *EventDataGeneral, i interface{}) {
+func (s *Session) handleEvent(t string, edg *EventDataGeneral, i EventContext) {
 	s.handlersMu.RLock()
 	defer s.handlersMu.RUnlock()
-	s.handle(t, edg, i)
+	c := i.GetCommon()
+	c.Common = edg
+	c.Session = s
+	s.handle(t, i)
 }

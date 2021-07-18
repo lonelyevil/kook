@@ -29,16 +29,16 @@ func main() {
 	s.Close()
 }
 
-func messageHan(s *khl.Session, edg *khl.EventDataGeneral, etm *khl.EventTextMessage) {
-	if edg.Type != khl.MessageTypeText || etm.Author.Bot {
+func messageHan(ctx *khl.TextMessageContext) {
+	if ctx.Common.Type != khl.MessageTypeText || ctx.Extra.Author.Bot {
 		return
 	}
-	if strings.Contains(edg.Content, "ping") {
-		s.MessageCreate(&khl.MessageCreate{
+	if strings.Contains(ctx.Common.Content, "ping") {
+		ctx.Session.MessageCreate(&khl.MessageCreate{
 			MessageCreateBase: khl.MessageCreateBase{
-				TargetID: edg.TargetID,
+				TargetID: ctx.Common.TargetID,
 				Content:  "pong",
-				Quote:    edg.MsgID,
+				Quote:    ctx.Common.MsgID,
 			},
 		})
 	}

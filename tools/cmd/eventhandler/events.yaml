@@ -1,0 +1,230 @@
+type_alias:
+  str: string
+  i64: int64
+  '[]str': '[]string'
+templates:
+  Guild:
+    body:
+      ID: str
+      Name: str
+      UserID: str
+      Icon: str
+      NotifyType: GuildNotifyType
+      Region: str
+      EnableOpen: IntBool
+      OpenID: str
+      DeafultChannelID: i64
+      WelcomeChannelID: i64
+  ReactionItem:
+    body:
+      MsgID: str
+      UserID: str
+      ChannelID: str
+      Emoji: EmojiItem
+  DirectChatReactionItem:
+    body:
+      MsgID: str
+      UserID: str
+      ChatCode: str
+      Emoji: EmojiItem
+  PinMessageItem:
+    body:
+      ChannelID: str
+      OperatorID: str
+      MsgID: str
+  GuildMemberOnlineItem:
+    body:
+      UserId: str
+      EventTime: MilliTimeStamp
+      Guilds: '[]str'
+  RichMessage:
+    body:
+      GuildID: str
+      Attachments: '[]Attachment'
+      Author: User
+  Kmarkdown:
+    body:
+      RawContent: str
+      MentionPart: '[]str'
+      MentionRolePart: '[]str'
+  CustomMessage:
+    body:
+      GuildID: str
+      ChannelName: str
+      Mention: '[]str'
+      MentionAll: bool
+      MentionRoles: '[]str'
+      MentionHere: bool
+      Author: User
+      Kmarkdown: Kmarkdown
+events:
+  updated_guild:
+    name: GuildUpdate
+    template: Guild
+  deleted_guild:
+    name: GuildDelete
+    template: Guild
+  added_block_list:
+    name: BlockListAdd
+    body:
+      OperatorID: str
+      Remark: str
+      UserID: '[]str'
+  deleted_block_list:
+    name: BlockListDelete
+    body:
+      OperatorID: str
+      UserID: '[]str'
+  added_reaction:
+    name: ReactionAdd
+    template: ReactionItem
+  deleted_reaction:
+    name: ReactionDelete
+    template: ReactionItem
+  updated_message:
+    name: MessageUpdate
+    body:
+      MsgID: str
+      Content: str
+      ChannelID: str
+      Mention: '[]str'
+      MentionAll: bool
+      MentionHere: bool
+      MentionRoles: '[]str'
+      UpdatedAt: MilliTimeStamp
+  deleted_message:
+    name: MessageDelete
+    body:
+      MsgID: str
+      ChannelID: str
+  added_channel:
+    name: ChannelAdd
+    template: Channel
+  updated_channel:
+    name: ChannelUpdate
+    template: Channel
+  deleted_channel:
+    name: ChannelDelete
+    body:
+      ID: str
+      DeletedAt: MilliTimeStamp
+  pinned_message:
+    name: MessagePin
+    template: PinMessageItem
+  unpinned_message:
+    name: MessageUnpin
+    template: PinMessageItem
+  updated_private_message:
+    name: DirectMessageUpdate
+    body:
+      MsgID: str
+      AuthorID: str
+      TargetID: str
+      Content: str
+      ChatCode: str
+      UpdatedAt: MilliTimeStamp
+  deleted_private_message:
+    name: DirectMessageDelete
+    body:
+      MsgID: str
+      AuthorID: str
+      TargetID: str
+      ChatCode: str
+      DeletedAt: MilliTimeStamp
+  private_added_reaction:
+    name: DirectMessageReactionAdd
+    template: DirectChatReactionItem
+  private_deleted_reaction:
+    name: DirectMessageReactionDelete
+    template: DirectChatReactionItem
+  joined_guild:
+    name: GuildMemberAdd
+    body:
+      UserID: str
+      JoinedAt: MilliTimeStamp
+  exited_guild:
+    name: GuildMemberDelete
+    body:
+      UserID: str
+      ExitedAt: MilliTimeStamp
+  updated_guild_member:
+    name: GuildMemberUpdate
+    body:
+      UserID: str
+      Nickname: str
+  guild_member_online:
+    name: GuildMemberOnline
+    template: GuildMemberOnlineItem
+  guild_member_offline:
+    name: GuildMemberOffline
+    template: GuildMemberOnlineItem
+  added_role:
+    name: GuildRoleAdd
+    template: Role
+  deleted_role:
+    name: GuildRoleDelete
+    template: Role
+  updated_role:
+    name: GuildRoleUpdate
+    template: Role
+  joined_channel:
+    name: GuildChannelMemberAdd
+    body:
+      UserID: str
+      ChannelID: str
+      JoinedAt: MilliTimeStamp
+  exited_channel:
+    name: GuildChannelMemberDelete
+    body:
+      UserID: str
+      ChannelID: str
+      ExitedAt: MilliTimeStamp
+  user_updated:
+    name: UserUpdate
+    body:
+      UserID: str
+      Username: str
+      Avatar: str
+  self_joined_guild:
+    name: BotJoin
+    body:
+      GuildID: str
+  self_exited_guild:
+    name: BotExit
+    body:
+      GuildID: str
+  message_btn_click:
+    name: MessageButtonClick
+    body:
+      MsgID: str
+      UserID: str
+      Value: str
+      TargetID: str
+  1:
+    name: TextMessage
+    body:
+      GuildID: str
+      ChannelName: str
+      Mention: '[]str'
+      MentionAll: bool
+      MentionRoles: '[]str'
+      MentionHere: bool
+      Author: User
+  2:
+    name: ImageMessage
+    template: RichMessage
+  3:
+    name: VideoMessage
+    template: RichMessage
+  4:
+    name: FileMessage
+    template: RichMessage
+  8:
+    name: AudioMessage
+    template: RichMessage
+  9:
+    name: KmarkdownMessage
+    template: CustomMessage
+  10:
+    name: EventCardMessage
+    template: CustomMessage
