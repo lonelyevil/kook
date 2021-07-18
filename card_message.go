@@ -73,7 +73,7 @@ func (c CardMessageCard) MarshalJSON() ([]byte, error) {
 //
 // Allowed Modules: *CardMessageHeader, *CardMessageSection, *CardMessageImageGroup, *CardMessageActionGroup,
 // *CardMessageContext, *CardMessageDivider, *CardMessageFile, *CardMessageCountdown.
-func (c *CardMessageCard) AddModule(i interface{}) {
+func (c *CardMessageCard) AddModule(i interface{}) *CardMessageCard {
 	switch i.(type) {
 	case *CardMessageHeader,
 		*CardMessageSection,
@@ -87,7 +87,7 @@ func (c *CardMessageCard) AddModule(i interface{}) {
 	default:
 		panic(unsupportedCardType)
 	}
-
+	return c
 }
 
 // CardMessageHeader is the type for 模块-标题模块.
@@ -129,25 +129,27 @@ func (c CardMessageSection) MarshalJSON() ([]byte, error) {
 // SetText provides additional type-checking when setting elements to section text.
 //
 // Allowed elements: *CardMessageElementText, *CardMessageElementKMarkdown, *CardMessageParagraph.
-func (c *CardMessageSection) SetText(i interface{}) {
+func (c *CardMessageSection) SetText(i interface{}) *CardMessageSection {
 	switch v := i.(type) {
 	case *CardMessageElementText, *CardMessageElementKMarkdown, *CardMessageParagraph:
 		c.Text = v
 	default:
 		panic(unsupportedCardType)
 	}
+	return c
 }
 
 // SetAccessory provides additional type-checking when setting elements to section accessory.
 //
 // Allowed elements: *CardMessageElementImage, *CardMessageElementButton.
-func (c *CardMessageSection) SetAccessory(i interface{}) {
+func (c *CardMessageSection) SetAccessory(i interface{}) *CardMessageSection {
 	switch v := i.(type) {
 	case *CardMessageElementImage, *CardMessageElementButton:
 		c.Accessory = v
 	default:
 		panic(unsupportedCardType)
 	}
+	return c
 }
 
 // CardMessageImageGroup is the type for 图片模块.
@@ -192,7 +194,7 @@ func (c CardMessageContext) MarshalJSON() ([]byte, error) {
 // AddItem provides additional type-checking when adding elements to context.
 //
 // Allowed elements: *CardMessageElementText, *CardMessageElementKMarkdown, *CardMessageElementImage
-func (c *CardMessageContext) AddItem(i interface{}) {
+func (c *CardMessageContext) AddItem(i interface{}) *CardMessageContext {
 	switch v := i.(type) {
 	case *CardMessageElementText,
 		*CardMessageElementKMarkdown,
@@ -201,7 +203,7 @@ func (c *CardMessageContext) AddItem(i interface{}) {
 	default:
 		panic("Unsupported type")
 	}
-
+	return c
 }
 
 // CardMessageDivider is the type for 模块-分割线模块.
@@ -338,7 +340,7 @@ func (c CardMessageParagraph) MarshalJSON() ([]byte, error) {
 }
 
 // AddField provides additional type-checking when adding elements to paragraph.
-func (c *CardMessageParagraph) AddField(i interface{}) {
+func (c *CardMessageParagraph) AddField(i interface{}) *CardMessageParagraph {
 	switch v := i.(type) {
 	case *CardMessageElementText,
 		*CardMessageElementKMarkdown,
@@ -347,4 +349,5 @@ func (c *CardMessageParagraph) AddField(i interface{}) {
 	default:
 		panic(unsupportedCardType)
 	}
+	return c
 }
