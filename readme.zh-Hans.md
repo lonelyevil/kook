@@ -20,7 +20,7 @@ KHL 是一个低级的和开黑啦机器人交互的软件库。目前她还在�
 目前，只有 [phuslu/log](https://github.com/phuslu/log) 的适配器被实现了。
 所以，想要使用本库，以下的安装命令也是必须的。
 
-```go get github.com/lonelyevil/log_adapter/plog```
+```go get github.com/lonelyevil/khl/log_adapter/plog```
 
 ### 使用
 

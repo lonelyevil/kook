@@ -18,7 +18,7 @@ This assumes that you already have a working Go environment.
 Other than the library itself, you need to install a logger and an adapter for logger.
 Personally, I only implement the adapter for [phuslu/log](https://github.com/phuslu/log). So, in order to use the library, the following installation is necessary.
 
-```go get github.com/lonelyevil/log_adapter/plog```
+```go get github.com/lonelyevil/khl/log_adapter/plog```
 
 ### Usage
 
