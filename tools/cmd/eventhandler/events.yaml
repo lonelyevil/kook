@@ -2,6 +2,7 @@ type_alias:
   str: string
   i64: int64
   '[]str': '[]string'
+  '[]i64': '[]int64'
 templates:
   Guild:
     body:
@@ -46,14 +47,14 @@ templates:
     body:
       RawContent: str
       MentionPart: '[]str'
-      MentionRolePart: '[]str'
+      MentionRolePart: '[]i64'
   CustomMessage:
     body:
       GuildID: str
       ChannelName: str
       Mention: '[]str'
       MentionAll: bool
-      MentionRoles: '[]str'
+      MentionRoles: '[]i64'
       MentionHere: bool
       Author: User
       Kmarkdown: Kmarkdown
@@ -90,7 +91,7 @@ events:
       Mention: '[]str'
       MentionAll: bool
       MentionHere: bool
-      MentionRoles: '[]str'
+      MentionRoles: '[]i64'
       UpdatedAt: MilliTimeStamp
   deleted_message:
     name: MessageDelete
@@ -207,7 +208,7 @@ events:
       ChannelName: str
       Mention: '[]str'
       MentionAll: bool
-      MentionRoles: '[]str'
+      MentionRoles: '[]i64'
       MentionHere: bool
       Author: User
   2:
