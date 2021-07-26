@@ -51,9 +51,9 @@ const (
 
 // CardMessageCard is the type for 卡片.
 type CardMessageCard struct {
-	Theme   CardTheme     `json:"theme"`
+	Theme   CardTheme     `json:"theme,omitempty"`
 	Color   string        `json:"color,omitempty"`
-	Size    CardSize      `json:"size"`
+	Size    CardSize      `json:"size,omitempty"`
 	Modules []interface{} `json:"modules"`
 }
 
@@ -109,9 +109,9 @@ func (c CardMessageHeader) MarshalJSON() ([]byte, error) {
 
 // CardMessageSection is the type for 模块-内容模块.
 type CardMessageSection struct {
-	Mode      string      `json:"mode"`
+	Mode      string      `json:"mode,omitempty"`
 	Text      interface{} `json:"text"`
-	Accessory interface{} `json:"accessory"`
+	Accessory interface{} `json:"accessory,omitempty"`
 }
 
 type fakeCardMessageSection CardMessageSection
@@ -305,7 +305,7 @@ func (c CardMessageElementImage) MarshalJSON() ([]byte, error) {
 type CardMessageElementButton struct {
 	Theme CardTheme `json:"theme"`
 	Value string    `json:"value"`
-	Click string    `json:"click"`
+	Click string    `json:"click,omitempty"`
 	Text  string    `json:"text"`
 }
 
