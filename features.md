@@ -3,6 +3,7 @@
 ## Implemented
 
 - [x] Websocket events
+- [x] Webhook events
 - [x] CardMessage builder
 - [x] RolePermission
 - [x] Injectable structural logger

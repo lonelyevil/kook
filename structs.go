@@ -243,8 +243,12 @@ type EventDataResumeAck struct {
 
 // Identify is the struct for the initial settings sent to kaiheila.
 type Identify struct {
-	Token    string
-	Compress bool
+	Token        string
+	Compress     bool
+	WebsocketKey []byte
+	ClientID     string
+	ClientSecret string
+	VerifyToken  string
 }
 
 // Session is the struct for a bot session.
@@ -269,6 +273,8 @@ type Session struct {
 
 	handlersMu sync.RWMutex
 	handlers   map[string][]*eventHandlerInstance
+
+	snStore SnStore
 }
 
 // EventDataGeneral is the struct passed to all event handler.

@@ -168,8 +168,16 @@ func (s *Session) onEvent(messageType int, message []byte) (e *Event, err error)
 		return
 	}
 
-	atomic.AddInt64(s.sequence, 1)
-
+	//atomic.AddInt64(s.sequence, 1)
+	var exist bool
+	func() {
+		s.snStore.Lock()
+		defer s.snStore.Unlock()
+		exist = s.snStore.TestAndInsert(e.SequenceNumber)
+	}()
+	if exist && e.SequenceNumber != 0 {
+		return nil, nil
+	}
 	data := EventData{}
 
 	if err = json.Unmarshal(e.Data, &data); err != nil {
@@ -179,6 +187,9 @@ func (s *Session) onEvent(messageType int, message []byte) (e *Event, err error)
 		return
 	}
 	if data.Type == MessageTypeSystem {
+		if data.ChannelType == "WEBHOOK_CHALLENGE" {
+			return e, errWebhookVerify
+		}
 		sys := EventDataSystem{}
 		if err = json.Unmarshal(data.Extra, &sys); err != nil {
 			addCaller(s.Logger.Error()).Int("signal", int(e.Signal)).Int64("seq", e.SequenceNumber).Bytes("data", e.Data).Err("err", err).Msg("unmarshal system event extra.body error")
