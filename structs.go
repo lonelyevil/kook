@@ -3,10 +3,11 @@ package khl
 import (
 	"encoding/json"
 	"errors"
-	"github.com/gorilla/websocket"
 	"net/http"
 	"sync"
 	"time"
+
+	"github.com/gorilla/websocket"
 )
 
 // RolePermission is the type for the permission of a user in guilds or channels.
@@ -60,7 +61,7 @@ func (r UserStatus) IsBanned() bool {
 // These are all the status of a user.
 const (
 	UserStatusNormal UserStatus = 1
-	UserStatusBanned            = 10
+	UserStatusBanned UserStatus = 10
 )
 
 // GuildNotifyType is the type of the notify type of a guild.
@@ -264,10 +265,10 @@ type Session struct {
 	ContentType       string
 	Logger            Logger
 
-	wsConn    *websocket.Conn
-	wsMutex   sync.Mutex
-	gateway   string
-	sessionID string
+	wsConn  *websocket.Conn
+	wsMutex sync.Mutex
+	gateway string
+	// sessionID string
 	sequence  *int64
 	listening chan interface{}
 

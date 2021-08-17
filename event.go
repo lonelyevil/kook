@@ -25,7 +25,6 @@ func registerEventHandler(eh EventHandlerProvider) {
 		return
 	}
 	registeredEventHandler[eh.Type()] = eh
-	return
 }
 
 type eventHandlerInstance struct {

@@ -8,18 +8,11 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"errors"
-	"github.com/gorilla/websocket"
 	"net/http"
 	"strings"
+
+	"github.com/gorilla/websocket"
 )
-
-type errChallenge struct {
-	Challenge string
-}
-
-func (e errChallenge) Error() string {
-	return ""
-}
 
 var errWebhookVerify = errors.New("web")
 

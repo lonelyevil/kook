@@ -739,7 +739,6 @@ func GuildUserListWithJoinedAt(joinedAt bool) GuildUserListOption {
 // FYI: https://developer.kaiheila.cn/doc/http/guild#%E8%8E%B7%E5%8F%96%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%AD%E7%9A%84%E7%94%A8%E6%88%B7%E5%88%97%E8%A1%A8
 func (s *Session) GuildUserList(guildID string, page *PageSetting, options ...GuildUserListOption) (us []*User, meta *PageInfo, err error) {
 	var response []byte
-	p := &PageInfo{}
 	u, _ := url.Parse(EndpointGuildUserList)
 	q := u.Query()
 	q.Set("guild_id", guildID)
@@ -747,7 +746,7 @@ func (s *Session) GuildUserList(guildID string, page *PageSetting, options ...Gu
 		item(q)
 	}
 	u.RawQuery = q.Encode()
-	response, p, err = s.RequestWithPage("GET", u.String(), page)
+	response, meta, err = s.RequestWithPage("GET", u.String(), page)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -755,7 +754,7 @@ func (s *Session) GuildUserList(guildID string, page *PageSetting, options ...Gu
 	if err != nil {
 		return nil, nil, err
 	}
-	return us, p, err
+	return us, meta, err
 }
 
 // GuildNickname is the arguments for GuildNickname.
@@ -851,12 +850,11 @@ func (s *Session) GuildMuteDelete(gms *GuildMuteSetting) (err error) {
 // FYI: https://developer.kaiheila.cn/doc/http/guild-role#%E8%8E%B7%E5%8F%96%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%A7%92%E8%89%B2%E5%88%97%E8%A1%A8
 func (s *Session) GuildRoleList(guildID string, page *PageSetting) (rs []*Role, meta *PageInfo, err error) {
 	var response []byte
-	p := &PageInfo{}
 	u, _ := url.Parse(EndpointGuildRoleList)
 	q := u.Query()
 	q.Add("guild_id", guildID)
 	u.RawQuery = q.Encode()
-	response, p, err = s.RequestWithPage("GET", u.String(), page)
+	response, meta, err = s.RequestWithPage("GET", u.String(), page)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -864,7 +862,7 @@ func (s *Session) GuildRoleList(guildID string, page *PageSetting) (rs []*Role, 
 	if err != nil {
 		return nil, nil, err
 	}
-	return rs, p, err
+	return rs, meta, err
 }
 
 // GuildRoleCreate creates a role for a guild.
