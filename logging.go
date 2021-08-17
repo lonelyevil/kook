@@ -76,90 +76,90 @@ type Entry interface {
 }
 
 // mock types are only for possible testing usage, do not use it in real project.
-type mockLogger struct {
-}
+// type mockLogger struct {
+// }
 
-func (m mockLogger) Trace() Entry {
-	return mockEntry{}
-}
+// func (m mockLogger) Trace() Entry {
+// 	return mockEntry{}
+// }
 
-func (m mockLogger) Debug() Entry {
-	return mockEntry{}
-}
+// func (m mockLogger) Debug() Entry {
+// 	return mockEntry{}
+// }
 
-func (m mockLogger) Info() Entry {
-	return mockEntry{}
-}
+// func (m mockLogger) Info() Entry {
+// 	return mockEntry{}
+// }
 
-func (m mockLogger) Warn() Entry {
-	return mockEntry{}
-}
+// func (m mockLogger) Warn() Entry {
+// 	return mockEntry{}
+// }
 
-func (m mockLogger) Error() Entry {
-	return mockEntry{}
-}
+// func (m mockLogger) Error() Entry {
+// 	return mockEntry{}
+// }
 
-func (m mockLogger) Fatal() Entry {
-	return mockEntry{}
-}
+// func (m mockLogger) Fatal() Entry {
+// 	return mockEntry{}
+// }
 
-type mockEntry struct {
-}
+// type mockEntry struct {
+// }
 
-func (m mockEntry) Strs(_ string, _ []string) Entry {
-	return m
-}
+// func (m mockEntry) Strs(_ string, _ []string) Entry {
+// 	return m
+// }
 
-func (m mockEntry) Bool(_ string, _ bool) Entry {
-	return m
-}
+// func (m mockEntry) Bool(_ string, _ bool) Entry {
+// 	return m
+// }
 
-func (m mockEntry) Bytes(_ string, _ []byte) Entry {
-	return m
-}
+// func (m mockEntry) Bytes(_ string, _ []byte) Entry {
+// 	return m
+// }
 
-func (m mockEntry) Caller(_ int) Entry {
-	return m
-}
+// func (m mockEntry) Caller(_ int) Entry {
+// 	return m
+// }
 
-func (m mockEntry) Dur(_ string, _ time.Duration) Entry {
-	return m
-}
+// func (m mockEntry) Dur(_ string, _ time.Duration) Entry {
+// 	return m
+// }
 
-func (m mockEntry) Err(_ string, _ error) Entry {
-	return m
-}
+// func (m mockEntry) Err(_ string, _ error) Entry {
+// 	return m
+// }
 
-func (m mockEntry) Float64(_ string, _ float64) Entry {
-	return m
-}
+// func (m mockEntry) Float64(_ string, _ float64) Entry {
+// 	return m
+// }
 
-func (m mockEntry) IPAddr(_ string, _ net.IP) Entry {
-	return m
-}
+// func (m mockEntry) IPAddr(_ string, _ net.IP) Entry {
+// 	return m
+// }
 
-func (m mockEntry) Int(_ string, _ int) Entry {
-	return m
-}
+// func (m mockEntry) Int(_ string, _ int) Entry {
+// 	return m
+// }
 
-func (m mockEntry) Int64(_ string, _ int64) Entry {
-	return m
-}
+// func (m mockEntry) Int64(_ string, _ int64) Entry {
+// 	return m
+// }
 
-func (m mockEntry) Interface(_ string, _ interface{}) Entry {
-	return m
-}
+// func (m mockEntry) Interface(_ string, _ interface{}) Entry {
+// 	return m
+// }
 
-func (m mockEntry) Msg(_ string) {
-}
+// func (m mockEntry) Msg(_ string) {
+// }
 
-func (m mockEntry) Msgf(_ string, _ ...interface{}) {
-}
+// func (m mockEntry) Msgf(_ string, _ ...interface{}) {
+// }
 
-func (m mockEntry) Str(_ string, _ string) Entry {
-	return m
-}
+// func (m mockEntry) Str(_ string, _ string) Entry {
+// 	return m
+// }
 
-func (m mockEntry) Time(_ string, _ time.Time) Entry {
-	return m
-}
+// func (m mockEntry) Time(_ string, _ time.Time) Entry {
+// 	return m
+// }
