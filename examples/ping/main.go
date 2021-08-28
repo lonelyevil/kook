@@ -2,13 +2,14 @@ package main
 
 import (
 	"fmt"
-	"github.com/lonelyevil/khl"
-	"github.com/lonelyevil/khl/log_adapter/plog"
-	"github.com/phuslu/log"
 	"os"
 	"os/signal"
 	"strings"
 	"syscall"
+
+	"github.com/lonelyevil/khl"
+	"github.com/lonelyevil/khl/log_adapter/plog"
+	"github.com/phuslu/log"
 )
 
 func main() {

@@ -1199,7 +1199,7 @@ func (s *Session) InviteDelete(id *InviteDelete) (err error) {
 }
 
 // UserMe returns the bot info.
-// FYI: https://developer.kaiheila.cn/doc/http/user
+// FYI: https://developer.kaiheila.cn/doc/http/user#%E8%8E%B7%E5%8F%96%E5%BD%93%E5%89%8D%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF
 func (s *Session) UserMe() (u *User, err error) {
 	var response []byte
 	response, err = s.Request("GET", EndpointUserMe, nil)
@@ -1212,6 +1212,39 @@ func (s *Session) UserMe() (u *User, err error) {
 		return nil, err
 	}
 	return u, nil
+}
+
+// UserView returns a user's info
+// FYI: https://developer.kaiheila.cn/doc/http/user#%E8%8E%B7%E5%8F%96%E7%9B%AE%E6%A0%87%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF
+func (s *Session) UserView(userID string, options ...UserViewOption) (u *User, err error) {
+	var response []byte
+	ur, _ := url.Parse(EndpointUserView)
+	q := ur.Query()
+	q.Set("user_id", userID)
+	for _, item := range options {
+		item(q)
+	}
+	ur.RawQuery = q.Encode()
+	response, err = s.Request("GET", ur.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+	u = &User{}
+	err = json.Unmarshal(response, u)
+	if err != nil {
+		return nil, err
+	}
+	return u, nil
+}
+
+// UserViewOption is the optional arguments for UserView requests.
+type UserViewOption func(value url.Values)
+
+// UserViewWithGuildID add the optional `guild_id` arguments to UserView request
+func UserViewWithGuildID(guildID string) UserViewOption {
+	return func(value url.Values) {
+		value.Set("guild_id", guildID)
+	}
 }
 
 // RequestWithPage is the wrapper for internal list GET request, you would prefer to use other method other than this.

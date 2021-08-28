@@ -70,7 +70,8 @@ var (
 
 	EndpointGatewayIndex = urlJoin(EndpointGateway, "index")
 
-	EndpointUserMe = urlJoin(EndpointUser, "me")
+	EndpointUserMe   = urlJoin(EndpointUser, "me")
+	EndpointUserView = urlJoin(EndpointUser, "view")
 
 	EndpointAssetCreate = urlJoin(EndpointAsset, "create")
 
