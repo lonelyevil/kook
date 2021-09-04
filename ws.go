@@ -169,7 +169,7 @@ func (s *Session) onEvent(messageType int, message []byte) (e *Event, err error)
 		return
 	}
 
-	//atomic.AddInt64(s.sequence, 1)
+	atomic.AddInt64(s.sequence, 1)
 	var exist bool
 	func() {
 		s.snStore.Lock()
