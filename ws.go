@@ -6,12 +6,13 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/gorilla/websocket"
 	"io"
 	"net/http"
 	"strconv"
 	"sync/atomic"
 	"time"
+
+	"github.com/gorilla/websocket"
 )
 
 // ErrWSAlreadyOpen is the error when connecting with connected websocket.
@@ -39,7 +40,7 @@ func (s *Session) Open() (err error) {
 	}
 
 	//s.log(LogInfo, "connecting to gateway %s", s.gateway)
-	addCaller(s.Logger.Error()).Str("gateway_url", s.gateway).Msg("connecting to gateway")
+	addCaller(s.Logger.Info()).Str("gateway_url", s.gateway).Msg("connecting to gateway")
 	s.wsConn, _, err = websocket.DefaultDialer.Dial(s.gateway, http.Header{})
 	if err != nil {
 		addCaller(s.Logger.Error()).
