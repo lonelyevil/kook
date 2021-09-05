@@ -13,9 +13,9 @@ templates:
       NotifyType: GuildNotifyType
       Region: str
       EnableOpen: IntBool
-      OpenID: str
-      DeafultChannelID: i64
-      WelcomeChannelID: i64
+      OpenID: i64
+      DeafultChannelID: str
+      WelcomeChannelID: str
   ReactionItem:
     body:
       MsgID: str

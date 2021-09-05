@@ -180,7 +180,7 @@ type Channel struct {
 	MasterID             string                `json:"master_id"`
 	GuildID              string                `json:"guild_id"`
 	Topic                string                `json:"topic"`
-	IsCategory           bool                  `json:"is_category"`
+	IsCategory           IntBool               `json:"is_category"`
 	ParentID             string                `json:"parent_id"`
 	Level                int                   `json:"level"`
 	SlowMode             int                   `json:"slow_mode"`
