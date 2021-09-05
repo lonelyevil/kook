@@ -1250,17 +1250,19 @@ func UserViewWithGuildID(guildID string) UserViewOption {
 // RequestWithPage is the wrapper for internal list GET request, you would prefer to use other method other than this.
 func (s *Session) RequestWithPage(method, u string, page *PageSetting) (response []byte, meta *PageInfo, err error) {
 	ur, _ := url.Parse(u)
-	q := ur.Query()
-	if page.Page != nil {
-		q.Add("page", strconv.Itoa(*page.Page))
+	if page != nil {
+		q := ur.Query()
+		if page.Page != nil {
+			q.Add("page", strconv.Itoa(*page.Page))
+		}
+		if page.PageSize != nil {
+			q.Add("page_size", strconv.Itoa(*page.PageSize))
+		}
+		if page.Sort != nil {
+			q.Add("sort", *page.Sort)
+		}
+		ur.RawQuery = q.Encode()
 	}
-	if page.PageSize != nil {
-		q.Add("page_size", strconv.Itoa(*page.PageSize))
-	}
-	if page.Sort != nil {
-		q.Add("sort", *page.Sort)
-	}
-	ur.RawQuery = q.Encode()
 	resp, err := s.Request(method, ur.String(), nil)
 	if err != nil {
 		return nil, nil, err
