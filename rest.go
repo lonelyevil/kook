@@ -1261,7 +1261,7 @@ func (s *Session) RequestWithPage(method, u string, page *PageSetting) (response
 		q.Add("sort", *page.Sort)
 	}
 	ur.RawQuery = q.Encode()
-	resp, err := s.Request(method, u, nil)
+	resp, err := s.Request(method, ur.String(), nil)
 	if err != nil {
 		return nil, nil, err
 	}
