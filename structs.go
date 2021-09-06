@@ -167,36 +167,43 @@ type Role struct {
 	Name        string         `json:"name,omitempty"`
 	Color       int            `json:"color,omitempty"`
 	Position    int            `json:"position"`
-	Hoist       int            `json:"hoist,omitempty"`
-	Mentionable int            `json:"mentionable,omitempty"`
+	Hoist       IntBool        `json:"hoist,omitempty"`
+	Mentionable IntBool        `json:"mentionable,omitempty"`
 	Permissions RolePermission `json:"permissions,omitempty"`
 }
 
 // Channel is the struct for a channel in guild. For different channels, some fields may be empty.
 type Channel struct {
-	ID                   string                `json:"id"`
-	Name                 string                `json:"name"`
-	UserID               string                `json:"user_id"`
-	MasterID             string                `json:"master_id"`
-	GuildID              string                `json:"guild_id"`
-	Topic                string                `json:"topic"`
-	IsCategory           IntBool               `json:"is_category"`
-	ParentID             string                `json:"parent_id"`
-	Level                int                   `json:"level"`
-	SlowMode             int                   `json:"slow_mode"`
-	Type                 ChannelType           `json:"type"`
-	LimitAmount          int                   `json:"limit_amount"`
-	PermissionOverwrites []PermissionOverwrite `json:"permission_overwrites"`
-	PermissionUsers      []PermissionOverwrite `json:"permission_users"`
-	PermissionSync       int8                  `json:"permission_sync"`
-	ServerURL            string                `json:"server_url"`
+	ID                   string                    `json:"id"`
+	Name                 string                    `json:"name"`
+	UserID               string                    `json:"user_id"`
+	MasterID             string                    `json:"master_id"`
+	GuildID              string                    `json:"guild_id"`
+	Topic                string                    `json:"topic"`
+	IsCategory           IntBool                   `json:"is_category"`
+	ParentID             string                    `json:"parent_id"`
+	Level                int                       `json:"level"`
+	SlowMode             int                       `json:"slow_mode"`
+	Type                 ChannelType               `json:"type"`
+	LimitAmount          int                       `json:"limit_amount"`
+	PermissionOverwrites []PermissionOverwrite     `json:"permission_overwrites"`
+	PermissionUsers      []UserPermissionOverwrite `json:"permission_users"`
+	PermissionSync       IntBool                   `json:"permission_sync"`
+	ServerURL            string                    `json:"server_url"`
 }
 
-// PermissionOverwrite is the struct for where needs to customize permission other than using global ones.
+// PermissionOverwrite is the struct for where needs to customize permission for a role in a channel.
 type PermissionOverwrite struct {
 	RoleID int64          `json:"role_id"`
 	Allow  RolePermission `json:"allow"`
 	Deny   RolePermission `json:"deny"`
+}
+
+// UserPermissionOverwrite is the struct for where needs to customize permission for a user in a channel.
+type UserPermissionOverwrite struct {
+	User  *User          `json:"user"`
+	Allow RolePermission `json:"allow"`
+	Deny  RolePermission `json:"deny"`
 }
 
 // Event is the struct for every received event.
