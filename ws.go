@@ -73,7 +73,7 @@ func (s *Session) Open() (err error) {
 		return
 	}
 	if e.Signal != EventSignalHello {
-
+		s.gateway = ""
 		err = fmt.Errorf("expecting signal hello, got singal %d", e.Signal)
 		return err
 	}
@@ -88,6 +88,7 @@ func (s *Session) Open() (err error) {
 		return
 	}
 	if h.Code != EventStatusOk {
+		s.gateway = ""
 		addCaller(s.Logger.Error()).Int("code", int(h.Code)).Msg("error status is not ok")
 		err = fmt.Errorf("expecting status ok, received %d", h.Code)
 		return
