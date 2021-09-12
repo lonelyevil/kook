@@ -154,6 +154,11 @@ func (s *Session) onEvent(messageType int, message []byte) (e *Event, err error)
 		addCaller(s.Logger.Info()).Msg("closing current ws and reconnecting in response to Reconnect signal")
 		//s.log(LogInfo, "closing current ws and reconnecting in response to Reconnect signal")
 		s.CloseWithCode(websocket.CloseServiceRestart)
+		s.Lock()
+		s.gateway = ""
+		atomic.StoreInt64(s.sequence, 0)
+		s.snStore.Clear()
+		s.Unlock()
 		s.reconnect()
 		return
 	}

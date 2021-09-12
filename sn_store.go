@@ -2,8 +2,9 @@ package khl
 
 import (
 	"encoding/binary"
-	"github.com/bits-and-blooms/bloom/v3"
 	"sync"
+
+	"github.com/bits-and-blooms/bloom/v3"
 )
 
 // SnStore is the interface for storing sequence numbers.
@@ -11,6 +12,7 @@ type SnStore interface {
 	TestAndInsert(int64) bool
 	Lock()
 	Unlock()
+	Clear()
 }
 
 type bloomSnStore struct {
@@ -40,4 +42,8 @@ func (b bloomSnStore) Lock() {
 // Unlock unlocks the store.
 func (b bloomSnStore) Unlock() {
 	b.lock.Unlock()
+}
+
+func (b bloomSnStore) Clear() {
+	b.filter.ClearAll()
 }
