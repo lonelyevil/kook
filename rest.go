@@ -92,7 +92,9 @@ func (s *Session) MessageList(targetID string, options ...MessageListOption) (ms
 		return nil, err
 	}
 
-	data := Data{}
+	data := struct {
+		Items []*DetailedChannelMessage `json:"items"`
+	}{}
 	err = json.Unmarshal(response, &data)
 	if err != nil {
 		return nil, err
@@ -310,7 +312,7 @@ type ChannelRoleIndex struct {
 		Allow RolePermission `json:"allow"`
 		Deny  RolePermission `json:"deny"`
 	} `json:"permission_users"`
-	PermissionSync int `json:"permission_sync"`
+	PermissionSync IntBool `json:"permission_sync"`
 }
 
 // ChannelRoleIndex returns the role and permission list of the channel.

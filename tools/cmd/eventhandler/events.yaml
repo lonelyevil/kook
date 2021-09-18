@@ -62,7 +62,7 @@ templates:
     body:
       GuildID: str
       ChannelName: str
-      Mention: '[]i64'
+      Mention: '[]str'
       MentionAll: bool
       MentionRoles: '[]i64'
       MentionHere: bool
@@ -98,7 +98,7 @@ events:
       MsgID: str
       Content: str
       ChannelID: str
-      Mention: '[]i64'
+      Mention: '[]str'
       MentionAll: bool
       MentionHere: bool
       MentionRoles: '[]i64'
@@ -216,7 +216,7 @@ events:
     body:
       GuildID: str
       ChannelName: str
-      Mention: '[]i64'
+      Mention: '[]str'
       MentionAll: bool
       MentionRoles: '[]i64'
       MentionHere: bool
