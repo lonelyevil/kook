@@ -43,16 +43,26 @@ templates:
       GuildID: str
       Attachments: '[]Attachment'
       Author: User
+  MentionRolePart:
+    body:
+      RoleID: i64
+      Name: str
+  MentionPart:
+    body:
+      ID: i64
+      Username: str
+      FullName: str
+      Avatar: str
   Kmarkdown:
     body:
       RawContent: str
-      MentionPart: '[]str'
-      MentionRolePart: '[]i64'
+      MentionPart: '[]EventMentionPart'
+      MentionRolePart: '[]EventMentionRolePart'
   CustomMessage:
     body:
       GuildID: str
       ChannelName: str
-      Mention: '[]str'
+      Mention: '[]i64'
       MentionAll: bool
       MentionRoles: '[]i64'
       MentionHere: bool
@@ -88,7 +98,7 @@ events:
       MsgID: str
       Content: str
       ChannelID: str
-      Mention: '[]str'
+      Mention: '[]i64'
       MentionAll: bool
       MentionHere: bool
       MentionRoles: '[]i64'
@@ -206,7 +216,7 @@ events:
     body:
       GuildID: str
       ChannelName: str
-      Mention: '[]str'
+      Mention: '[]i64'
       MentionAll: bool
       MentionRoles: '[]i64'
       MentionHere: bool

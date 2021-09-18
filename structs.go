@@ -328,6 +328,10 @@ type EndpointGeneralResponse struct {
 	Data    json.RawMessage `json:"data"`
 }
 
+type Data struct {
+	Items []*DetailedChannelMessage `json:"items"`
+}
+
 const heartbeatInterval = time.Second * 30
 
 // MessageReaction is the struct for reactions embedded to a message.

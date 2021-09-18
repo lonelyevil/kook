@@ -91,10 +91,14 @@ func (s *Session) MessageList(targetID string, options ...MessageListOption) (ms
 	if err != nil {
 		return nil, err
 	}
-	err = json.Unmarshal(response, &ms)
+
+	data := Data{}
+	err = json.Unmarshal(response, &data)
 	if err != nil {
 		return nil, err
 	}
+	ms = data.Items
+
 	return ms, nil
 }
 
@@ -129,7 +133,7 @@ func (s *Session) MessageCreate(m *MessageCreate) (resp *MessageResp, err error)
 		return nil, err
 	}
 
-	err = json.Unmarshal(response, resp)
+	err = json.Unmarshal(response, &resp)
 	if err != nil {
 		return nil, err
 	}
@@ -247,7 +251,7 @@ func (s *Session) ChannelView(channelID string) (c *Channel, err error) {
 	if err != nil {
 		return nil, err
 	}
-	err = json.Unmarshal(response, c)
+	err = json.Unmarshal(response, &c)
 	if err != nil {
 		return nil, err
 	}
@@ -272,7 +276,7 @@ func (s *Session) ChannelCreate(cc *ChannelCreate) (c *Channel, err error) {
 	if err != nil {
 		return nil, err
 	}
-	err = json.Unmarshal(response, c)
+	err = json.Unmarshal(response, &c)
 	if err != nil {
 		return nil, err
 	}
@@ -306,7 +310,7 @@ type ChannelRoleIndex struct {
 		Allow RolePermission `json:"allow"`
 		Deny  RolePermission `json:"deny"`
 	} `json:"permission_users"`
-	PermissionSync bool `json:"permission_sync"`
+	PermissionSync int `json:"permission_sync"`
 }
 
 // ChannelRoleIndex returns the role and permission list of the channel.
@@ -321,7 +325,7 @@ func (s *Session) ChannelRoleIndex(channelID string) (cr *ChannelRoleIndex, err 
 	if err != nil {
 		return nil, err
 	}
-	err = json.Unmarshal(response, cr)
+	err = json.Unmarshal(response, &cr)
 	if err != nil {
 		return nil, err
 	}
@@ -368,7 +372,7 @@ func (s *Session) ChannelRoleUpdate(cru *ChannelRoleUpdate) (crur *ChannelRoleUp
 	if err != nil {
 		return nil, err
 	}
-	err = json.Unmarshal(response, crur)
+	err = json.Unmarshal(response, &crur)
 	if err != nil {
 		return nil, err
 	}
@@ -537,7 +541,7 @@ func (s *Session) DirectMessageCreate(create *DirectMessageCreate) (mr *MessageR
 	if err != nil {
 		return nil, err
 	}
-	err = json.Unmarshal(response, mr)
+	err = json.Unmarshal(response, &mr)
 	if err != nil {
 		return nil, err
 	}
@@ -1083,7 +1087,7 @@ func (s *Session) GuildEmojiCreate(name, guildID string, emoji []byte) (ger *Gui
 	if err != nil {
 		return nil, err
 	}
-	err = json.Unmarshal(response, ger)
+	err = json.Unmarshal(response, &ger)
 	if err != nil {
 		return nil, err
 	}
