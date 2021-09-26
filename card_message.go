@@ -246,6 +246,23 @@ func (c CardMessageCountdown) MarshalJSON() ([]byte, error) {
 	})
 }
 
+// CardMessageContainer is the type for 可拓展图片模块.
+type CardMessageContainer []CardMessageElementImage
+
+// MarshalJSON adds additional type field when marshaling.
+func (c CardMessageContainer) MarshalJSON() ([]byte, error) {
+	return json.Marshal(struct {
+		Type     string                    `json:"type"`
+		Elements []CardMessageElementImage `json:"elements"`
+	}{"container", c})
+}
+
+// AddElements adds elements to container.
+func (c *CardMessageContainer) AddElements(i ...CardMessageElementImage) *CardMessageContainer {
+	*c = append(*c, i...)
+	return c
+}
+
 // CardMessageElementText is the type for 元素-普通文本.
 type CardMessageElementText struct {
 	Content string `json:"content"`
