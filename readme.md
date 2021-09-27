@@ -4,6 +4,7 @@ A low level library for interacting with kaiheila(开黑啦) bot API. Currently,
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/lonelyevil/khl.svg)](https://pkg.go.dev/github.com/lonelyevil/khl)
 [![Go Report Card](https://goreportcard.com/badge/github.com/lonelyevil/khl)](https://goreportcard.com/report/github.com/lonelyevil/khl)
+[![Server Badger](https://img.shields.io/badge/kaiheila-dev--chat-informational)](https://kaihei.co/r5s1WO)
 
 ## Get Started
 
