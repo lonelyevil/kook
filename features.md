@@ -15,8 +15,8 @@
 ## WIP
 
 ## Planned
-- [] TextMessage router
-- [] Helper fucntion for messages could emit event
+- [ ] TextMessage router
+- [ ] Helper fucntion for messages could emit event
 
 ## HTTP API status
 
