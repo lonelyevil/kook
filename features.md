@@ -9,11 +9,14 @@
 - [x] Injectable structural logger
   - [x] Integration
   - [x] `phuslu/log` adapter
+  - [x] `zap` adapter
 - [x] HTTP API
 
 ## WIP
 
 ## Planned
+- [] TextMessage router
+- [] Helper fucntion for messages could emit event
 
 ## HTTP API status
 
@@ -63,6 +66,7 @@
   - [x] 获取网关连接地址 `gateway/index`
 - [x] 用户相关接口 `user`
   - [x] 获取当前用户信息 `user/me`
+  - [x] 获取目标用户信息 `user/view`
 - [x] 媒体模块 `asset`
   - [x] 上传文件/图片 `asset/create`
 - [x] 服务器角色权限相关接口 `guild-role`
