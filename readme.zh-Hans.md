@@ -51,3 +51,7 @@ KHL 是一个低级的和开黑啦机器人交互的软件库。目前她还在�
 ## 授权协议
 
 KHL 是以 ISC 授权条款分发的一个免费开源的软件库。
+
+## 特别感谢
+
+<img alt="GoLand logo" src="https://resources.jetbrains.com/storage/products/company/brand/logos/GoLand.png" width="250">

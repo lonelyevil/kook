@@ -49,3 +49,9 @@ Bug reports and code suggestions are greatly welcomed.
 ## LICENSE
 
 KHL is a free and open source software library distributed under the terms of [ISC License](LICENSE).
+
+## Special Thanks To:
+
+<img alt="GoLand logo" src="https://resources.jetbrains.com/storage/products/company/brand/logos/GoLand.png" width="250">
+
+Built using IntelliJ IDEA
