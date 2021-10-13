@@ -221,6 +221,7 @@ events:
       MentionRoles: '[]i64'
       MentionHere: bool
       Author: User
+      Quote: '*Quote'
   2:
     name: ImageMessage
     template: RichMessage

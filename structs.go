@@ -483,3 +483,12 @@ type EventHandlerCommonContext struct {
 	Session *Session
 	Common  *EventDataGeneral
 }
+
+// Quote is the struct for quotes in message events.
+type Quote struct {
+	ID       string         `json:"id"`
+	Type     MessageType    `json:"type"`
+	Content  string         `json:"content"`
+	CreateAt MilliTimeStamp `json:"create_at"`
+	Author   *User          `json:"author"`
+}
