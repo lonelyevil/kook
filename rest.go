@@ -122,7 +122,7 @@ type MessageCreate struct {
 // MessageResp is the type for response for MessageCreate.
 type MessageResp struct {
 	MsgID        string         `json:"msg_id"`
-	MegTimestamp MilliTimeStamp `json:"meg_timestamp"`
+	MsgTimestamp MilliTimeStamp `json:"msg_timestamp"`
 	Nonce        string         `json:"nonce"`
 }
 
