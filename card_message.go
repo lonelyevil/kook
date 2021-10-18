@@ -107,11 +107,20 @@ func (c CardMessageHeader) MarshalJSON() ([]byte, error) {
 	})
 }
 
+// CardMessageSectionMode is the type of mode for CardMessageSection
+type CardMessageSectionMode string
+
+// These are predefined usable CardMessageSectionModes
+const (
+	CardMessageSectionModeLeft  CardMessageSectionMode = "left"
+	CardMessageSectionModeRight CardMessageSectionMode = "right"
+)
+
 // CardMessageSection is the type for 模块-内容模块.
 type CardMessageSection struct {
-	Mode      string      `json:"mode,omitempty"`
-	Text      interface{} `json:"text"`
-	Accessory interface{} `json:"accessory,omitempty"`
+	Mode      CardMessageSectionMode `json:"mode,omitempty"`
+	Text      interface{}            `json:"text"`
+	Accessory interface{}            `json:"accessory,omitempty"`
 }
 
 type fakeCardMessageSection CardMessageSection
@@ -221,18 +230,38 @@ func (c CardMessageDivider) MarshalJSON() ([]byte, error) {
 
 // CardMessageFile is the type for 模块-文件模块.
 type CardMessageFile struct {
-	Type  string `json:"type"`
-	Src   string `json:"src"`
-	Title string `json:"title"`
-	Cover string `json:"cover"`
+	Type  CardMessageFileType `json:"type"`
+	Src   string              `json:"src"`
+	Title string              `json:"title,omitempty"`
+	Cover string              `json:"cover,omitempty"`
 }
+
+// CardMessageFileType is the type for types of CardMessageFile
+type CardMessageFileType string
+
+// These are predefined usable CardMessageFileTypes
+const (
+	CardMessageFileTypeFile  CardMessageFileType = "file"
+	CardMessageFileTypeAudio CardMessageFileType = "audio"
+	CardMessageFileTypeVideo CardMessageFileType = "video"
+)
 
 // CardMessageCountdown is the type for 模块-倒计时模块.
 type CardMessageCountdown struct {
-	EndTime   MilliTimeStamp `json:"endTime"`
-	StartTime MilliTimeStamp `json:"startTime"`
-	Mode      string         `json:"mode"`
+	EndTime   MilliTimeStamp           `json:"endTime"`
+	StartTime MilliTimeStamp           `json:"startTime"`
+	Mode      CardMessageCountdownMode `json:"mode"`
 }
+
+// CardMessageCountdownMode is the type for modes of CardMessageCountdown
+type CardMessageCountdownMode string
+
+// These are predefined usable CardMessageCountdownModes
+const (
+	CardMessageCountdownModeDay    CardMessageCountdownMode = "day"
+	CardMessageCountdownModeHour   CardMessageCountdownMode = "hour"
+	CardMessageCountdownModeSecond CardMessageCountdownMode = "second"
+)
 
 type fakeCardMessageCountdown CardMessageCountdown
 
@@ -301,8 +330,8 @@ func (c CardMessageElementKMarkdown) MarshalJSON() ([]byte, error) {
 // CardMessageElementImage is the type for 元素-图片.
 type CardMessageElementImage struct {
 	Src    string `json:"src"`
-	Alt    string `json:"alt"`
-	Size   string `json:"size"`
+	Alt    string `json:"alt,omitempty"`
+	Size   string `json:"size,omitempty"`
 	Circle bool   `json:"circle"`
 }
 
@@ -325,6 +354,15 @@ type CardMessageElementButton struct {
 	Click string    `json:"click,omitempty"`
 	Text  string    `json:"text"`
 }
+
+// CardMessageElementButtonClick is the type for click modes of CardMessageElementButton
+type CardMessageElementButtonClick string
+
+// These are predefined usable CardMessageElementButtonClicks
+const (
+	CardMessageElementButtonClickLink      CardMessageElementButtonClick = "link"
+	CardMessageElementButtonClickReturnVal CardMessageElementButtonClick = "return-val"
+)
 
 type fakeCardMessageElementButton CardMessageElementButton
 
