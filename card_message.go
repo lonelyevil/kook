@@ -395,6 +395,8 @@ func (c CardMessageParagraph) MarshalJSON() ([]byte, error) {
 }
 
 // AddField provides additional type-checking when adding elements to paragraph.
+//
+// Allowed elements: *CardMessageElementText, *CardMessageElementKMarkdown and *CardMessageContext
 func (c *CardMessageParagraph) AddField(i interface{}) *CardMessageParagraph {
 	switch v := i.(type) {
 	case *CardMessageElementText,
