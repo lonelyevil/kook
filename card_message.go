@@ -292,6 +292,21 @@ func (c *CardMessageContainer) AddElements(i ...CardMessageElementImage) *CardMe
 	return c
 }
 
+// CardMessageInvite is the type for 邀请模块.
+type CardMessageInvite struct {
+	Code string `json:"code"`
+}
+
+type fakeCardMessageInvite CardMessageInvite
+
+// MarshalJSON adds additional type field when marshaling.
+func (c CardMessageInvite) MarshalJSON() ([]byte, error) {
+	return json.Marshal(struct {
+		Type string `json:"type"`
+		fakeCardMessageInvite
+	}{"container", fakeCardMessageInvite(c)})
+}
+
 // CardMessageElementText is the type for 元素-普通文本.
 type CardMessageElementText struct {
 	Content string `json:"content"`
