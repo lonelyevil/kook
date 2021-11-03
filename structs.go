@@ -394,7 +394,7 @@ func (t *MilliTimeStamp) ToTime() time.Time {
 
 // MilliTimeStampOfTime converts the time.Time to MillTimeStamp
 func MilliTimeStampOfTime(t time.Time) MilliTimeStamp {
-	return MilliTimeStamp(t.Unix()*1000 + t.UnixNano()/1000000)
+	return MilliTimeStamp(t.UnixNano() / 1000000)
 }
 
 // PrivateMessage is the struct for messages in direct chat.
