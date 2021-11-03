@@ -211,6 +211,8 @@ events:
       UserID: str
       Value: str
       TargetID: str
+      GuildID: str
+      UserInfo: User
   1:
     name: TextMessage
     body:

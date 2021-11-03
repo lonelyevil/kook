@@ -6,59 +6,23 @@ Don't edit it.
 */
 
 //revive:disable
-type EventDirectChatReactionItem struct {
-	ChatCode string    `json:"chat_code"`
-	Emoji    EmojiItem `json:"emoji"`
-	MsgID    string    `json:"msg_id"`
-	UserID   string    `json:"user_id"`
-}
-type EventRichMessage struct {
-	GuildID     string       `json:"guild_id"`
-	Attachments []Attachment `json:"attachments"`
-	Author      User         `json:"author"`
-}
 type EventMentionPart struct {
+	FullName string `json:"full_name"`
 	Avatar   string `json:"avatar"`
 	ID       int64  `json:"id"`
 	Username string `json:"username"`
-	FullName string `json:"full_name"`
-}
-type EventKmarkdown struct {
-	RawContent      string                 `json:"raw_content"`
-	MentionPart     []EventMentionPart     `json:"mention_part"`
-	MentionRolePart []EventMentionRolePart `json:"mention_role_part"`
 }
 type EventGuild struct {
+	Icon             string          `json:"icon"`
 	NotifyType       GuildNotifyType `json:"notify_type"`
 	EnableOpen       IntBool         `json:"enable_open"`
-	DeafultChannelID string          `json:"deafult_channel_id"`
-	WelcomeChannelID string          `json:"welcome_channel_id"`
-	ID               string          `json:"id"`
-	Name             string          `json:"name"`
-	UserID           string          `json:"user_id"`
-	Icon             string          `json:"icon"`
-	Region           string          `json:"region"`
 	OpenID           int64           `json:"open_id"`
-}
-type EventReactionItem struct {
-	MsgID     string    `json:"msg_id"`
-	UserID    string    `json:"user_id"`
-	ChannelID string    `json:"channel_id"`
-	Emoji     EmojiItem `json:"emoji"`
-}
-type EventMentionRolePart struct {
-	RoleID int64  `json:"role_id"`
-	Name   string `json:"name"`
-}
-type EventCustomMessage struct {
-	GuildID      string         `json:"guild_id"`
-	ChannelName  string         `json:"channel_name"`
-	Mention      []int64        `json:"mention"`
-	MentionAll   bool           `json:"mention_all"`
-	MentionRoles []int64        `json:"mention_roles"`
-	MentionHere  bool           `json:"mention_here"`
-	Author       User           `json:"author"`
-	Kmarkdown    EventKmarkdown `json:"kmarkdown"`
+	WelcomeChannelID string          `json:"welcome_channel_id"`
+	UserID           string          `json:"user_id"`
+	Name             string          `json:"name"`
+	Region           string          `json:"region"`
+	DeafultChannelID string          `json:"deafult_channel_id"`
+	ID               string          `json:"id"`
 }
 type EventPinMessageItem struct {
 	ChannelID  string `json:"channel_id"`
@@ -70,158 +34,251 @@ type EventGuildMemberOnlineItem struct {
 	EventTime MilliTimeStamp `json:"event_time"`
 	Guilds    []string       `json:"guilds"`
 }
-type ChannelDeleteEventHandler func(*ChannelDeleteContext)
+type EventRichMessage struct {
+	Attachments []Attachment `json:"attachments"`
+	Author      User         `json:"author"`
+	GuildID     string       `json:"guild_id"`
+}
+type EventMentionRolePart struct {
+	RoleID int64  `json:"role_id"`
+	Name   string `json:"name"`
+}
+type EventKmarkdown struct {
+	RawContent      string                 `json:"raw_content"`
+	MentionPart     []EventMentionPart     `json:"mention_part"`
+	MentionRolePart []EventMentionRolePart `json:"mention_role_part"`
+}
+type EventCustomMessage struct {
+	MentionAll   bool           `json:"mention_all"`
+	MentionRoles []int64        `json:"mention_roles"`
+	MentionHere  bool           `json:"mention_here"`
+	Author       User           `json:"author"`
+	Kmarkdown    EventKmarkdown `json:"kmarkdown"`
+	GuildID      string         `json:"guild_id"`
+	ChannelName  string         `json:"channel_name"`
+	Mention      []int64        `json:"mention"`
+}
+type EventReactionItem struct {
+	MsgID     string    `json:"msg_id"`
+	UserID    string    `json:"user_id"`
+	ChannelID string    `json:"channel_id"`
+	Emoji     EmojiItem `json:"emoji"`
+}
+type EventDirectChatReactionItem struct {
+	MsgID    string    `json:"msg_id"`
+	UserID   string    `json:"user_id"`
+	ChatCode string    `json:"chat_code"`
+	Emoji    EmojiItem `json:"emoji"`
+}
+type BlockListDeleteEventHandler func(*BlockListDeleteContext)
 
-func (eh ChannelDeleteEventHandler) Type() string {
-	return "deleted_channel"
+func (eh BlockListDeleteEventHandler) Type() string {
+	return "deleted_block_list"
 }
-func (eh ChannelDeleteEventHandler) New() EventContext {
-	return &ChannelDeleteContext{}
+func (eh BlockListDeleteEventHandler) New() EventContext {
+	return &BlockListDeleteContext{}
 }
-func (eh ChannelDeleteEventHandler) Handle(i EventContext) {
-	if t, ok := i.(*ChannelDeleteContext); ok {
+func (eh BlockListDeleteEventHandler) Handle(i EventContext) {
+	if t, ok := i.(*BlockListDeleteContext); ok {
 		eh(t)
 	}
 }
 
-type ChannelDeleteContext struct {
-	*EventHandlerCommonContext
-	Extra struct {
-		ID        string         `json:"id"`
-		DeletedAt MilliTimeStamp `json:"deleted_at"`
-	}
-}
-
-func (ctx *ChannelDeleteContext) GetExtra() interface{} {
-	return &ctx.Extra
-}
-func (ctx *ChannelDeleteContext) GetCommon() *EventHandlerCommonContext {
-	if ctx.EventHandlerCommonContext == nil {
-		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
-	}
-	return ctx.EventHandlerCommonContext
-}
-
-type GuildMemberOnlineEventHandler func(*GuildMemberOnlineContext)
-
-func (eh GuildMemberOnlineEventHandler) Type() string {
-	return "guild_member_online"
-}
-func (eh GuildMemberOnlineEventHandler) New() EventContext {
-	return &GuildMemberOnlineContext{}
-}
-func (eh GuildMemberOnlineEventHandler) Handle(i EventContext) {
-	if t, ok := i.(*GuildMemberOnlineContext); ok {
-		eh(t)
-	}
-}
-
-type GuildMemberOnlineContext struct {
-	*EventHandlerCommonContext
-	Extra EventGuildMemberOnlineItem
-}
-
-func (ctx *GuildMemberOnlineContext) GetExtra() interface{} {
-	return &ctx.Extra
-}
-func (ctx *GuildMemberOnlineContext) GetCommon() *EventHandlerCommonContext {
-	if ctx.EventHandlerCommonContext == nil {
-		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
-	}
-	return ctx.EventHandlerCommonContext
-}
-
-type UserUpdateEventHandler func(*UserUpdateContext)
-
-func (eh UserUpdateEventHandler) Type() string {
-	return "user_updated"
-}
-func (eh UserUpdateEventHandler) New() EventContext {
-	return &UserUpdateContext{}
-}
-func (eh UserUpdateEventHandler) Handle(i EventContext) {
-	if t, ok := i.(*UserUpdateContext); ok {
-		eh(t)
-	}
-}
-
-type UserUpdateContext struct {
-	*EventHandlerCommonContext
-	Extra struct {
-		UserID   string `json:"user_id"`
-		Username string `json:"username"`
-		Avatar   string `json:"avatar"`
-	}
-}
-
-func (ctx *UserUpdateContext) GetExtra() interface{} {
-	return &ctx.Extra
-}
-func (ctx *UserUpdateContext) GetCommon() *EventHandlerCommonContext {
-	if ctx.EventHandlerCommonContext == nil {
-		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
-	}
-	return ctx.EventHandlerCommonContext
-}
-
-type BotExitEventHandler func(*BotExitContext)
-
-func (eh BotExitEventHandler) Type() string {
-	return "self_exited_guild"
-}
-func (eh BotExitEventHandler) New() EventContext {
-	return &BotExitContext{}
-}
-func (eh BotExitEventHandler) Handle(i EventContext) {
-	if t, ok := i.(*BotExitContext); ok {
-		eh(t)
-	}
-}
-
-type BotExitContext struct {
-	*EventHandlerCommonContext
-	Extra struct {
-		GuildID string `json:"guild_id"`
-	}
-}
-
-func (ctx *BotExitContext) GetExtra() interface{} {
-	return &ctx.Extra
-}
-func (ctx *BotExitContext) GetCommon() *EventHandlerCommonContext {
-	if ctx.EventHandlerCommonContext == nil {
-		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
-	}
-	return ctx.EventHandlerCommonContext
-}
-
-type BlockListAddEventHandler func(*BlockListAddContext)
-
-func (eh BlockListAddEventHandler) Type() string {
-	return "added_block_list"
-}
-func (eh BlockListAddEventHandler) New() EventContext {
-	return &BlockListAddContext{}
-}
-func (eh BlockListAddEventHandler) Handle(i EventContext) {
-	if t, ok := i.(*BlockListAddContext); ok {
-		eh(t)
-	}
-}
-
-type BlockListAddContext struct {
+type BlockListDeleteContext struct {
 	*EventHandlerCommonContext
 	Extra struct {
 		OperatorID string   `json:"operator_id"`
-		Remark     string   `json:"remark"`
 		UserID     []string `json:"user_id"`
 	}
 }
 
-func (ctx *BlockListAddContext) GetExtra() interface{} {
+func (ctx *BlockListDeleteContext) GetExtra() interface{} {
 	return &ctx.Extra
 }
-func (ctx *BlockListAddContext) GetCommon() *EventHandlerCommonContext {
+func (ctx *BlockListDeleteContext) GetCommon() *EventHandlerCommonContext {
+	if ctx.EventHandlerCommonContext == nil {
+		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
+	}
+	return ctx.EventHandlerCommonContext
+}
+
+type DirectMessageReactionDeleteEventHandler func(*DirectMessageReactionDeleteContext)
+
+func (eh DirectMessageReactionDeleteEventHandler) Type() string {
+	return "private_deleted_reaction"
+}
+func (eh DirectMessageReactionDeleteEventHandler) New() EventContext {
+	return &DirectMessageReactionDeleteContext{}
+}
+func (eh DirectMessageReactionDeleteEventHandler) Handle(i EventContext) {
+	if t, ok := i.(*DirectMessageReactionDeleteContext); ok {
+		eh(t)
+	}
+}
+
+type DirectMessageReactionDeleteContext struct {
+	*EventHandlerCommonContext
+	Extra EventDirectChatReactionItem
+}
+
+func (ctx *DirectMessageReactionDeleteContext) GetExtra() interface{} {
+	return &ctx.Extra
+}
+func (ctx *DirectMessageReactionDeleteContext) GetCommon() *EventHandlerCommonContext {
+	if ctx.EventHandlerCommonContext == nil {
+		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
+	}
+	return ctx.EventHandlerCommonContext
+}
+
+type GuildRoleUpdateEventHandler func(*GuildRoleUpdateContext)
+
+func (eh GuildRoleUpdateEventHandler) Type() string {
+	return "updated_role"
+}
+func (eh GuildRoleUpdateEventHandler) New() EventContext {
+	return &GuildRoleUpdateContext{}
+}
+func (eh GuildRoleUpdateEventHandler) Handle(i EventContext) {
+	if t, ok := i.(*GuildRoleUpdateContext); ok {
+		eh(t)
+	}
+}
+
+type GuildRoleUpdateContext struct {
+	*EventHandlerCommonContext
+	Extra Role
+}
+
+func (ctx *GuildRoleUpdateContext) GetExtra() interface{} {
+	return &ctx.Extra
+}
+func (ctx *GuildRoleUpdateContext) GetCommon() *EventHandlerCommonContext {
+	if ctx.EventHandlerCommonContext == nil {
+		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
+	}
+	return ctx.EventHandlerCommonContext
+}
+
+type TextMessageEventHandler func(*TextMessageContext)
+
+func (eh TextMessageEventHandler) Type() string {
+	return "1"
+}
+func (eh TextMessageEventHandler) New() EventContext {
+	return &TextMessageContext{}
+}
+func (eh TextMessageEventHandler) Handle(i EventContext) {
+	if t, ok := i.(*TextMessageContext); ok {
+		eh(t)
+	}
+}
+
+type TextMessageContext struct {
+	*EventHandlerCommonContext
+	Extra struct {
+		MentionRoles []int64  `json:"mention_roles"`
+		MentionHere  bool     `json:"mention_here"`
+		Author       User     `json:"author"`
+		Quote        *Quote   `json:"quote"`
+		GuildID      string   `json:"guild_id"`
+		ChannelName  string   `json:"channel_name"`
+		Mention      []string `json:"mention"`
+		MentionAll   bool     `json:"mention_all"`
+	}
+}
+
+func (ctx *TextMessageContext) GetExtra() interface{} {
+	return &ctx.Extra
+}
+func (ctx *TextMessageContext) GetCommon() *EventHandlerCommonContext {
+	if ctx.EventHandlerCommonContext == nil {
+		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
+	}
+	return ctx.EventHandlerCommonContext
+}
+
+type EventCardMessageEventHandler func(*EventCardMessageContext)
+
+func (eh EventCardMessageEventHandler) Type() string {
+	return "10"
+}
+func (eh EventCardMessageEventHandler) New() EventContext {
+	return &EventCardMessageContext{}
+}
+func (eh EventCardMessageEventHandler) Handle(i EventContext) {
+	if t, ok := i.(*EventCardMessageContext); ok {
+		eh(t)
+	}
+}
+
+type EventCardMessageContext struct {
+	*EventHandlerCommonContext
+	Extra EventCustomMessage
+}
+
+func (ctx *EventCardMessageContext) GetExtra() interface{} {
+	return &ctx.Extra
+}
+func (ctx *EventCardMessageContext) GetCommon() *EventHandlerCommonContext {
+	if ctx.EventHandlerCommonContext == nil {
+		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
+	}
+	return ctx.EventHandlerCommonContext
+}
+
+type GuildMemberOfflineEventHandler func(*GuildMemberOfflineContext)
+
+func (eh GuildMemberOfflineEventHandler) Type() string {
+	return "guild_member_offline"
+}
+func (eh GuildMemberOfflineEventHandler) New() EventContext {
+	return &GuildMemberOfflineContext{}
+}
+func (eh GuildMemberOfflineEventHandler) Handle(i EventContext) {
+	if t, ok := i.(*GuildMemberOfflineContext); ok {
+		eh(t)
+	}
+}
+
+type GuildMemberOfflineContext struct {
+	*EventHandlerCommonContext
+	Extra EventGuildMemberOnlineItem
+}
+
+func (ctx *GuildMemberOfflineContext) GetExtra() interface{} {
+	return &ctx.Extra
+}
+func (ctx *GuildMemberOfflineContext) GetCommon() *EventHandlerCommonContext {
+	if ctx.EventHandlerCommonContext == nil {
+		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
+	}
+	return ctx.EventHandlerCommonContext
+}
+
+type GuildUpdateEventHandler func(*GuildUpdateContext)
+
+func (eh GuildUpdateEventHandler) Type() string {
+	return "updated_guild"
+}
+func (eh GuildUpdateEventHandler) New() EventContext {
+	return &GuildUpdateContext{}
+}
+func (eh GuildUpdateEventHandler) Handle(i EventContext) {
+	if t, ok := i.(*GuildUpdateContext); ok {
+		eh(t)
+	}
+}
+
+type GuildUpdateContext struct {
+	*EventHandlerCommonContext
+	Extra EventGuild
+}
+
+func (ctx *GuildUpdateContext) GetExtra() interface{} {
+	return &ctx.Extra
+}
+func (ctx *GuildUpdateContext) GetCommon() *EventHandlerCommonContext {
 	if ctx.EventHandlerCommonContext == nil {
 		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
 	}
@@ -257,67 +314,6 @@ func (ctx *ReactionAddContext) GetCommon() *EventHandlerCommonContext {
 	return ctx.EventHandlerCommonContext
 }
 
-type MessageDeleteEventHandler func(*MessageDeleteContext)
-
-func (eh MessageDeleteEventHandler) Type() string {
-	return "deleted_message"
-}
-func (eh MessageDeleteEventHandler) New() EventContext {
-	return &MessageDeleteContext{}
-}
-func (eh MessageDeleteEventHandler) Handle(i EventContext) {
-	if t, ok := i.(*MessageDeleteContext); ok {
-		eh(t)
-	}
-}
-
-type MessageDeleteContext struct {
-	*EventHandlerCommonContext
-	Extra struct {
-		MsgID     string `json:"msg_id"`
-		ChannelID string `json:"channel_id"`
-	}
-}
-
-func (ctx *MessageDeleteContext) GetExtra() interface{} {
-	return &ctx.Extra
-}
-func (ctx *MessageDeleteContext) GetCommon() *EventHandlerCommonContext {
-	if ctx.EventHandlerCommonContext == nil {
-		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
-	}
-	return ctx.EventHandlerCommonContext
-}
-
-type ChannelAddEventHandler func(*ChannelAddContext)
-
-func (eh ChannelAddEventHandler) Type() string {
-	return "added_channel"
-}
-func (eh ChannelAddEventHandler) New() EventContext {
-	return &ChannelAddContext{}
-}
-func (eh ChannelAddEventHandler) Handle(i EventContext) {
-	if t, ok := i.(*ChannelAddContext); ok {
-		eh(t)
-	}
-}
-
-type ChannelAddContext struct {
-	*EventHandlerCommonContext
-	Extra Channel
-}
-
-func (ctx *ChannelAddContext) GetExtra() interface{} {
-	return &ctx.Extra
-}
-func (ctx *ChannelAddContext) GetCommon() *EventHandlerCommonContext {
-	if ctx.EventHandlerCommonContext == nil {
-		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
-	}
-	return ctx.EventHandlerCommonContext
-}
-
 type MessageUnpinEventHandler func(*MessageUnpinContext)
 
 func (eh MessageUnpinEventHandler) Type() string {
@@ -347,152 +343,129 @@ func (ctx *MessageUnpinContext) GetCommon() *EventHandlerCommonContext {
 	return ctx.EventHandlerCommonContext
 }
 
-type FileMessageEventHandler func(*FileMessageContext)
+type DirectMessageUpdateEventHandler func(*DirectMessageUpdateContext)
 
-func (eh FileMessageEventHandler) Type() string {
-	return "4"
+func (eh DirectMessageUpdateEventHandler) Type() string {
+	return "updated_private_message"
 }
-func (eh FileMessageEventHandler) New() EventContext {
-	return &FileMessageContext{}
+func (eh DirectMessageUpdateEventHandler) New() EventContext {
+	return &DirectMessageUpdateContext{}
 }
-func (eh FileMessageEventHandler) Handle(i EventContext) {
-	if t, ok := i.(*FileMessageContext); ok {
+func (eh DirectMessageUpdateEventHandler) Handle(i EventContext) {
+	if t, ok := i.(*DirectMessageUpdateContext); ok {
 		eh(t)
 	}
 }
 
-type FileMessageContext struct {
-	*EventHandlerCommonContext
-	Extra EventRichMessage
-}
-
-func (ctx *FileMessageContext) GetExtra() interface{} {
-	return &ctx.Extra
-}
-func (ctx *FileMessageContext) GetCommon() *EventHandlerCommonContext {
-	if ctx.EventHandlerCommonContext == nil {
-		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
-	}
-	return ctx.EventHandlerCommonContext
-}
-
-type ReactionDeleteEventHandler func(*ReactionDeleteContext)
-
-func (eh ReactionDeleteEventHandler) Type() string {
-	return "deleted_reaction"
-}
-func (eh ReactionDeleteEventHandler) New() EventContext {
-	return &ReactionDeleteContext{}
-}
-func (eh ReactionDeleteEventHandler) Handle(i EventContext) {
-	if t, ok := i.(*ReactionDeleteContext); ok {
-		eh(t)
-	}
-}
-
-type ReactionDeleteContext struct {
-	*EventHandlerCommonContext
-	Extra EventReactionItem
-}
-
-func (ctx *ReactionDeleteContext) GetExtra() interface{} {
-	return &ctx.Extra
-}
-func (ctx *ReactionDeleteContext) GetCommon() *EventHandlerCommonContext {
-	if ctx.EventHandlerCommonContext == nil {
-		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
-	}
-	return ctx.EventHandlerCommonContext
-}
-
-type ChannelUpdateEventHandler func(*ChannelUpdateContext)
-
-func (eh ChannelUpdateEventHandler) Type() string {
-	return "updated_channel"
-}
-func (eh ChannelUpdateEventHandler) New() EventContext {
-	return &ChannelUpdateContext{}
-}
-func (eh ChannelUpdateEventHandler) Handle(i EventContext) {
-	if t, ok := i.(*ChannelUpdateContext); ok {
-		eh(t)
-	}
-}
-
-type ChannelUpdateContext struct {
-	*EventHandlerCommonContext
-	Extra Channel
-}
-
-func (ctx *ChannelUpdateContext) GetExtra() interface{} {
-	return &ctx.Extra
-}
-func (ctx *ChannelUpdateContext) GetCommon() *EventHandlerCommonContext {
-	if ctx.EventHandlerCommonContext == nil {
-		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
-	}
-	return ctx.EventHandlerCommonContext
-}
-
-type GuildMemberDeleteEventHandler func(*GuildMemberDeleteContext)
-
-func (eh GuildMemberDeleteEventHandler) Type() string {
-	return "exited_guild"
-}
-func (eh GuildMemberDeleteEventHandler) New() EventContext {
-	return &GuildMemberDeleteContext{}
-}
-func (eh GuildMemberDeleteEventHandler) Handle(i EventContext) {
-	if t, ok := i.(*GuildMemberDeleteContext); ok {
-		eh(t)
-	}
-}
-
-type GuildMemberDeleteContext struct {
+type DirectMessageUpdateContext struct {
 	*EventHandlerCommonContext
 	Extra struct {
-		UserID   string         `json:"user_id"`
-		ExitedAt MilliTimeStamp `json:"exited_at"`
+		MsgID     string         `json:"msg_id"`
+		AuthorID  string         `json:"author_id"`
+		TargetID  string         `json:"target_id"`
+		Content   string         `json:"content"`
+		ChatCode  string         `json:"chat_code"`
+		UpdatedAt MilliTimeStamp `json:"updated_at"`
 	}
 }
 
-func (ctx *GuildMemberDeleteContext) GetExtra() interface{} {
+func (ctx *DirectMessageUpdateContext) GetExtra() interface{} {
 	return &ctx.Extra
 }
-func (ctx *GuildMemberDeleteContext) GetCommon() *EventHandlerCommonContext {
+func (ctx *DirectMessageUpdateContext) GetCommon() *EventHandlerCommonContext {
 	if ctx.EventHandlerCommonContext == nil {
 		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
 	}
 	return ctx.EventHandlerCommonContext
 }
 
-type GuildChannelMemberDeleteEventHandler func(*GuildChannelMemberDeleteContext)
+type DirectMessageDeleteEventHandler func(*DirectMessageDeleteContext)
 
-func (eh GuildChannelMemberDeleteEventHandler) Type() string {
-	return "exited_channel"
+func (eh DirectMessageDeleteEventHandler) Type() string {
+	return "deleted_private_message"
 }
-func (eh GuildChannelMemberDeleteEventHandler) New() EventContext {
-	return &GuildChannelMemberDeleteContext{}
+func (eh DirectMessageDeleteEventHandler) New() EventContext {
+	return &DirectMessageDeleteContext{}
 }
-func (eh GuildChannelMemberDeleteEventHandler) Handle(i EventContext) {
-	if t, ok := i.(*GuildChannelMemberDeleteContext); ok {
+func (eh DirectMessageDeleteEventHandler) Handle(i EventContext) {
+	if t, ok := i.(*DirectMessageDeleteContext); ok {
 		eh(t)
 	}
 }
 
-type GuildChannelMemberDeleteContext struct {
+type DirectMessageDeleteContext struct {
 	*EventHandlerCommonContext
 	Extra struct {
-		ChannelID string         `json:"channel_id"`
-		ExitedAt  MilliTimeStamp `json:"exited_at"`
-		UserID    string         `json:"user_id"`
+		TargetID  string         `json:"target_id"`
+		ChatCode  string         `json:"chat_code"`
+		DeletedAt MilliTimeStamp `json:"deleted_at"`
+		MsgID     string         `json:"msg_id"`
+		AuthorID  string         `json:"author_id"`
 	}
 }
 
-func (ctx *GuildChannelMemberDeleteContext) GetExtra() interface{} {
+func (ctx *DirectMessageDeleteContext) GetExtra() interface{} {
 	return &ctx.Extra
 }
-func (ctx *GuildChannelMemberDeleteContext) GetCommon() *EventHandlerCommonContext {
+func (ctx *DirectMessageDeleteContext) GetCommon() *EventHandlerCommonContext {
+	if ctx.EventHandlerCommonContext == nil {
+		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
+	}
+	return ctx.EventHandlerCommonContext
+}
+
+type DirectMessageReactionAddEventHandler func(*DirectMessageReactionAddContext)
+
+func (eh DirectMessageReactionAddEventHandler) Type() string {
+	return "private_added_reaction"
+}
+func (eh DirectMessageReactionAddEventHandler) New() EventContext {
+	return &DirectMessageReactionAddContext{}
+}
+func (eh DirectMessageReactionAddEventHandler) Handle(i EventContext) {
+	if t, ok := i.(*DirectMessageReactionAddContext); ok {
+		eh(t)
+	}
+}
+
+type DirectMessageReactionAddContext struct {
+	*EventHandlerCommonContext
+	Extra EventDirectChatReactionItem
+}
+
+func (ctx *DirectMessageReactionAddContext) GetExtra() interface{} {
+	return &ctx.Extra
+}
+func (ctx *DirectMessageReactionAddContext) GetCommon() *EventHandlerCommonContext {
+	if ctx.EventHandlerCommonContext == nil {
+		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
+	}
+	return ctx.EventHandlerCommonContext
+}
+
+type GuildRoleDeleteEventHandler func(*GuildRoleDeleteContext)
+
+func (eh GuildRoleDeleteEventHandler) Type() string {
+	return "deleted_role"
+}
+func (eh GuildRoleDeleteEventHandler) New() EventContext {
+	return &GuildRoleDeleteContext{}
+}
+func (eh GuildRoleDeleteEventHandler) Handle(i EventContext) {
+	if t, ok := i.(*GuildRoleDeleteContext); ok {
+		eh(t)
+	}
+}
+
+type GuildRoleDeleteContext struct {
+	*EventHandlerCommonContext
+	Extra Role
+}
+
+func (ctx *GuildRoleDeleteContext) GetExtra() interface{} {
+	return &ctx.Extra
+}
+func (ctx *GuildRoleDeleteContext) GetCommon() *EventHandlerCommonContext {
 	if ctx.EventHandlerCommonContext == nil {
 		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
 	}
@@ -532,6 +505,35 @@ func (ctx *GuildChannelMemberAddContext) GetCommon() *EventHandlerCommonContext 
 	return ctx.EventHandlerCommonContext
 }
 
+type ImageMessageEventHandler func(*ImageMessageContext)
+
+func (eh ImageMessageEventHandler) Type() string {
+	return "2"
+}
+func (eh ImageMessageEventHandler) New() EventContext {
+	return &ImageMessageContext{}
+}
+func (eh ImageMessageEventHandler) Handle(i EventContext) {
+	if t, ok := i.(*ImageMessageContext); ok {
+		eh(t)
+	}
+}
+
+type ImageMessageContext struct {
+	*EventHandlerCommonContext
+	Extra EventRichMessage
+}
+
+func (ctx *ImageMessageContext) GetExtra() interface{} {
+	return &ctx.Extra
+}
+func (ctx *ImageMessageContext) GetCommon() *EventHandlerCommonContext {
+	if ctx.EventHandlerCommonContext == nil {
+		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
+	}
+	return ctx.EventHandlerCommonContext
+}
+
 type AudioMessageEventHandler func(*AudioMessageContext)
 
 func (eh AudioMessageEventHandler) Type() string {
@@ -561,6 +563,287 @@ func (ctx *AudioMessageContext) GetCommon() *EventHandlerCommonContext {
 	return ctx.EventHandlerCommonContext
 }
 
+type BlockListAddEventHandler func(*BlockListAddContext)
+
+func (eh BlockListAddEventHandler) Type() string {
+	return "added_block_list"
+}
+func (eh BlockListAddEventHandler) New() EventContext {
+	return &BlockListAddContext{}
+}
+func (eh BlockListAddEventHandler) Handle(i EventContext) {
+	if t, ok := i.(*BlockListAddContext); ok {
+		eh(t)
+	}
+}
+
+type BlockListAddContext struct {
+	*EventHandlerCommonContext
+	Extra struct {
+		OperatorID string   `json:"operator_id"`
+		Remark     string   `json:"remark"`
+		UserID     []string `json:"user_id"`
+	}
+}
+
+func (ctx *BlockListAddContext) GetExtra() interface{} {
+	return &ctx.Extra
+}
+func (ctx *BlockListAddContext) GetCommon() *EventHandlerCommonContext {
+	if ctx.EventHandlerCommonContext == nil {
+		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
+	}
+	return ctx.EventHandlerCommonContext
+}
+
+type ReactionDeleteEventHandler func(*ReactionDeleteContext)
+
+func (eh ReactionDeleteEventHandler) Type() string {
+	return "deleted_reaction"
+}
+func (eh ReactionDeleteEventHandler) New() EventContext {
+	return &ReactionDeleteContext{}
+}
+func (eh ReactionDeleteEventHandler) Handle(i EventContext) {
+	if t, ok := i.(*ReactionDeleteContext); ok {
+		eh(t)
+	}
+}
+
+type ReactionDeleteContext struct {
+	*EventHandlerCommonContext
+	Extra EventReactionItem
+}
+
+func (ctx *ReactionDeleteContext) GetExtra() interface{} {
+	return &ctx.Extra
+}
+func (ctx *ReactionDeleteContext) GetCommon() *EventHandlerCommonContext {
+	if ctx.EventHandlerCommonContext == nil {
+		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
+	}
+	return ctx.EventHandlerCommonContext
+}
+
+type ChannelAddEventHandler func(*ChannelAddContext)
+
+func (eh ChannelAddEventHandler) Type() string {
+	return "added_channel"
+}
+func (eh ChannelAddEventHandler) New() EventContext {
+	return &ChannelAddContext{}
+}
+func (eh ChannelAddEventHandler) Handle(i EventContext) {
+	if t, ok := i.(*ChannelAddContext); ok {
+		eh(t)
+	}
+}
+
+type ChannelAddContext struct {
+	*EventHandlerCommonContext
+	Extra Channel
+}
+
+func (ctx *ChannelAddContext) GetExtra() interface{} {
+	return &ctx.Extra
+}
+func (ctx *ChannelAddContext) GetCommon() *EventHandlerCommonContext {
+	if ctx.EventHandlerCommonContext == nil {
+		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
+	}
+	return ctx.EventHandlerCommonContext
+}
+
+type GuildRoleAddEventHandler func(*GuildRoleAddContext)
+
+func (eh GuildRoleAddEventHandler) Type() string {
+	return "added_role"
+}
+func (eh GuildRoleAddEventHandler) New() EventContext {
+	return &GuildRoleAddContext{}
+}
+func (eh GuildRoleAddEventHandler) Handle(i EventContext) {
+	if t, ok := i.(*GuildRoleAddContext); ok {
+		eh(t)
+	}
+}
+
+type GuildRoleAddContext struct {
+	*EventHandlerCommonContext
+	Extra Role
+}
+
+func (ctx *GuildRoleAddContext) GetExtra() interface{} {
+	return &ctx.Extra
+}
+func (ctx *GuildRoleAddContext) GetCommon() *EventHandlerCommonContext {
+	if ctx.EventHandlerCommonContext == nil {
+		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
+	}
+	return ctx.EventHandlerCommonContext
+}
+
+type VideoMessageEventHandler func(*VideoMessageContext)
+
+func (eh VideoMessageEventHandler) Type() string {
+	return "3"
+}
+func (eh VideoMessageEventHandler) New() EventContext {
+	return &VideoMessageContext{}
+}
+func (eh VideoMessageEventHandler) Handle(i EventContext) {
+	if t, ok := i.(*VideoMessageContext); ok {
+		eh(t)
+	}
+}
+
+type VideoMessageContext struct {
+	*EventHandlerCommonContext
+	Extra EventRichMessage
+}
+
+func (ctx *VideoMessageContext) GetExtra() interface{} {
+	return &ctx.Extra
+}
+func (ctx *VideoMessageContext) GetCommon() *EventHandlerCommonContext {
+	if ctx.EventHandlerCommonContext == nil {
+		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
+	}
+	return ctx.EventHandlerCommonContext
+}
+
+type MessageUpdateEventHandler func(*MessageUpdateContext)
+
+func (eh MessageUpdateEventHandler) Type() string {
+	return "updated_message"
+}
+func (eh MessageUpdateEventHandler) New() EventContext {
+	return &MessageUpdateContext{}
+}
+func (eh MessageUpdateEventHandler) Handle(i EventContext) {
+	if t, ok := i.(*MessageUpdateContext); ok {
+		eh(t)
+	}
+}
+
+type MessageUpdateContext struct {
+	*EventHandlerCommonContext
+	Extra struct {
+		MentionAll   bool           `json:"mention_all"`
+		MentionHere  bool           `json:"mention_here"`
+		MentionRoles []string       `json:"mention_roles"`
+		UpdatedAt    MilliTimeStamp `json:"updated_at"`
+		MsgID        string         `json:"msg_id"`
+		Content      string         `json:"content"`
+		ChannelID    string         `json:"channel_id"`
+		Mention      []string       `json:"mention"`
+	}
+}
+
+func (ctx *MessageUpdateContext) GetExtra() interface{} {
+	return &ctx.Extra
+}
+func (ctx *MessageUpdateContext) GetCommon() *EventHandlerCommonContext {
+	if ctx.EventHandlerCommonContext == nil {
+		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
+	}
+	return ctx.EventHandlerCommonContext
+}
+
+type MessageDeleteEventHandler func(*MessageDeleteContext)
+
+func (eh MessageDeleteEventHandler) Type() string {
+	return "deleted_message"
+}
+func (eh MessageDeleteEventHandler) New() EventContext {
+	return &MessageDeleteContext{}
+}
+func (eh MessageDeleteEventHandler) Handle(i EventContext) {
+	if t, ok := i.(*MessageDeleteContext); ok {
+		eh(t)
+	}
+}
+
+type MessageDeleteContext struct {
+	*EventHandlerCommonContext
+	Extra struct {
+		MsgID     string `json:"msg_id"`
+		ChannelID string `json:"channel_id"`
+	}
+}
+
+func (ctx *MessageDeleteContext) GetExtra() interface{} {
+	return &ctx.Extra
+}
+func (ctx *MessageDeleteContext) GetCommon() *EventHandlerCommonContext {
+	if ctx.EventHandlerCommonContext == nil {
+		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
+	}
+	return ctx.EventHandlerCommonContext
+}
+
+type UserUpdateEventHandler func(*UserUpdateContext)
+
+func (eh UserUpdateEventHandler) Type() string {
+	return "user_updated"
+}
+func (eh UserUpdateEventHandler) New() EventContext {
+	return &UserUpdateContext{}
+}
+func (eh UserUpdateEventHandler) Handle(i EventContext) {
+	if t, ok := i.(*UserUpdateContext); ok {
+		eh(t)
+	}
+}
+
+type UserUpdateContext struct {
+	*EventHandlerCommonContext
+	Extra struct {
+		UserID   string `json:"user_id"`
+		Username string `json:"username"`
+		Avatar   string `json:"avatar"`
+	}
+}
+
+func (ctx *UserUpdateContext) GetExtra() interface{} {
+	return &ctx.Extra
+}
+func (ctx *UserUpdateContext) GetCommon() *EventHandlerCommonContext {
+	if ctx.EventHandlerCommonContext == nil {
+		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
+	}
+	return ctx.EventHandlerCommonContext
+}
+
+type FileMessageEventHandler func(*FileMessageContext)
+
+func (eh FileMessageEventHandler) Type() string {
+	return "4"
+}
+func (eh FileMessageEventHandler) New() EventContext {
+	return &FileMessageContext{}
+}
+func (eh FileMessageEventHandler) Handle(i EventContext) {
+	if t, ok := i.(*FileMessageContext); ok {
+		eh(t)
+	}
+}
+
+type FileMessageContext struct {
+	*EventHandlerCommonContext
+	Extra EventRichMessage
+}
+
+func (ctx *FileMessageContext) GetExtra() interface{} {
+	return &ctx.Extra
+}
+func (ctx *FileMessageContext) GetCommon() *EventHandlerCommonContext {
+	if ctx.EventHandlerCommonContext == nil {
+		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
+	}
+	return ctx.EventHandlerCommonContext
+}
+
 type GuildDeleteEventHandler func(*GuildDeleteContext)
 
 func (eh GuildDeleteEventHandler) Type() string {
@@ -584,134 +867,6 @@ func (ctx *GuildDeleteContext) GetExtra() interface{} {
 	return &ctx.Extra
 }
 func (ctx *GuildDeleteContext) GetCommon() *EventHandlerCommonContext {
-	if ctx.EventHandlerCommonContext == nil {
-		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
-	}
-	return ctx.EventHandlerCommonContext
-}
-
-type BlockListDeleteEventHandler func(*BlockListDeleteContext)
-
-func (eh BlockListDeleteEventHandler) Type() string {
-	return "deleted_block_list"
-}
-func (eh BlockListDeleteEventHandler) New() EventContext {
-	return &BlockListDeleteContext{}
-}
-func (eh BlockListDeleteEventHandler) Handle(i EventContext) {
-	if t, ok := i.(*BlockListDeleteContext); ok {
-		eh(t)
-	}
-}
-
-type BlockListDeleteContext struct {
-	*EventHandlerCommonContext
-	Extra struct {
-		OperatorID string   `json:"operator_id"`
-		UserID     []string `json:"user_id"`
-	}
-}
-
-func (ctx *BlockListDeleteContext) GetExtra() interface{} {
-	return &ctx.Extra
-}
-func (ctx *BlockListDeleteContext) GetCommon() *EventHandlerCommonContext {
-	if ctx.EventHandlerCommonContext == nil {
-		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
-	}
-	return ctx.EventHandlerCommonContext
-}
-
-type MessagePinEventHandler func(*MessagePinContext)
-
-func (eh MessagePinEventHandler) Type() string {
-	return "pinned_message"
-}
-func (eh MessagePinEventHandler) New() EventContext {
-	return &MessagePinContext{}
-}
-func (eh MessagePinEventHandler) Handle(i EventContext) {
-	if t, ok := i.(*MessagePinContext); ok {
-		eh(t)
-	}
-}
-
-type MessagePinContext struct {
-	*EventHandlerCommonContext
-	Extra EventPinMessageItem
-}
-
-func (ctx *MessagePinContext) GetExtra() interface{} {
-	return &ctx.Extra
-}
-func (ctx *MessagePinContext) GetCommon() *EventHandlerCommonContext {
-	if ctx.EventHandlerCommonContext == nil {
-		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
-	}
-	return ctx.EventHandlerCommonContext
-}
-
-type GuildMemberOfflineEventHandler func(*GuildMemberOfflineContext)
-
-func (eh GuildMemberOfflineEventHandler) Type() string {
-	return "guild_member_offline"
-}
-func (eh GuildMemberOfflineEventHandler) New() EventContext {
-	return &GuildMemberOfflineContext{}
-}
-func (eh GuildMemberOfflineEventHandler) Handle(i EventContext) {
-	if t, ok := i.(*GuildMemberOfflineContext); ok {
-		eh(t)
-	}
-}
-
-type GuildMemberOfflineContext struct {
-	*EventHandlerCommonContext
-	Extra EventGuildMemberOnlineItem
-}
-
-func (ctx *GuildMemberOfflineContext) GetExtra() interface{} {
-	return &ctx.Extra
-}
-func (ctx *GuildMemberOfflineContext) GetCommon() *EventHandlerCommonContext {
-	if ctx.EventHandlerCommonContext == nil {
-		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
-	}
-	return ctx.EventHandlerCommonContext
-}
-
-type TextMessageEventHandler func(*TextMessageContext)
-
-func (eh TextMessageEventHandler) Type() string {
-	return "1"
-}
-func (eh TextMessageEventHandler) New() EventContext {
-	return &TextMessageContext{}
-}
-func (eh TextMessageEventHandler) Handle(i EventContext) {
-	if t, ok := i.(*TextMessageContext); ok {
-		eh(t)
-	}
-}
-
-type TextMessageContext struct {
-	*EventHandlerCommonContext
-	Extra struct {
-		MentionAll   bool     `json:"mention_all"`
-		MentionRoles []int64  `json:"mention_roles"`
-		MentionHere  bool     `json:"mention_here"`
-		Author       User     `json:"author"`
-		Quote        *Quote   `json:"quote"`
-		GuildID      string   `json:"guild_id"`
-		ChannelName  string   `json:"channel_name"`
-		Mention      []string `json:"mention"`
-	}
-}
-
-func (ctx *TextMessageContext) GetExtra() interface{} {
-	return &ctx.Extra
-}
-func (ctx *TextMessageContext) GetCommon() *EventHandlerCommonContext {
 	if ctx.EventHandlerCommonContext == nil {
 		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
 	}
@@ -750,58 +905,62 @@ func (ctx *GuildMemberAddContext) GetCommon() *EventHandlerCommonContext {
 	return ctx.EventHandlerCommonContext
 }
 
-type GuildRoleAddEventHandler func(*GuildRoleAddContext)
+type GuildMemberOnlineEventHandler func(*GuildMemberOnlineContext)
 
-func (eh GuildRoleAddEventHandler) Type() string {
-	return "added_role"
+func (eh GuildMemberOnlineEventHandler) Type() string {
+	return "guild_member_online"
 }
-func (eh GuildRoleAddEventHandler) New() EventContext {
-	return &GuildRoleAddContext{}
+func (eh GuildMemberOnlineEventHandler) New() EventContext {
+	return &GuildMemberOnlineContext{}
 }
-func (eh GuildRoleAddEventHandler) Handle(i EventContext) {
-	if t, ok := i.(*GuildRoleAddContext); ok {
+func (eh GuildMemberOnlineEventHandler) Handle(i EventContext) {
+	if t, ok := i.(*GuildMemberOnlineContext); ok {
 		eh(t)
 	}
 }
 
-type GuildRoleAddContext struct {
+type GuildMemberOnlineContext struct {
 	*EventHandlerCommonContext
-	Extra Role
+	Extra EventGuildMemberOnlineItem
 }
 
-func (ctx *GuildRoleAddContext) GetExtra() interface{} {
+func (ctx *GuildMemberOnlineContext) GetExtra() interface{} {
 	return &ctx.Extra
 }
-func (ctx *GuildRoleAddContext) GetCommon() *EventHandlerCommonContext {
+func (ctx *GuildMemberOnlineContext) GetCommon() *EventHandlerCommonContext {
 	if ctx.EventHandlerCommonContext == nil {
 		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
 	}
 	return ctx.EventHandlerCommonContext
 }
 
-type GuildRoleUpdateEventHandler func(*GuildRoleUpdateContext)
+type GuildChannelMemberDeleteEventHandler func(*GuildChannelMemberDeleteContext)
 
-func (eh GuildRoleUpdateEventHandler) Type() string {
-	return "updated_role"
+func (eh GuildChannelMemberDeleteEventHandler) Type() string {
+	return "exited_channel"
 }
-func (eh GuildRoleUpdateEventHandler) New() EventContext {
-	return &GuildRoleUpdateContext{}
+func (eh GuildChannelMemberDeleteEventHandler) New() EventContext {
+	return &GuildChannelMemberDeleteContext{}
 }
-func (eh GuildRoleUpdateEventHandler) Handle(i EventContext) {
-	if t, ok := i.(*GuildRoleUpdateContext); ok {
+func (eh GuildChannelMemberDeleteEventHandler) Handle(i EventContext) {
+	if t, ok := i.(*GuildChannelMemberDeleteContext); ok {
 		eh(t)
 	}
 }
 
-type GuildRoleUpdateContext struct {
+type GuildChannelMemberDeleteContext struct {
 	*EventHandlerCommonContext
-	Extra Role
+	Extra struct {
+		UserID    string         `json:"user_id"`
+		ChannelID string         `json:"channel_id"`
+		ExitedAt  MilliTimeStamp `json:"exited_at"`
+	}
 }
 
-func (ctx *GuildRoleUpdateContext) GetExtra() interface{} {
+func (ctx *GuildChannelMemberDeleteContext) GetExtra() interface{} {
 	return &ctx.Extra
 }
-func (ctx *GuildRoleUpdateContext) GetCommon() *EventHandlerCommonContext {
+func (ctx *GuildChannelMemberDeleteContext) GetCommon() *EventHandlerCommonContext {
 	if ctx.EventHandlerCommonContext == nil {
 		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
 	}
@@ -839,317 +998,153 @@ func (ctx *BotJoinContext) GetCommon() *EventHandlerCommonContext {
 	return ctx.EventHandlerCommonContext
 }
 
-type KmarkdownMessageEventHandler func(*KmarkdownMessageContext)
+type BotExitEventHandler func(*BotExitContext)
 
-func (eh KmarkdownMessageEventHandler) Type() string {
-	return "9"
+func (eh BotExitEventHandler) Type() string {
+	return "self_exited_guild"
 }
-func (eh KmarkdownMessageEventHandler) New() EventContext {
-	return &KmarkdownMessageContext{}
+func (eh BotExitEventHandler) New() EventContext {
+	return &BotExitContext{}
 }
-func (eh KmarkdownMessageEventHandler) Handle(i EventContext) {
-	if t, ok := i.(*KmarkdownMessageContext); ok {
+func (eh BotExitEventHandler) Handle(i EventContext) {
+	if t, ok := i.(*BotExitContext); ok {
 		eh(t)
 	}
 }
 
-type KmarkdownMessageContext struct {
-	*EventHandlerCommonContext
-	Extra EventCustomMessage
-}
-
-func (ctx *KmarkdownMessageContext) GetExtra() interface{} {
-	return &ctx.Extra
-}
-func (ctx *KmarkdownMessageContext) GetCommon() *EventHandlerCommonContext {
-	if ctx.EventHandlerCommonContext == nil {
-		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
-	}
-	return ctx.EventHandlerCommonContext
-}
-
-type EventCardMessageEventHandler func(*EventCardMessageContext)
-
-func (eh EventCardMessageEventHandler) Type() string {
-	return "10"
-}
-func (eh EventCardMessageEventHandler) New() EventContext {
-	return &EventCardMessageContext{}
-}
-func (eh EventCardMessageEventHandler) Handle(i EventContext) {
-	if t, ok := i.(*EventCardMessageContext); ok {
-		eh(t)
-	}
-}
-
-type EventCardMessageContext struct {
-	*EventHandlerCommonContext
-	Extra EventCustomMessage
-}
-
-func (ctx *EventCardMessageContext) GetExtra() interface{} {
-	return &ctx.Extra
-}
-func (ctx *EventCardMessageContext) GetCommon() *EventHandlerCommonContext {
-	if ctx.EventHandlerCommonContext == nil {
-		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
-	}
-	return ctx.EventHandlerCommonContext
-}
-
-type GuildUpdateEventHandler func(*GuildUpdateContext)
-
-func (eh GuildUpdateEventHandler) Type() string {
-	return "updated_guild"
-}
-func (eh GuildUpdateEventHandler) New() EventContext {
-	return &GuildUpdateContext{}
-}
-func (eh GuildUpdateEventHandler) Handle(i EventContext) {
-	if t, ok := i.(*GuildUpdateContext); ok {
-		eh(t)
-	}
-}
-
-type GuildUpdateContext struct {
-	*EventHandlerCommonContext
-	Extra EventGuild
-}
-
-func (ctx *GuildUpdateContext) GetExtra() interface{} {
-	return &ctx.Extra
-}
-func (ctx *GuildUpdateContext) GetCommon() *EventHandlerCommonContext {
-	if ctx.EventHandlerCommonContext == nil {
-		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
-	}
-	return ctx.EventHandlerCommonContext
-}
-
-type DirectMessageUpdateEventHandler func(*DirectMessageUpdateContext)
-
-func (eh DirectMessageUpdateEventHandler) Type() string {
-	return "updated_private_message"
-}
-func (eh DirectMessageUpdateEventHandler) New() EventContext {
-	return &DirectMessageUpdateContext{}
-}
-func (eh DirectMessageUpdateEventHandler) Handle(i EventContext) {
-	if t, ok := i.(*DirectMessageUpdateContext); ok {
-		eh(t)
-	}
-}
-
-type DirectMessageUpdateContext struct {
+type BotExitContext struct {
 	*EventHandlerCommonContext
 	Extra struct {
-		TargetID  string         `json:"target_id"`
-		Content   string         `json:"content"`
-		ChatCode  string         `json:"chat_code"`
-		UpdatedAt MilliTimeStamp `json:"updated_at"`
-		MsgID     string         `json:"msg_id"`
-		AuthorID  string         `json:"author_id"`
+		GuildID string `json:"guild_id"`
 	}
 }
 
-func (ctx *DirectMessageUpdateContext) GetExtra() interface{} {
+func (ctx *BotExitContext) GetExtra() interface{} {
 	return &ctx.Extra
 }
-func (ctx *DirectMessageUpdateContext) GetCommon() *EventHandlerCommonContext {
+func (ctx *BotExitContext) GetCommon() *EventHandlerCommonContext {
 	if ctx.EventHandlerCommonContext == nil {
 		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
 	}
 	return ctx.EventHandlerCommonContext
 }
 
-type DirectMessageReactionAddEventHandler func(*DirectMessageReactionAddContext)
+type ChannelUpdateEventHandler func(*ChannelUpdateContext)
 
-func (eh DirectMessageReactionAddEventHandler) Type() string {
-	return "private_added_reaction"
+func (eh ChannelUpdateEventHandler) Type() string {
+	return "updated_channel"
 }
-func (eh DirectMessageReactionAddEventHandler) New() EventContext {
-	return &DirectMessageReactionAddContext{}
+func (eh ChannelUpdateEventHandler) New() EventContext {
+	return &ChannelUpdateContext{}
 }
-func (eh DirectMessageReactionAddEventHandler) Handle(i EventContext) {
-	if t, ok := i.(*DirectMessageReactionAddContext); ok {
+func (eh ChannelUpdateEventHandler) Handle(i EventContext) {
+	if t, ok := i.(*ChannelUpdateContext); ok {
 		eh(t)
 	}
 }
 
-type DirectMessageReactionAddContext struct {
+type ChannelUpdateContext struct {
 	*EventHandlerCommonContext
-	Extra EventDirectChatReactionItem
+	Extra Channel
 }
 
-func (ctx *DirectMessageReactionAddContext) GetExtra() interface{} {
+func (ctx *ChannelUpdateContext) GetExtra() interface{} {
 	return &ctx.Extra
 }
-func (ctx *DirectMessageReactionAddContext) GetCommon() *EventHandlerCommonContext {
+func (ctx *ChannelUpdateContext) GetCommon() *EventHandlerCommonContext {
 	if ctx.EventHandlerCommonContext == nil {
 		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
 	}
 	return ctx.EventHandlerCommonContext
 }
 
-type MessageButtonClickEventHandler func(*MessageButtonClickContext)
+type ChannelDeleteEventHandler func(*ChannelDeleteContext)
 
-func (eh MessageButtonClickEventHandler) Type() string {
-	return "message_btn_click"
+func (eh ChannelDeleteEventHandler) Type() string {
+	return "deleted_channel"
 }
-func (eh MessageButtonClickEventHandler) New() EventContext {
-	return &MessageButtonClickContext{}
+func (eh ChannelDeleteEventHandler) New() EventContext {
+	return &ChannelDeleteContext{}
 }
-func (eh MessageButtonClickEventHandler) Handle(i EventContext) {
-	if t, ok := i.(*MessageButtonClickContext); ok {
+func (eh ChannelDeleteEventHandler) Handle(i EventContext) {
+	if t, ok := i.(*ChannelDeleteContext); ok {
 		eh(t)
 	}
 }
 
-type MessageButtonClickContext struct {
+type ChannelDeleteContext struct {
 	*EventHandlerCommonContext
 	Extra struct {
-		UserID   string `json:"user_id"`
-		Value    string `json:"value"`
-		TargetID string `json:"target_id"`
-		MsgID    string `json:"msg_id"`
-	}
-}
-
-func (ctx *MessageButtonClickContext) GetExtra() interface{} {
-	return &ctx.Extra
-}
-func (ctx *MessageButtonClickContext) GetCommon() *EventHandlerCommonContext {
-	if ctx.EventHandlerCommonContext == nil {
-		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
-	}
-	return ctx.EventHandlerCommonContext
-}
-
-type MessageUpdateEventHandler func(*MessageUpdateContext)
-
-func (eh MessageUpdateEventHandler) Type() string {
-	return "updated_message"
-}
-func (eh MessageUpdateEventHandler) New() EventContext {
-	return &MessageUpdateContext{}
-}
-func (eh MessageUpdateEventHandler) Handle(i EventContext) {
-	if t, ok := i.(*MessageUpdateContext); ok {
-		eh(t)
-	}
-}
-
-type MessageUpdateContext struct {
-	*EventHandlerCommonContext
-	Extra struct {
-		Content      string         `json:"content"`
-		ChannelID    string         `json:"channel_id"`
-		Mention      []string       `json:"mention"`
-		MentionAll   bool           `json:"mention_all"`
-		MentionHere  bool           `json:"mention_here"`
-		MentionRoles []string       `json:"mention_roles"`
-		UpdatedAt    MilliTimeStamp `json:"updated_at"`
-		MsgID        string         `json:"msg_id"`
-	}
-}
-
-func (ctx *MessageUpdateContext) GetExtra() interface{} {
-	return &ctx.Extra
-}
-func (ctx *MessageUpdateContext) GetCommon() *EventHandlerCommonContext {
-	if ctx.EventHandlerCommonContext == nil {
-		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
-	}
-	return ctx.EventHandlerCommonContext
-}
-
-type DirectMessageDeleteEventHandler func(*DirectMessageDeleteContext)
-
-func (eh DirectMessageDeleteEventHandler) Type() string {
-	return "deleted_private_message"
-}
-func (eh DirectMessageDeleteEventHandler) New() EventContext {
-	return &DirectMessageDeleteContext{}
-}
-func (eh DirectMessageDeleteEventHandler) Handle(i EventContext) {
-	if t, ok := i.(*DirectMessageDeleteContext); ok {
-		eh(t)
-	}
-}
-
-type DirectMessageDeleteContext struct {
-	*EventHandlerCommonContext
-	Extra struct {
-		MsgID     string         `json:"msg_id"`
-		AuthorID  string         `json:"author_id"`
-		TargetID  string         `json:"target_id"`
-		ChatCode  string         `json:"chat_code"`
+		ID        string         `json:"id"`
 		DeletedAt MilliTimeStamp `json:"deleted_at"`
 	}
 }
 
-func (ctx *DirectMessageDeleteContext) GetExtra() interface{} {
+func (ctx *ChannelDeleteContext) GetExtra() interface{} {
 	return &ctx.Extra
 }
-func (ctx *DirectMessageDeleteContext) GetCommon() *EventHandlerCommonContext {
+func (ctx *ChannelDeleteContext) GetCommon() *EventHandlerCommonContext {
 	if ctx.EventHandlerCommonContext == nil {
 		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
 	}
 	return ctx.EventHandlerCommonContext
 }
 
-type DirectMessageReactionDeleteEventHandler func(*DirectMessageReactionDeleteContext)
+type MessagePinEventHandler func(*MessagePinContext)
 
-func (eh DirectMessageReactionDeleteEventHandler) Type() string {
-	return "private_deleted_reaction"
+func (eh MessagePinEventHandler) Type() string {
+	return "pinned_message"
 }
-func (eh DirectMessageReactionDeleteEventHandler) New() EventContext {
-	return &DirectMessageReactionDeleteContext{}
+func (eh MessagePinEventHandler) New() EventContext {
+	return &MessagePinContext{}
 }
-func (eh DirectMessageReactionDeleteEventHandler) Handle(i EventContext) {
-	if t, ok := i.(*DirectMessageReactionDeleteContext); ok {
+func (eh MessagePinEventHandler) Handle(i EventContext) {
+	if t, ok := i.(*MessagePinContext); ok {
 		eh(t)
 	}
 }
 
-type DirectMessageReactionDeleteContext struct {
+type MessagePinContext struct {
 	*EventHandlerCommonContext
-	Extra EventDirectChatReactionItem
+	Extra EventPinMessageItem
 }
 
-func (ctx *DirectMessageReactionDeleteContext) GetExtra() interface{} {
+func (ctx *MessagePinContext) GetExtra() interface{} {
 	return &ctx.Extra
 }
-func (ctx *DirectMessageReactionDeleteContext) GetCommon() *EventHandlerCommonContext {
+func (ctx *MessagePinContext) GetCommon() *EventHandlerCommonContext {
 	if ctx.EventHandlerCommonContext == nil {
 		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
 	}
 	return ctx.EventHandlerCommonContext
 }
 
-type VideoMessageEventHandler func(*VideoMessageContext)
+type GuildMemberDeleteEventHandler func(*GuildMemberDeleteContext)
 
-func (eh VideoMessageEventHandler) Type() string {
-	return "3"
+func (eh GuildMemberDeleteEventHandler) Type() string {
+	return "exited_guild"
 }
-func (eh VideoMessageEventHandler) New() EventContext {
-	return &VideoMessageContext{}
+func (eh GuildMemberDeleteEventHandler) New() EventContext {
+	return &GuildMemberDeleteContext{}
 }
-func (eh VideoMessageEventHandler) Handle(i EventContext) {
-	if t, ok := i.(*VideoMessageContext); ok {
+func (eh GuildMemberDeleteEventHandler) Handle(i EventContext) {
+	if t, ok := i.(*GuildMemberDeleteContext); ok {
 		eh(t)
 	}
 }
 
-type VideoMessageContext struct {
+type GuildMemberDeleteContext struct {
 	*EventHandlerCommonContext
-	Extra EventRichMessage
+	Extra struct {
+		UserID   string         `json:"user_id"`
+		ExitedAt MilliTimeStamp `json:"exited_at"`
+	}
 }
 
-func (ctx *VideoMessageContext) GetExtra() interface{} {
+func (ctx *GuildMemberDeleteContext) GetExtra() interface{} {
 	return &ctx.Extra
 }
-func (ctx *VideoMessageContext) GetCommon() *EventHandlerCommonContext {
+func (ctx *GuildMemberDeleteContext) GetCommon() *EventHandlerCommonContext {
 	if ctx.EventHandlerCommonContext == nil {
 		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
 	}
@@ -1188,181 +1183,188 @@ func (ctx *GuildMemberUpdateContext) GetCommon() *EventHandlerCommonContext {
 	return ctx.EventHandlerCommonContext
 }
 
-type GuildRoleDeleteEventHandler func(*GuildRoleDeleteContext)
+type MessageButtonClickEventHandler func(*MessageButtonClickContext)
 
-func (eh GuildRoleDeleteEventHandler) Type() string {
-	return "deleted_role"
+func (eh MessageButtonClickEventHandler) Type() string {
+	return "message_btn_click"
 }
-func (eh GuildRoleDeleteEventHandler) New() EventContext {
-	return &GuildRoleDeleteContext{}
+func (eh MessageButtonClickEventHandler) New() EventContext {
+	return &MessageButtonClickContext{}
 }
-func (eh GuildRoleDeleteEventHandler) Handle(i EventContext) {
-	if t, ok := i.(*GuildRoleDeleteContext); ok {
+func (eh MessageButtonClickEventHandler) Handle(i EventContext) {
+	if t, ok := i.(*MessageButtonClickContext); ok {
 		eh(t)
 	}
 }
 
-type GuildRoleDeleteContext struct {
+type MessageButtonClickContext struct {
 	*EventHandlerCommonContext
-	Extra Role
+	Extra struct {
+		TargetID string `json:"target_id"`
+		GuildID  string `json:"guild_id"`
+		UserInfo User   `json:"user_info"`
+		MsgID    string `json:"msg_id"`
+		UserID   string `json:"user_id"`
+		Value    string `json:"value"`
+	}
 }
 
-func (ctx *GuildRoleDeleteContext) GetExtra() interface{} {
+func (ctx *MessageButtonClickContext) GetExtra() interface{} {
 	return &ctx.Extra
 }
-func (ctx *GuildRoleDeleteContext) GetCommon() *EventHandlerCommonContext {
+func (ctx *MessageButtonClickContext) GetCommon() *EventHandlerCommonContext {
 	if ctx.EventHandlerCommonContext == nil {
 		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
 	}
 	return ctx.EventHandlerCommonContext
 }
 
-type ImageMessageEventHandler func(*ImageMessageContext)
+type KmarkdownMessageEventHandler func(*KmarkdownMessageContext)
 
-func (eh ImageMessageEventHandler) Type() string {
-	return "2"
+func (eh KmarkdownMessageEventHandler) Type() string {
+	return "9"
 }
-func (eh ImageMessageEventHandler) New() EventContext {
-	return &ImageMessageContext{}
+func (eh KmarkdownMessageEventHandler) New() EventContext {
+	return &KmarkdownMessageContext{}
 }
-func (eh ImageMessageEventHandler) Handle(i EventContext) {
-	if t, ok := i.(*ImageMessageContext); ok {
+func (eh KmarkdownMessageEventHandler) Handle(i EventContext) {
+	if t, ok := i.(*KmarkdownMessageContext); ok {
 		eh(t)
 	}
 }
 
-type ImageMessageContext struct {
+type KmarkdownMessageContext struct {
 	*EventHandlerCommonContext
-	Extra EventRichMessage
+	Extra EventCustomMessage
 }
 
-func (ctx *ImageMessageContext) GetExtra() interface{} {
+func (ctx *KmarkdownMessageContext) GetExtra() interface{} {
 	return &ctx.Extra
 }
-func (ctx *ImageMessageContext) GetCommon() *EventHandlerCommonContext {
+func (ctx *KmarkdownMessageContext) GetCommon() *EventHandlerCommonContext {
 	if ctx.EventHandlerCommonContext == nil {
 		ctx.EventHandlerCommonContext = new(EventHandlerCommonContext)
 	}
 	return ctx.EventHandlerCommonContext
 }
 func init() {
-	registerEventHandler(ChannelDeleteEventHandler(nil))
-	registerEventHandler(GuildMemberOnlineEventHandler(nil))
-	registerEventHandler(UserUpdateEventHandler(nil))
-	registerEventHandler(BotExitEventHandler(nil))
-	registerEventHandler(BlockListAddEventHandler(nil))
-	registerEventHandler(ReactionAddEventHandler(nil))
-	registerEventHandler(MessageDeleteEventHandler(nil))
-	registerEventHandler(ChannelAddEventHandler(nil))
-	registerEventHandler(MessageUnpinEventHandler(nil))
-	registerEventHandler(FileMessageEventHandler(nil))
-	registerEventHandler(ReactionDeleteEventHandler(nil))
-	registerEventHandler(ChannelUpdateEventHandler(nil))
-	registerEventHandler(GuildMemberDeleteEventHandler(nil))
-	registerEventHandler(GuildChannelMemberDeleteEventHandler(nil))
-	registerEventHandler(GuildChannelMemberAddEventHandler(nil))
-	registerEventHandler(AudioMessageEventHandler(nil))
-	registerEventHandler(GuildDeleteEventHandler(nil))
 	registerEventHandler(BlockListDeleteEventHandler(nil))
-	registerEventHandler(MessagePinEventHandler(nil))
-	registerEventHandler(GuildMemberOfflineEventHandler(nil))
-	registerEventHandler(TextMessageEventHandler(nil))
-	registerEventHandler(GuildMemberAddEventHandler(nil))
-	registerEventHandler(GuildRoleAddEventHandler(nil))
-	registerEventHandler(GuildRoleUpdateEventHandler(nil))
-	registerEventHandler(BotJoinEventHandler(nil))
-	registerEventHandler(KmarkdownMessageEventHandler(nil))
-	registerEventHandler(EventCardMessageEventHandler(nil))
-	registerEventHandler(GuildUpdateEventHandler(nil))
-	registerEventHandler(DirectMessageUpdateEventHandler(nil))
-	registerEventHandler(DirectMessageReactionAddEventHandler(nil))
-	registerEventHandler(MessageButtonClickEventHandler(nil))
-	registerEventHandler(MessageUpdateEventHandler(nil))
-	registerEventHandler(DirectMessageDeleteEventHandler(nil))
 	registerEventHandler(DirectMessageReactionDeleteEventHandler(nil))
-	registerEventHandler(VideoMessageEventHandler(nil))
-	registerEventHandler(GuildMemberUpdateEventHandler(nil))
+	registerEventHandler(GuildRoleUpdateEventHandler(nil))
+	registerEventHandler(TextMessageEventHandler(nil))
+	registerEventHandler(EventCardMessageEventHandler(nil))
+	registerEventHandler(GuildMemberOfflineEventHandler(nil))
+	registerEventHandler(GuildUpdateEventHandler(nil))
+	registerEventHandler(ReactionAddEventHandler(nil))
+	registerEventHandler(MessageUnpinEventHandler(nil))
+	registerEventHandler(DirectMessageUpdateEventHandler(nil))
+	registerEventHandler(DirectMessageDeleteEventHandler(nil))
+	registerEventHandler(DirectMessageReactionAddEventHandler(nil))
 	registerEventHandler(GuildRoleDeleteEventHandler(nil))
+	registerEventHandler(GuildChannelMemberAddEventHandler(nil))
 	registerEventHandler(ImageMessageEventHandler(nil))
+	registerEventHandler(AudioMessageEventHandler(nil))
+	registerEventHandler(BlockListAddEventHandler(nil))
+	registerEventHandler(ReactionDeleteEventHandler(nil))
+	registerEventHandler(ChannelAddEventHandler(nil))
+	registerEventHandler(GuildRoleAddEventHandler(nil))
+	registerEventHandler(VideoMessageEventHandler(nil))
+	registerEventHandler(MessageUpdateEventHandler(nil))
+	registerEventHandler(MessageDeleteEventHandler(nil))
+	registerEventHandler(UserUpdateEventHandler(nil))
+	registerEventHandler(FileMessageEventHandler(nil))
+	registerEventHandler(GuildDeleteEventHandler(nil))
+	registerEventHandler(GuildMemberAddEventHandler(nil))
+	registerEventHandler(GuildMemberOnlineEventHandler(nil))
+	registerEventHandler(GuildChannelMemberDeleteEventHandler(nil))
+	registerEventHandler(BotJoinEventHandler(nil))
+	registerEventHandler(BotExitEventHandler(nil))
+	registerEventHandler(ChannelUpdateEventHandler(nil))
+	registerEventHandler(ChannelDeleteEventHandler(nil))
+	registerEventHandler(MessagePinEventHandler(nil))
+	registerEventHandler(GuildMemberDeleteEventHandler(nil))
+	registerEventHandler(GuildMemberUpdateEventHandler(nil))
+	registerEventHandler(MessageButtonClickEventHandler(nil))
+	registerEventHandler(KmarkdownMessageEventHandler(nil))
 }
 func handlerForInterface(i interface{}) EventHandler {
 	switch v := i.(type) {
-	case func(*ChannelDeleteContext):
-		return ChannelDeleteEventHandler(v)
-	case func(*GuildMemberOnlineContext):
-		return GuildMemberOnlineEventHandler(v)
-	case func(*UserUpdateContext):
-		return UserUpdateEventHandler(v)
-	case func(*BotExitContext):
-		return BotExitEventHandler(v)
-	case func(*BlockListAddContext):
-		return BlockListAddEventHandler(v)
-	case func(*ReactionAddContext):
-		return ReactionAddEventHandler(v)
-	case func(*MessageDeleteContext):
-		return MessageDeleteEventHandler(v)
-	case func(*ChannelAddContext):
-		return ChannelAddEventHandler(v)
-	case func(*MessageUnpinContext):
-		return MessageUnpinEventHandler(v)
-	case func(*FileMessageContext):
-		return FileMessageEventHandler(v)
-	case func(*ReactionDeleteContext):
-		return ReactionDeleteEventHandler(v)
-	case func(*ChannelUpdateContext):
-		return ChannelUpdateEventHandler(v)
-	case func(*GuildMemberDeleteContext):
-		return GuildMemberDeleteEventHandler(v)
-	case func(*GuildChannelMemberDeleteContext):
-		return GuildChannelMemberDeleteEventHandler(v)
-	case func(*GuildChannelMemberAddContext):
-		return GuildChannelMemberAddEventHandler(v)
-	case func(*AudioMessageContext):
-		return AudioMessageEventHandler(v)
-	case func(*GuildDeleteContext):
-		return GuildDeleteEventHandler(v)
 	case func(*BlockListDeleteContext):
 		return BlockListDeleteEventHandler(v)
-	case func(*MessagePinContext):
-		return MessagePinEventHandler(v)
-	case func(*GuildMemberOfflineContext):
-		return GuildMemberOfflineEventHandler(v)
-	case func(*TextMessageContext):
-		return TextMessageEventHandler(v)
-	case func(*GuildMemberAddContext):
-		return GuildMemberAddEventHandler(v)
-	case func(*GuildRoleAddContext):
-		return GuildRoleAddEventHandler(v)
-	case func(*GuildRoleUpdateContext):
-		return GuildRoleUpdateEventHandler(v)
-	case func(*BotJoinContext):
-		return BotJoinEventHandler(v)
-	case func(*KmarkdownMessageContext):
-		return KmarkdownMessageEventHandler(v)
-	case func(*EventCardMessageContext):
-		return EventCardMessageEventHandler(v)
-	case func(*GuildUpdateContext):
-		return GuildUpdateEventHandler(v)
-	case func(*DirectMessageUpdateContext):
-		return DirectMessageUpdateEventHandler(v)
-	case func(*DirectMessageReactionAddContext):
-		return DirectMessageReactionAddEventHandler(v)
-	case func(*MessageButtonClickContext):
-		return MessageButtonClickEventHandler(v)
-	case func(*MessageUpdateContext):
-		return MessageUpdateEventHandler(v)
-	case func(*DirectMessageDeleteContext):
-		return DirectMessageDeleteEventHandler(v)
 	case func(*DirectMessageReactionDeleteContext):
 		return DirectMessageReactionDeleteEventHandler(v)
-	case func(*VideoMessageContext):
-		return VideoMessageEventHandler(v)
-	case func(*GuildMemberUpdateContext):
-		return GuildMemberUpdateEventHandler(v)
+	case func(*GuildRoleUpdateContext):
+		return GuildRoleUpdateEventHandler(v)
+	case func(*TextMessageContext):
+		return TextMessageEventHandler(v)
+	case func(*EventCardMessageContext):
+		return EventCardMessageEventHandler(v)
+	case func(*GuildMemberOfflineContext):
+		return GuildMemberOfflineEventHandler(v)
+	case func(*GuildUpdateContext):
+		return GuildUpdateEventHandler(v)
+	case func(*ReactionAddContext):
+		return ReactionAddEventHandler(v)
+	case func(*MessageUnpinContext):
+		return MessageUnpinEventHandler(v)
+	case func(*DirectMessageUpdateContext):
+		return DirectMessageUpdateEventHandler(v)
+	case func(*DirectMessageDeleteContext):
+		return DirectMessageDeleteEventHandler(v)
+	case func(*DirectMessageReactionAddContext):
+		return DirectMessageReactionAddEventHandler(v)
 	case func(*GuildRoleDeleteContext):
 		return GuildRoleDeleteEventHandler(v)
+	case func(*GuildChannelMemberAddContext):
+		return GuildChannelMemberAddEventHandler(v)
 	case func(*ImageMessageContext):
 		return ImageMessageEventHandler(v)
+	case func(*AudioMessageContext):
+		return AudioMessageEventHandler(v)
+	case func(*BlockListAddContext):
+		return BlockListAddEventHandler(v)
+	case func(*ReactionDeleteContext):
+		return ReactionDeleteEventHandler(v)
+	case func(*ChannelAddContext):
+		return ChannelAddEventHandler(v)
+	case func(*GuildRoleAddContext):
+		return GuildRoleAddEventHandler(v)
+	case func(*VideoMessageContext):
+		return VideoMessageEventHandler(v)
+	case func(*MessageUpdateContext):
+		return MessageUpdateEventHandler(v)
+	case func(*MessageDeleteContext):
+		return MessageDeleteEventHandler(v)
+	case func(*UserUpdateContext):
+		return UserUpdateEventHandler(v)
+	case func(*FileMessageContext):
+		return FileMessageEventHandler(v)
+	case func(*GuildDeleteContext):
+		return GuildDeleteEventHandler(v)
+	case func(*GuildMemberAddContext):
+		return GuildMemberAddEventHandler(v)
+	case func(*GuildMemberOnlineContext):
+		return GuildMemberOnlineEventHandler(v)
+	case func(*GuildChannelMemberDeleteContext):
+		return GuildChannelMemberDeleteEventHandler(v)
+	case func(*BotJoinContext):
+		return BotJoinEventHandler(v)
+	case func(*BotExitContext):
+		return BotExitEventHandler(v)
+	case func(*ChannelUpdateContext):
+		return ChannelUpdateEventHandler(v)
+	case func(*ChannelDeleteContext):
+		return ChannelDeleteEventHandler(v)
+	case func(*MessagePinContext):
+		return MessagePinEventHandler(v)
+	case func(*GuildMemberDeleteContext):
+		return GuildMemberDeleteEventHandler(v)
+	case func(*GuildMemberUpdateContext):
+		return GuildMemberUpdateEventHandler(v)
+	case func(*MessageButtonClickContext):
+		return MessageButtonClickEventHandler(v)
+	case func(*KmarkdownMessageContext):
+		return KmarkdownMessageEventHandler(v)
 	}
 	return nil
 }
