@@ -73,19 +73,21 @@ func (c CardMessageCard) MarshalJSON() ([]byte, error) {
 //
 // Allowed Modules: *CardMessageHeader, *CardMessageSection, *CardMessageImageGroup, *CardMessageActionGroup,
 // *CardMessageContext, *CardMessageDivider, *CardMessageFile, *CardMessageCountdown.
-func (c *CardMessageCard) AddModule(i interface{}) *CardMessageCard {
-	switch i.(type) {
-	case *CardMessageHeader,
-		*CardMessageSection,
-		*CardMessageImageGroup,
-		*CardMessageActionGroup,
-		*CardMessageContext,
-		*CardMessageDivider,
-		*CardMessageFile,
-		*CardMessageCountdown:
-		c.Modules = append(c.Modules, i)
-	default:
-		panic(unsupportedCardType)
+func (c *CardMessageCard) AddModule(i ...interface{}) *CardMessageCard {
+	for _, item := range i {
+		switch item.(type) {
+		case *CardMessageHeader,
+			*CardMessageSection,
+			*CardMessageImageGroup,
+			*CardMessageActionGroup,
+			*CardMessageContext,
+			*CardMessageDivider,
+			*CardMessageFile,
+			*CardMessageCountdown:
+			c.Modules = append(c.Modules, i)
+		default:
+			panic(unsupportedCardType)
+		}
 	}
 	return c
 }
@@ -203,14 +205,16 @@ func (c CardMessageContext) MarshalJSON() ([]byte, error) {
 // AddItem provides additional type-checking when adding elements to context.
 //
 // Allowed elements: *CardMessageElementText, *CardMessageElementKMarkdown, *CardMessageElementImage
-func (c *CardMessageContext) AddItem(i interface{}) *CardMessageContext {
-	switch v := i.(type) {
-	case *CardMessageElementText,
-		*CardMessageElementKMarkdown,
-		*CardMessageElementImage:
-		*c = append(*c, v)
-	default:
-		panic("Unsupported type")
+func (c *CardMessageContext) AddItem(i ...interface{}) *CardMessageContext {
+	for _, item := range i {
+		switch v := item.(type) {
+		case *CardMessageElementText,
+			*CardMessageElementKMarkdown,
+			*CardMessageElementImage:
+			*c = append(*c, v)
+		default:
+			panic("Unsupported type")
+		}
 	}
 	return c
 }
@@ -412,14 +416,16 @@ func (c CardMessageParagraph) MarshalJSON() ([]byte, error) {
 // AddField provides additional type-checking when adding elements to paragraph.
 //
 // Allowed elements: *CardMessageElementText, *CardMessageElementKMarkdown and *CardMessageContext
-func (c *CardMessageParagraph) AddField(i interface{}) *CardMessageParagraph {
-	switch v := i.(type) {
-	case *CardMessageElementText,
-		*CardMessageElementKMarkdown,
-		*CardMessageContext:
-		c.Fields = append(c.Fields, v)
-	default:
-		panic(unsupportedCardType)
+func (c *CardMessageParagraph) AddField(i ...interface{}) *CardMessageParagraph {
+	for _, item := range i {
+		switch v := item.(type) {
+		case *CardMessageElementText,
+			*CardMessageElementKMarkdown,
+			*CardMessageContext:
+			c.Fields = append(c.Fields, v)
+		default:
+			panic(unsupportedCardType)
+		}
 	}
 	return c
 }
