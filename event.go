@@ -74,9 +74,12 @@ func (s *Session) removeEventHandler(t string, ehi *eventHandlerInstance) {
 }
 
 func (s *Session) handle(t string, i EventContext) {
-
 	for _, eh := range s.handlers[t] {
-		eh.eventHandler.Handle(i)
+		if s.Sync {
+			eh.eventHandler.Handle(i)
+		} else {
+			go eh.eventHandler.Handle(i)
+		}
 	}
 }
 

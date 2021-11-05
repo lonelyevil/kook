@@ -274,6 +274,7 @@ type Session struct {
 	RetryTimeout      time.Duration
 	ContentType       string
 	Logger            Logger
+	Sync              bool
 
 	wsConn  *websocket.Conn
 	wsMutex sync.Mutex

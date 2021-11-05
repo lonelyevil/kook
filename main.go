@@ -16,6 +16,7 @@ func New(token string, l Logger, o ...SessionOption) (s *Session) {
 		ContentType:  "application/json",
 		Logger:       l,
 		snStore:      newBloomSnStore(),
+		Sync:         true,
 	}
 	s.Identify.Token = "Bot " + token
 	s.Identify.Compress = true
