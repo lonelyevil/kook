@@ -92,6 +92,7 @@ type User struct {
 	Online         bool           `json:"online"`
 	Status         UserStatus     `json:"status"`
 	Avatar         string         `json:"avatar"`
+	VipAvatar      string         `json:"vip_avatar"`
 	Bot            bool           `json:"bot"`
 	MobileVerified bool           `json:"mobile_verified"`
 	System         bool           `json:"system"`
