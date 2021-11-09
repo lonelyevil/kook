@@ -75,7 +75,7 @@ func (c CardMessageCard) MarshalJSON() ([]byte, error) {
 // *CardMessageContext, *CardMessageDivider, *CardMessageFile, *CardMessageCountdown.
 func (c *CardMessageCard) AddModule(i ...interface{}) *CardMessageCard {
 	for _, item := range i {
-		switch item.(type) {
+		switch v := item.(type) {
 		case *CardMessageHeader,
 			*CardMessageSection,
 			*CardMessageImageGroup,
@@ -84,7 +84,7 @@ func (c *CardMessageCard) AddModule(i ...interface{}) *CardMessageCard {
 			*CardMessageDivider,
 			*CardMessageFile,
 			*CardMessageCountdown:
-			c.Modules = append(c.Modules, i)
+			c.Modules = append(c.Modules, v)
 		default:
 			panic(unsupportedCardType)
 		}
