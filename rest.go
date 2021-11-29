@@ -288,7 +288,7 @@ func (s *Session) ChannelCreate(cc *ChannelCreate) (c *Channel, err error) {
 // ChannelDelete deletes a channel.
 // FYI: https://developer.kaiheila.cn/doc/http/channel#%E5%88%A0%E9%99%A4%E9%A2%91%E9%81%93
 func (s *Session) ChannelDelete(channelID string) (err error) {
-	_, err = s.Request("POST", EndpointChannelRoleDelete, struct {
+	_, err = s.Request("POST", EndpointChannelDelete, struct {
 		ChannelID string `json:"channel_id"`
 	}{channelID})
 	return err

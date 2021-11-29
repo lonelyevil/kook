@@ -42,6 +42,7 @@ var (
 	EndpointChannelView       = urlJoin(EndpointChannel, "view")
 	EndpointChannelCreate     = urlJoin(EndpointChannel, "create")
 	EndpointChannelMoveUser   = urlJoin(EndpointChannel, "move-user")
+	EndpointChannelDelete     = urlJoin(EndpointChannel, "delete")
 	EndpointChannelRoleIndex  = urlJoin(EndpointChannelRole, "index")
 	EndpointChannelRoleCreate = urlJoin(EndpointChannelRole, "create")
 	EndpointChannelRoleUpdate = urlJoin(EndpointChannelRole, "update")
