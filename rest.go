@@ -1167,9 +1167,43 @@ func (s *Session) InviteList(page *PageSetting, options ...InviteListOption) (il
 
 // InviteCreate is the type for arguments of InviteCreate request.
 type InviteCreate struct {
-	GuildID   string `json:"guild_id,omitempty"`
-	ChannelID string `json:"channel_id,omitempty"`
+	GuildID      string             `json:"guild_id,omitempty"`
+	ChannelID    string             `json:"channel_id,omitempty"`
+	Duration     InviteDuration     `json:"duration,omitempty"`
+	SettingTimes InviteSettingTimes `json:"setting_times,omitempty"`
 }
+
+// InviteDuration is the type for Duration in InviteCreate
+//
+// You MUST use the enum defined below.
+type InviteDuration string
+
+// These are allowed InviteDuration enums. You MUST use them.
+const (
+	InviteDurationInfinity   InviteDuration = "0"
+	InviteDurationHalfHour   InviteDuration = "1800"
+	InviteDurationHour       InviteDuration = "3600"
+	InviteDurationSixHour    InviteDuration = "21600"
+	InviteDurationTwelveHour InviteDuration = "43200"
+	InviteDurationDay        InviteDuration = "86400"
+	InviteDurationWeek       InviteDuration = "604800"
+)
+
+// InviteSettingTimes is the type for SettingTimes in InviteCreate
+//
+// You SHOULD use the enum defined below.
+type InviteSettingTimes int
+
+// These are allowed InviteSettingTimes enums. You SHOULD use them.
+const (
+	InviteSettingTimesInfinity   InviteSettingTimes = -1
+	InviteSettingTimesOne        InviteSettingTimes = 1
+	InviteSettingTimesFive       InviteSettingTimes = 5
+	InviteSettingTimesTen        InviteSettingTimes = 10
+	InviteSettingTimesTwentyFive InviteSettingTimes = 25
+	InviteSettingTimesFifty      InviteSettingTimes = 50
+	InviteSettingTimesHundred    InviteSettingTimes = 100
+)
 
 // InviteCreate creates an invite link.
 //
@@ -1192,8 +1226,9 @@ func (s *Session) InviteCreate(ic *InviteCreate) (URL string, err error) {
 
 // InviteDelete is the type for arguments of InviteDelete request.
 type InviteDelete struct {
-	InviteCreate
-	URLCode string `json:"url_code"`
+	GuildID   string `json:"guild_id,omitempty"`
+	ChannelID string `json:"channel_id,omitempty"`
+	URLCode   string `json:"url_code"`
 }
 
 // InviteDelete deletes an invite link.
