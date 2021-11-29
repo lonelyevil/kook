@@ -344,11 +344,22 @@ type ChannelRoleBase struct {
 // ChannelRoleCreate is the request query data for ChannelRoleCreate.
 type ChannelRoleCreate ChannelRoleBase
 
+// ChannelRoleCreateResp is the response for ChannelRoleCreate.
+type ChannelRoleCreateResp ChannelRoleUpdateResp
+
 // ChannelRoleCreate creates a role for a channel
 // FYI: https://developer.kaiheila.cn/doc/http/channel#%E5%88%9B%E5%BB%BA%E9%A2%91%E9%81%93%E8%A7%92%E8%89%B2%E6%9D%83%E9%99%90
-func (s *Session) ChannelRoleCreate(crc *ChannelRoleCreate) (err error) {
-	_, err = s.Request("POST", EndpointChannelRoleCreate, crc)
-	return err
+func (s *Session) ChannelRoleCreate(crc *ChannelRoleCreate) (crcr *ChannelRoleCreateResp, err error) {
+	var resp []byte
+	resp, err = s.Request("POST", EndpointChannelRoleCreate, crc)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(resp, &crcr)
+	if err != nil {
+		return nil, err
+	}
+	return crcr, err
 }
 
 // ChannelRoleUpdate is the request query data for ChannelRoleUpdate
