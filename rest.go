@@ -1288,6 +1288,12 @@ func UserViewWithGuildID(guildID string) UserViewOption {
 	}
 }
 
+// UserOffline logout the bot.
+func (s *Session) UserOffline() error {
+	_, err := s.Request("POST", EndpointUserOffline, nil)
+	return err
+}
+
 // RequestWithPage is the wrapper for internal list GET request, you would prefer to use other method other than this.
 func (s *Session) RequestWithPage(method, u string, page *PageSetting) (response []byte, meta *PageInfo, err error) {
 	ur, _ := url.Parse(u)
