@@ -41,7 +41,7 @@ templates:
   RichMessage:
     body:
       GuildID: str
-      Attachments: '[]Attachment'
+      Attachments: Attachment
       Author: User
   MentionRolePart:
     body:
