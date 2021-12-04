@@ -101,7 +101,7 @@ events:
       Mention: '[]str'
       MentionAll: bool
       MentionHere: bool
-      MentionRoles: '[]str'
+      MentionRoles: '[]int64'
       UpdatedAt: MilliTimeStamp
   deleted_message:
     name: MessageDelete
