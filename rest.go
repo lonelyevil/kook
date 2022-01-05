@@ -1425,7 +1425,7 @@ func (s *Session) request(method, url string, data interface{}, sequence int) (r
 	if r.Code != 0 {
 		addCaller(s.Logger.Error()).Int("code", r.Code).Str("error_msg", r.Message).Msg("api response error")
 		//s.log(LogError, "Api Response Error Code %d, Message %s", r.Code, r.Message)
-		return
+		return nil, newRestErrorFromGeneralResp(&r)
 	}
 	response = r.Data
 	return
