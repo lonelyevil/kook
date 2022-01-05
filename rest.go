@@ -1250,6 +1250,60 @@ func (s *Session) InviteDelete(id *InviteDelete) (err error) {
 	return err
 }
 
+type BlacklistItem struct {
+	UserID      string         `json:"user_id"`
+	CreatedTime MilliTimeStamp `json:"created_time"`
+	Remark      string         `json:"remark"`
+	User        *User          `json:"user"`
+}
+
+// BlacklistList lists the users in blacklist.
+//
+// FYI: https://developer.kaiheila.cn/doc/http/blacklist
+func (s *Session) BlacklistList(guildID string, page *PageSetting) (bi []*BlacklistItem, meta *PageInfo, err error) {
+	u, _ := url.Parse(EndpointBlacklistList)
+	q := u.Query()
+	q.Set("guild_id", guildID)
+	u.RawQuery = q.Encode()
+	var response []byte
+	response, meta, err = s.RequestWithPage("GET", u.String(), page)
+	if err != nil {
+		return nil, nil, err
+	}
+	err = json.Unmarshal(response, &bi)
+	if err != nil {
+		return nil, nil, err
+	}
+	return bi, meta, nil
+}
+
+// BlacklistCreate is the type for arguments of BlacklistCreate request.
+type BlacklistCreate struct {
+	GuildID    string `json:"guild_id"`
+	TargetID   string `json:"target_id"`
+	Remark     string `json:"remark,omitempty"`
+	DelMsgDays int    `json:"del_msg_days,omitempty"`
+}
+
+// BlacklistCreate adds user to blacklist
+//
+// FYI: https://developer.kaiheila.cn/doc/http/blacklist#%E5%8A%A0%E5%85%A5%E9%BB%91%E5%90%8D%E5%8D%95
+func (s *Session) BlacklistCreate(bc *BlacklistCreate) (err error) {
+	_, err = s.Request("POST", EndpointBlacklistCreate, bc)
+	return err
+}
+
+// BlacklistDelete removes user from blacklist
+//
+// FYI: https://developer.kaiheila.cn/doc/http/blacklist#%E7%A7%BB%E9%99%A4%E9%BB%91%E5%90%8D%E5%8D%95
+func (s *Session) BlacklistDelete(guildID, targetID string) (err error) {
+	_, err = s.Request("POST", EndpointBlacklistDelete, struct {
+		GuildID  string `json:"guild_id"`
+		TargetID string `json:"target_id"`
+	}{GuildID: guildID, TargetID: targetID})
+	return err
+}
+
 // UserMe returns the bot info.
 // FYI: https://developer.kaiheila.cn/doc/http/user#%E8%8E%B7%E5%8F%96%E5%BD%93%E5%89%8D%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF
 func (s *Session) UserMe() (u *User, err error) {
