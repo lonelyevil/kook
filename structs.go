@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+	"strconv"
+	"strings"
 	"sync"
 	"time"
 
@@ -345,6 +347,20 @@ type MessageReaction struct {
 type EmojiItem struct {
 	ID   string `json:"id"`
 	Name string `json:"name"`
+}
+
+// IsEqual compares standard emoji string with khl's emoji representation.
+func (e *EmojiItem) IsEqual(s string) bool {
+	if !strings.HasPrefix(e.ID, "[#") {
+		return e.ID == s
+	}
+	t := strings.TrimLeft(e.ID, "[#")
+	t = strings.TrimRight(t, ";]")
+	i, err := strconv.Atoi(t)
+	if err != nil {
+		return false
+	}
+	return string([]rune{int32(i)}) == s
 }
 
 // ChannelMessage is the struct for a message in a channel.
