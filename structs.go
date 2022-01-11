@@ -351,16 +351,21 @@ type EmojiItem struct {
 
 // IsEqual compares standard emoji string with khl's emoji representation.
 func (e *EmojiItem) IsEqual(s string) bool {
+	return e.Convert() == s
+}
+
+// Convert converts khl's emoji to standard emoji.
+func (e *EmojiItem) Convert() string {
 	if !strings.HasPrefix(e.ID, "[#") {
-		return e.ID == s
+		return e.ID
 	}
 	t := strings.TrimLeft(e.ID, "[#")
 	t = strings.TrimRight(t, ";]")
 	i, err := strconv.Atoi(t)
 	if err != nil {
-		return false
+		return ""
 	}
-	return string([]rune{int32(i)}) == s
+	return string([]rune{int32(i)})
 }
 
 // ChannelMessage is the struct for a message in a channel.
