@@ -18,5 +18,5 @@ func (r RestError) Error() string {
 }
 
 func newRestErrorFromGeneralResp(r *EndpointGeneralResponse) error {
-	return RestError{Code: r.Code, Message: r.Message, Data: r.Data}
+	return &RestError{Code: r.Code, Message: r.Message, Data: r.Data}
 }
