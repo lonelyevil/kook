@@ -49,7 +49,7 @@ templates:
       Name: str
   MentionPart:
     body:
-      ID: i64
+      ID: str
       Username: str
       FullName: str
       Avatar: str
