@@ -1359,6 +1359,16 @@ func (s *Session) UserOffline() error {
 	return err
 }
 
+// BadgeGuildUrl builds the url for guild badge.
+func (s *Session) BadgeGuildUrl(guildID string, style int) string {
+	u, _ := url.Parse(EndpointBadgeGuild)
+	q := u.Query()
+	q.Add("guild_id", guildID)
+	q.Add("style", strconv.Itoa(style))
+	u.RawQuery = q.Encode()
+	return u.String()
+}
+
 // RequestWithPage is the wrapper for internal list GET request, you would prefer to use other method other than this.
 func (s *Session) RequestWithPage(method, u string, page *PageSetting) (response []byte, meta *PageInfo, err error) {
 	ur, _ := url.Parse(u)

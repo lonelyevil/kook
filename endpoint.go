@@ -26,6 +26,7 @@ var (
 	EndpointGuildEmoji    = urlJoin(EndpointAPI, "guild-emoji")
 	EndpointInvite        = urlJoin(EndpointAPI, "invite")
 	EndpointBlacklist     = urlJoin(EndpointAPI, "blacklist")
+	EndpointBadge         = urlJoin(EndpointAPI, "badge")
 
 	EndpointGuildList       = urlJoin(EndpointGuild, "list")
 	EndpointGuildView       = urlJoin(EndpointGuild, "view")
@@ -100,6 +101,8 @@ var (
 	EndpointBlacklistList   = urlJoin(EndpointBlacklist, "list")
 	EndpointBlacklistCreate = urlJoin(EndpointBlacklist, "create")
 	EndpointBlacklistDelete = urlJoin(EndpointBlacklist, "delete")
+
+	EndpointBadgeGuild = urlJoin(EndpointBadge, "guild")
 )
 
 // Must not be used elsewhere.
