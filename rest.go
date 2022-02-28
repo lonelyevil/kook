@@ -402,6 +402,44 @@ func (s *Session) ChannelRoleDelete(crd *ChannelRoleDelete) (err error) {
 	return err
 }
 
+// UserInVoiceChannel is a user in a voice channel
+type UserInVoiceChannel struct {
+	ID                   string                    `json:"id"`
+	GuildID              string                    `json:"guild_id"`
+	MasterID             string                    `json:"master_id"`
+	ParentID             string                    `json:"parent_id"`
+	UserID               string                    `json:"user_id"`
+	Name                 string                    `json:"name"`
+	Topic                string                    `json:"topic"`
+	Type                 ChannelType               `json:"type"`
+	Level                int                       `json:"level"`
+	SlowMode             int                       `json:"slow_mode"`
+	LimitAmount          int                       `json:"limit_amount"`
+	IsCategory           bool                      `json:"is_category"`
+	PermissionOverwrites []PermissionOverwrite     `json:"permission_overwrites"`
+	PermissionUsers      []UserPermissionOverwrite `json:"permission_users"`
+	PermissionSync       IntBool                   `json:"permission_sync"`
+}
+
+// ChannelUserGetJoinedChannel gets the user in voice channel
+func (s *Session) ChannelUserGetJoinedChannel(guildID, userID string, page *PageSetting) (us []*UserInVoiceChannel, meta *PageInfo, err error) {
+	var response []byte
+	u, _ := url.Parse(EndpointChannelUserGetJoinedChannel)
+	q := u.Query()
+	q.Set("guild_id", guildID)
+	q.Set("user_id", userID)
+	u.RawQuery = q.Encode()
+	response, meta, err = s.RequestWithPage("GET", u.String(), page)
+	if err != nil {
+		return nil, nil, err
+	}
+	err = json.Unmarshal(response, &us)
+	if err != nil {
+		return nil, nil, err
+	}
+	return us, meta, nil
+}
+
 // UserChatList returns a list of user chats that bot owns.
 //
 // Note: for User in TargetInfo, only ID, Username, Online, Avatar is filled
