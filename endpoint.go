@@ -28,6 +28,7 @@ var (
 	EndpointInvite        = urlJoin(EndpointAPI, "invite")
 	EndpointBlacklist     = urlJoin(EndpointAPI, "blacklist")
 	EndpointBadge         = urlJoin(EndpointAPI, "badge")
+	EndpointGame          = urlJoin(EndpointAPI, "game")
 
 	EndpointGuildList       = urlJoin(EndpointGuild, "list")
 	EndpointGuildView       = urlJoin(EndpointGuild, "view")
@@ -105,6 +106,12 @@ var (
 	EndpointBlacklistDelete = urlJoin(EndpointBlacklist, "delete")
 
 	EndpointBadgeGuild = urlJoin(EndpointBadge, "guild")
+
+	EndpointGameCreate         = urlJoin(EndpointGame, "create")
+	EndpointGameUpdate         = urlJoin(EndpointGame, "update")
+	EndpointGameDelete         = urlJoin(EndpointGame, "delete")
+	EndpointGameActivity       = urlJoin(EndpointGame, "activity")
+	EndpointGameDeleteActivity = urlJoin(EndpointGame, "delete-activity")
 )
 
 // Must not be used elsewhere.

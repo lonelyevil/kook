@@ -1407,6 +1407,109 @@ func (s *Session) BadgeGuildUrl(guildID string, style int) string {
 	return u.String()
 }
 
+// GameType is an enum for Game's type.
+type GameType int
+
+// These are all GameType values.
+const (
+	GameTypeGame = iota
+	GameTypeVup
+	GameTypeProcess
+)
+
+// Game is a game item registered at khl.
+type Game struct {
+	ID          int64    `json:"id"`
+	Name        string   `json:"name"`
+	Type        GameType `json:"type"`
+	Options     string   `json:"options"`
+	KmhookAdmin bool     `json:"kmhook_admin"`
+	ProcessName []string `json:"process_name"`
+	ProductName []string `json:"product_name"`
+	Icon        string   `json:"icon"`
+}
+
+// GameList lists the games registered.
+func (s *Session) GameList(page *PageSetting) (gs []*Game, meta *PageInfo, err error) {
+	var resp []byte
+	resp, meta, err = s.RequestWithPage("GET", EndpointGame, page)
+	if err != nil {
+		return nil, nil, err
+	}
+	err = json.Unmarshal(resp, &gs)
+	if err != nil {
+		return nil, nil, err
+	}
+	return gs, meta, nil
+}
+
+// GameCreate is the type for arguments of GameCreate request.
+type GameCreate struct {
+	Name        string `json:"name"`
+	ProcessName string `json:"process_name,omitempty"`
+	Icon        string `json:"icon,omitempty"`
+}
+
+// GameCreate creates a new Game in khl.
+func (s *Session) GameCreate(gc *GameCreate) (g *Game, err error) {
+	var resp []byte
+	resp, err = s.Request("POST", EndpointGameCreate, gc)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(resp, &g)
+	if err != nil {
+		return nil, err
+	}
+	return g, nil
+}
+
+// GameUpdate is the type for arguments of GameUpdate request.
+type GameUpdate struct {
+	ID   int64  `json:"id"`
+	Name string `json:"name,omitempty"`
+	Icon string `json:"icon,omitempty"`
+}
+
+// GameUpdate updates the Game info in khl
+func (s *Session) GameUpdate(gu *GameUpdate) (g *Game, err error) {
+	var resp []byte
+	resp, err = s.Request("POST", EndpointGameUpdate, gu)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(resp, &g)
+	if err != nil {
+		return nil, err
+	}
+	return g, nil
+}
+
+// GameDelete deletes the Game info in khl
+func (s *Session) GameDelete(id int64) (err error) {
+	_, err = s.Request("POST", EndpointGameDelete, struct {
+		ID int64 `json:"id"`
+	}{id})
+	return err
+}
+
+// GameActivity begins playing a game.
+func (s *Session) GameActivity(id int64) (err error) {
+	_, err = s.Request("POST", EndpointGameActivity, struct {
+		ID       int64 `json:"id"`
+		DataType int   `json:"data_type"`
+	}{ID: id, DataType: 1})
+	return err
+}
+
+// GameDeleteActivity stops playing a game.
+func (s *Session) GameDeleteActivity() (err error) {
+	_, err = s.Request("POST", EndpointGameDeleteActivity, struct {
+		DataType int `json:"data_type"`
+	}{1})
+	return err
+}
+
 // RequestWithPage is the wrapper for internal list GET request, you would prefer to use other method other than this.
 func (s *Session) RequestWithPage(method, u string, page *PageSetting) (response []byte, meta *PageInfo, err error) {
 	ur, _ := url.Parse(u)
