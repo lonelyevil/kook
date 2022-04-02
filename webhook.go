@@ -36,6 +36,7 @@ func (s *Session) WebhookHandler() http.HandlerFunc {
 				writer.WriteHeader(http.StatusInternalServerError)
 				return
 			}
+			defer r.Close()
 		}
 		_, err = buf.ReadFrom(r)
 		if err != nil {
