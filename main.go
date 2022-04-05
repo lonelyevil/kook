@@ -43,6 +43,9 @@ func SessionWithEncryptKey(key []byte) SessionOption {
 			buf := &bytes.Buffer{}
 			buf.Grow(32)
 			buf.Write(key)
+			for i := len(key); i < 32; i++ {
+				buf.WriteByte(byte(0))
+			}
 			key = buf.Bytes()
 		}
 		session.Identify.WebsocketKey = key
