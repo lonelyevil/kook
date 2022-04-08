@@ -391,7 +391,7 @@ type DetailedChannelMessage struct {
 	MentionHere bool                    `json:"mention_here"`
 	MentionRole []string                `json:"mention_role"`
 	Embeds      []map[string]string     `json:"embeds"`
-	Attachments []Attachment            `json:"attachments"`
+	Attachments *Attachment             `json:"attachments"`
 	Reactions   []ReactionItem          `json:"reactions"`
 	Quote       *DetailedChannelMessage `json:"quote"`
 	MentionInfo struct {
