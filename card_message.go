@@ -71,14 +71,15 @@ func (c CardMessageCard) MarshalJSON() ([]byte, error) {
 
 // AddModule adds Modules to a card and provides a runtime type check for CardMessageCard Modules.
 //
-// Allowed Modules: *CardMessageHeader, *CardMessageSection, *CardMessageImageGroup, *CardMessageActionGroup,
-// *CardMessageContext, *CardMessageDivider, *CardMessageFile, *CardMessageCountdown.
+// Allowed Modules: *CardMessageHeader, *CardMessageSection, *CardMessageImageGroup, *CardMessageContainer,
+// *CardMessageActionGroup, *CardMessageContext, *CardMessageDivider, *CardMessageFile, *CardMessageCountdown.
 func (c *CardMessageCard) AddModule(i ...interface{}) *CardMessageCard {
 	for _, item := range i {
 		switch v := item.(type) {
 		case *CardMessageHeader,
 			*CardMessageSection,
 			*CardMessageImageGroup,
+			*CardMessageContainer,
 			*CardMessageActionGroup,
 			*CardMessageContext,
 			*CardMessageDivider,
