@@ -62,7 +62,7 @@ templates:
     body:
       GuildID: str
       ChannelName: str
-      Mention: '[]str'
+      Mention: '[]i64'
       MentionAll: bool
       MentionRoles: '[]i64'
       MentionHere: bool
@@ -101,7 +101,7 @@ events:
       Mention: '[]str'
       MentionAll: bool
       MentionHere: bool
-      MentionRoles: '[]int64'
+      MentionRoles: '[]i64'
       UpdatedAt: MilliTimeStamp
   deleted_message:
     name: MessageDelete
