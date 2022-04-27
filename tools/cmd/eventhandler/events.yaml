@@ -14,7 +14,7 @@ templates:
       Region: str
       EnableOpen: IntBool
       OpenID: i64
-      DeafultChannelID: str
+      DefaultChannelID: str
       WelcomeChannelID: str
   ReactionItem:
     body:
