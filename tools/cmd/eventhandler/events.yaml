@@ -62,7 +62,7 @@ templates:
     body:
       GuildID: str
       ChannelName: str
-      Mention: '[]i64'
+      Mention: '[]str'
       MentionAll: bool
       MentionRoles: '[]i64'
       MentionHere: bool
