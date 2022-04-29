@@ -1288,6 +1288,7 @@ func (s *Session) InviteDelete(id *InviteDelete) (err error) {
 	return err
 }
 
+// BlacklistItem is one user in blacklist.
 type BlacklistItem struct {
 	UserID      string         `json:"user_id"`
 	CreatedTime MilliTimeStamp `json:"created_time"`
