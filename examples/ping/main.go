@@ -30,7 +30,7 @@ func main() {
 	s.Close()
 }
 
-func messageHan(ctx *khl.TextMessageContext) {
+func messageHan(ctx *khl.KmarkdownMessageContext) {
 	if ctx.Common.Type != khl.MessageTypeText || ctx.Extra.Author.Bot {
 		return
 	}
@@ -40,6 +40,7 @@ func messageHan(ctx *khl.TextMessageContext) {
 				TargetID: ctx.Common.TargetID,
 				Content:  "pong",
 				Quote:    ctx.Common.MsgID,
+				Type:     khl.MessageTypeKMarkdown,
 			},
 		})
 	}
