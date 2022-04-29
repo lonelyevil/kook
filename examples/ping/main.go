@@ -31,7 +31,7 @@ func main() {
 }
 
 func messageHan(ctx *khl.KmarkdownMessageContext) {
-	if ctx.Common.Type != khl.MessageTypeText || ctx.Extra.Author.Bot {
+	if ctx.Common.Type != khl.MessageTypeKMarkdown || ctx.Extra.Author.Bot {
 		return
 	}
 	if strings.Contains(ctx.Common.Content, "ping") {
