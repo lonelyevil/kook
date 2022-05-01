@@ -790,9 +790,15 @@ func GuildUserListWithJoinedAt(joinedAt bool) GuildUserListOption {
 	}
 }
 
+type GuildUserListInfo struct {
+	UserCount    int64 `json:"user_count"`
+	OnlineCount  int64 `json:"online_count"`
+	OfflineCount int64 `json:"offline_count"`
+}
+
 // GuildUserList returns the list of users in a guild.
 // FYI: https://developer.kaiheila.cn/doc/http/guild#%E8%8E%B7%E5%8F%96%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%AD%E7%9A%84%E7%94%A8%E6%88%B7%E5%88%97%E8%A1%A8
-func (s *Session) GuildUserList(guildID string, page *PageSetting, options ...GuildUserListOption) (us []*User, meta *PageInfo, err error) {
+func (s *Session) GuildUserList(guildID string, page *PageSetting, options ...GuildUserListOption) (us []*User, guli *GuildUserListInfo, meta *PageInfo, err error) {
 	var response []byte
 	u, _ := url.Parse(EndpointGuildUserList)
 	q := u.Query()
@@ -800,16 +806,35 @@ func (s *Session) GuildUserList(guildID string, page *PageSetting, options ...Gu
 	for _, item := range options {
 		item(q)
 	}
+	if page != nil {
+		if page.Page != nil {
+			q.Add("page", strconv.Itoa(*page.Page))
+		}
+		if page.PageSize != nil {
+			q.Add("page_size", strconv.Itoa(*page.PageSize))
+		}
+		if page.Sort != nil {
+			q.Add("sort", *page.Sort)
+		}
+	}
 	u.RawQuery = q.Encode()
-	response, meta, err = s.RequestWithPage("GET", u.String(), page)
+	resp, err := s.Request("GET", u.String(), nil)
 	if err != nil {
-		return nil, nil, err
+		return nil, nil, nil, err
+	}
+	g := &struct {
+		GeneralListData
+		GuildUserListInfo
+	}{}
+	err = json.Unmarshal(resp, g)
+	if err != nil {
+		return nil, nil, nil, err
 	}
 	err = json.Unmarshal(response, &us)
 	if err != nil {
-		return nil, nil, err
+		return nil, nil, nil, err
 	}
-	return us, meta, err
+	return us, &g.GuildUserListInfo, &g.Meta, err
 }
 
 // GuildNickname is the arguments for GuildNickname.
