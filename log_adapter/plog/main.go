@@ -54,7 +54,7 @@ func (e *EntryAdapter) Bytes(key string, val []byte) khl.Entry {
 }
 
 func (e *EntryAdapter) Caller(depth int) khl.Entry {
-	e.e = e.e.Caller(depth, false)
+	e.e = e.e.Caller(depth)
 	return e
 }
 

@@ -3,7 +3,7 @@ module github.com/lonelyevil/khl/log_adapter/zap
 go 1.17
 
 require (
-	github.com/lonelyevil/khl v0.0.25
+	github.com/lonelyevil/khl v0.0.26
 	go.uber.org/zap v1.21.0
 )
 
