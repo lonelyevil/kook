@@ -5,6 +5,7 @@ A low level library for interacting with kaiheila(开黑啦) bot API. Currently,
 [![Go Reference](https://pkg.go.dev/badge/github.com/lonelyevil/khl.svg)](https://pkg.go.dev/github.com/lonelyevil/khl)
 [![Go Report Card](https://goreportcard.com/badge/github.com/lonelyevil/khl)](https://goreportcard.com/report/github.com/lonelyevil/khl)
 [![Server Badger](https://img.shields.io/badge/kaiheila-dev--chat-informational)](https://kaihei.co/r5s1WO)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Flonelyevil%2Fkhl.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Flonelyevil%2Fkhl?ref=badge_shield)
 
 ## Get Started
 
@@ -49,6 +50,9 @@ Bug reports and code suggestions are greatly welcomed.
 ## LICENSE
 
 KHL is a free and open source software library distributed under the terms of [ISC License](LICENSE).
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Flonelyevil%2Fkhl.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Flonelyevil%2Fkhl?ref=badge_large)
 
 ## Special Thanks To:
 
