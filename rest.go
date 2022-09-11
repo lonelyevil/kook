@@ -267,7 +267,7 @@ type ChannelCreate struct {
 	Name         string      `json:"name"`
 	Type         ChannelType `json:"type,omitempty"`
 	LimitAmount  int         `json:"limit_amount,omitempty"`
-	VoiceQuality int         `json:"voice_quality,omitempty"`
+	VoiceQuality string      `json:"voice_quality,omitempty"`
 }
 
 // ChannelCreate creates a channel.
