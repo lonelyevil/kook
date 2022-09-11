@@ -1067,7 +1067,7 @@ type IntimacyIndexResp struct {
 	SocialInfo string         `json:"social_info"`
 	LastRead   MilliTimeStamp `json:"last_read"`
 	Score      int            `json:"score"`
-	ImgList    struct {
+	ImgList    []struct {
 		ID  string `json:"id"`
 		URL string `json:"url"`
 	} `json:"img_list"`
