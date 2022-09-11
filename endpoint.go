@@ -1,4 +1,4 @@
-package khl
+package kook
 
 import (
 	"net/url"
@@ -9,7 +9,7 @@ import (
 var (
 	APIVersion = "v3"
 
-	EndpointBase          = "https://www.kaiheila.cn/api"
+	EndpointBase          = "https://www.kookapp.cn/api"
 	EndpointAPI           = urlJoin(EndpointBase, APIVersion)
 	EndpointGuild         = urlJoin(EndpointAPI, "guild")
 	EndpointGuildMute     = urlJoin(EndpointAPI, "guild-mute")

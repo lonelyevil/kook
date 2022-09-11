@@ -1,4 +1,4 @@
-package khl
+package kook
 
 import (
 	"bytes"
@@ -12,7 +12,7 @@ import (
 )
 
 // Gateway returns the url for websocket gateway.
-// FYI: https://developer.kaiheila.cn/doc/http/gateway#%E8%8E%B7%E5%8F%96%E7%BD%91%E5%85%B3%E8%BF%9E%E6%8E%A5%E5%9C%B0%E5%9D%80
+// FYI: https://developer.kookapp.cn/doc/http/gateway#%E8%8E%B7%E5%8F%96%E7%BD%91%E5%85%B3%E8%BF%9E%E6%8E%A5%E5%9C%B0%E5%9D%80
 func (s *Session) Gateway() (gateway string, err error) {
 	u, _ := url.Parse(EndpointGatewayIndex)
 	q := u.Query()
@@ -77,7 +77,7 @@ func MessageListWithFlag(flag MessageListFlag) MessageListOption {
 }
 
 // MessageList returns a list of messages of a channel.
-// FYI: https://developer.kaiheila.cn/doc/http/message#%E8%8E%B7%E5%8F%96%E9%A2%91%E9%81%93%E8%81%8A%E5%A4%A9%E6%B6%88%E6%81%AF%E5%88%97%E8%A1%A8
+// FYI: https://developer.kookapp.cn/doc/http/message#%E8%8E%B7%E5%8F%96%E9%A2%91%E9%81%93%E8%81%8A%E5%A4%A9%E6%B6%88%E6%81%AF%E5%88%97%E8%A1%A8
 func (s *Session) MessageList(targetID string, options ...MessageListOption) (ms []*DetailedChannelMessage, err error) {
 	var response []byte
 	u, _ := url.Parse(EndpointMessageList)
@@ -127,7 +127,7 @@ type MessageResp struct {
 }
 
 // MessageCreate creates a message.
-// FYI: https://developer.kaiheila.cn/doc/http/message#%E5%8F%91%E9%80%81%E9%A2%91%E9%81%93%E8%81%8A%E5%A4%A9%E6%B6%88%E6%81%AF
+// FYI: https://developer.kookapp.cn/doc/http/message#%E5%8F%91%E9%80%81%E9%A2%91%E9%81%93%E8%81%8A%E5%A4%A9%E6%B6%88%E6%81%AF
 func (s *Session) MessageCreate(m *MessageCreate) (resp *MessageResp, err error) {
 	var response []byte
 	response, err = s.Request("POST", EndpointMessageCreate, m)
@@ -156,14 +156,14 @@ type MessageUpdate struct {
 }
 
 // MessageUpdate updates a message.
-// FYI: https://developer.kaiheila.cn/doc/http/message#%E6%9B%B4%E6%96%B0%E9%A2%91%E9%81%93%E8%81%8A%E5%A4%A9%E6%B6%88%E6%81%AF
+// FYI: https://developer.kookapp.cn/doc/http/message#%E6%9B%B4%E6%96%B0%E9%A2%91%E9%81%93%E8%81%8A%E5%A4%A9%E6%B6%88%E6%81%AF
 func (s *Session) MessageUpdate(m *MessageUpdate) (err error) {
 	_, err = s.Request("POST", EndpointMessageUpdate, m)
 	return
 }
 
 // MessageDelete deletes a message.
-// FYI: https://developer.kaiheila.cn/doc/http/message#%E5%88%A0%E9%99%A4%E9%A2%91%E9%81%93%E8%81%8A%E5%A4%A9%E6%B6%88%E6%81%AF
+// FYI: https://developer.kookapp.cn/doc/http/message#%E5%88%A0%E9%99%A4%E9%A2%91%E9%81%93%E8%81%8A%E5%A4%A9%E6%B6%88%E6%81%AF
 func (s *Session) MessageDelete(msgID string) (err error) {
 	_, err = s.Request("POST", EndpointMessageDelete, struct {
 		MsgID string `json:"msg_id"`
@@ -182,7 +182,7 @@ type ReactedUser struct {
 }
 
 // MessageReactionList returns the list of the reacted users with a specific emoji to a message.
-// FYI: https://developer.kaiheila.cn/doc/http/message#%E8%8E%B7%E5%8F%96%E9%A2%91%E9%81%93%E6%B6%88%E6%81%AF%E6%9F%90%E5%9B%9E%E5%BA%94%E7%9A%84%E7%94%A8%E6%88%B7%E5%88%97%E8%A1%A8
+// FYI: https://developer.kookapp.cn/doc/http/message#%E8%8E%B7%E5%8F%96%E9%A2%91%E9%81%93%E6%B6%88%E6%81%AF%E6%9F%90%E5%9B%9E%E5%BA%94%E7%9A%84%E7%94%A8%E6%88%B7%E5%88%97%E8%A1%A8
 func (s *Session) MessageReactionList(msgID, emoji string) (us []*ReactedUser, err error) {
 	u, _ := url.Parse(EndpointMessageReactionList)
 	q := u.Query()
@@ -202,7 +202,7 @@ func (s *Session) MessageReactionList(msgID, emoji string) (us []*ReactedUser, e
 }
 
 // MessageAddReaction add a reaction to a message as the bot.
-// FYI: https://developer.kaiheila.cn/doc/http/message#%E7%BB%99%E6%9F%90%E4%B8%AA%E6%B6%88%E6%81%AF%E6%B7%BB%E5%8A%A0%E5%9B%9E%E5%BA%94
+// FYI: https://developer.kookapp.cn/doc/http/message#%E7%BB%99%E6%9F%90%E4%B8%AA%E6%B6%88%E6%81%AF%E6%B7%BB%E5%8A%A0%E5%9B%9E%E5%BA%94
 func (s *Session) MessageAddReaction(msgID, emoji string) (err error) {
 	_, err = s.Request("POST", EndpointMessageAddReaction, struct {
 		MsgID string `json:"msg_id"`
@@ -212,7 +212,7 @@ func (s *Session) MessageAddReaction(msgID, emoji string) (err error) {
 }
 
 // MessageDeleteReaction deletes a reaction of a user from a message.
-// FYI: https://developer.kaiheila.cn/doc/http/message#%E5%88%A0%E9%99%A4%E6%B6%88%E6%81%AF%E7%9A%84%E6%9F%90%E4%B8%AA%E5%9B%9E%E5%BA%94
+// FYI: https://developer.kookapp.cn/doc/http/message#%E5%88%A0%E9%99%A4%E6%B6%88%E6%81%AF%E7%9A%84%E6%9F%90%E4%B8%AA%E5%9B%9E%E5%BA%94
 func (s *Session) MessageDeleteReaction(msgID, emoji string, userID string) (err error) {
 	_, err = s.Request("POST", EndpointMessageDeleteReaction, struct {
 		MsgID  string `json:"msg_id"`
@@ -223,7 +223,7 @@ func (s *Session) MessageDeleteReaction(msgID, emoji string, userID string) (err
 }
 
 // ChannelList lists all channels from a guild.
-// FYI: https://developer.kaiheila.cn/doc/http/channel#%E8%8E%B7%E5%8F%96%E9%A2%91%E9%81%93%E5%88%97%E8%A1%A8
+// FYI: https://developer.kookapp.cn/doc/http/channel#%E8%8E%B7%E5%8F%96%E9%A2%91%E9%81%93%E5%88%97%E8%A1%A8
 func (s *Session) ChannelList(guildID string, page *PageSetting) (cs []*Channel, meta *PageInfo, err error) {
 	var response []byte
 	u, _ := url.Parse(EndpointChannelList)
@@ -242,7 +242,7 @@ func (s *Session) ChannelList(guildID string, page *PageSetting) (cs []*Channel,
 }
 
 // ChannelView returns the detailed information for a channel.
-// FYI: https://developer.kaiheila.cn/doc/http/channel#%E8%8E%B7%E5%8F%96%E9%A2%91%E9%81%93%E8%AF%A6%E6%83%85
+// FYI: https://developer.kookapp.cn/doc/http/channel#%E8%8E%B7%E5%8F%96%E9%A2%91%E9%81%93%E8%AF%A6%E6%83%85
 func (s *Session) ChannelView(channelID string) (c *Channel, err error) {
 	var response []byte
 	u, _ := url.Parse(EndpointChannelView)
@@ -271,7 +271,7 @@ type ChannelCreate struct {
 }
 
 // ChannelCreate creates a channel.
-// FYI: https://developer.kaiheila.cn/doc/http/channel#%E5%88%9B%E5%BB%BA%E9%A2%91%E9%81%93
+// FYI: https://developer.kookapp.cn/doc/http/channel#%E5%88%9B%E5%BB%BA%E9%A2%91%E9%81%93
 func (s *Session) ChannelCreate(cc *ChannelCreate) (c *Channel, err error) {
 	var response []byte
 	response, err = s.Request("POST", EndpointChannelCreate, cc)
@@ -286,7 +286,7 @@ func (s *Session) ChannelCreate(cc *ChannelCreate) (c *Channel, err error) {
 }
 
 // ChannelDelete deletes a channel.
-// FYI: https://developer.kaiheila.cn/doc/http/channel#%E5%88%A0%E9%99%A4%E9%A2%91%E9%81%93
+// FYI: https://developer.kookapp.cn/doc/http/channel#%E5%88%A0%E9%99%A4%E9%A2%91%E9%81%93
 func (s *Session) ChannelDelete(channelID string) (err error) {
 	_, err = s.Request("POST", EndpointChannelDelete, struct {
 		ChannelID string `json:"channel_id"`
@@ -295,7 +295,7 @@ func (s *Session) ChannelDelete(channelID string) (err error) {
 }
 
 // ChannelMoveUsers moves users to a channel.
-// FYI: https://developer.kaiheila.cn/doc/http/channel#%E8%AF%AD%E9%9F%B3%E9%A2%91%E9%81%93%E4%B9%8B%E9%97%B4%E7%A7%BB%E5%8A%A8%E7%94%A8%E6%88%B7
+// FYI: https://developer.kookapp.cn/doc/http/channel#%E8%AF%AD%E9%9F%B3%E9%A2%91%E9%81%93%E4%B9%8B%E9%97%B4%E7%A7%BB%E5%8A%A8%E7%94%A8%E6%88%B7
 func (s *Session) ChannelMoveUsers(targetChannelID string, userIDs []string) (err error) {
 	_, err = s.Request("POST", EndpointChannelMoveUser, struct {
 		TargetID string   `json:"target_id"`
@@ -316,7 +316,7 @@ type ChannelRoleIndex struct {
 }
 
 // ChannelRoleIndex returns the role and permission list of the channel.
-// FYI: https://developer.kaiheila.cn/doc/http/channel#%E9%A2%91%E9%81%93%E8%A7%92%E8%89%B2%E6%9D%83%E9%99%90%E8%AF%A6%E6%83%85
+// FYI: https://developer.kookapp.cn/doc/http/channel#%E9%A2%91%E9%81%93%E8%A7%92%E8%89%B2%E6%9D%83%E9%99%90%E8%AF%A6%E6%83%85
 func (s *Session) ChannelRoleIndex(channelID string) (cr *ChannelRoleIndex, err error) {
 	var response []byte
 	u, _ := url.Parse(EndpointChannelRoleIndex)
@@ -348,7 +348,7 @@ type ChannelRoleCreate ChannelRoleBase
 type ChannelRoleCreateResp ChannelRoleUpdateResp
 
 // ChannelRoleCreate creates a role for a channel
-// FYI: https://developer.kaiheila.cn/doc/http/channel#%E5%88%9B%E5%BB%BA%E9%A2%91%E9%81%93%E8%A7%92%E8%89%B2%E6%9D%83%E9%99%90
+// FYI: https://developer.kookapp.cn/doc/http/channel#%E5%88%9B%E5%BB%BA%E9%A2%91%E9%81%93%E8%A7%92%E8%89%B2%E6%9D%83%E9%99%90
 func (s *Session) ChannelRoleCreate(crc *ChannelRoleCreate) (crcr *ChannelRoleCreateResp, err error) {
 	var resp []byte
 	resp, err = s.Request("POST", EndpointChannelRoleCreate, crc)
@@ -378,7 +378,7 @@ type ChannelRoleUpdateResp struct {
 }
 
 // ChannelRoleUpdate updates a role from channel setting.
-// FYI: https://developer.kaiheila.cn/doc/http/channel#%E6%9B%B4%E6%96%B0%E9%A2%91%E9%81%93%E8%A7%92%E8%89%B2%E6%9D%83%E9%99%90
+// FYI: https://developer.kookapp.cn/doc/http/channel#%E6%9B%B4%E6%96%B0%E9%A2%91%E9%81%93%E8%A7%92%E8%89%B2%E6%9D%83%E9%99%90
 func (s *Session) ChannelRoleUpdate(cru *ChannelRoleUpdate) (crur *ChannelRoleUpdateResp, err error) {
 	var response []byte
 	response, err = s.Request("POST", EndpointChannelRoleUpdate, cru)
@@ -396,7 +396,7 @@ func (s *Session) ChannelRoleUpdate(cru *ChannelRoleUpdate) (crur *ChannelRoleUp
 type ChannelRoleDelete ChannelRoleBase
 
 // ChannelRoleDelete deletes a role form channel setting.
-// FYI: https://developer.kaiheila.cn/doc/http/channel#%E5%88%A0%E9%99%A4%E9%A2%91%E9%81%93%E8%A7%92%E8%89%B2%E6%9D%83%E9%99%90
+// FYI: https://developer.kookapp.cn/doc/http/channel#%E5%88%A0%E9%99%A4%E9%A2%91%E9%81%93%E8%A7%92%E8%89%B2%E6%9D%83%E9%99%90
 func (s *Session) ChannelRoleDelete(crd *ChannelRoleDelete) (err error) {
 	_, err = s.Request("POST", EndpointChannelRoleDelete, crd)
 	return err
@@ -462,7 +462,7 @@ func (s *Session) ChannelUserList(channelID string) (us []*User, err error) {
 //
 // Note: for User in TargetInfo, only ID, Username, Online, Avatar is filled
 //
-// FYI: https://developer.kaiheila.cn/doc/http/user-chat#%E8%8E%B7%E5%8F%96%E7%A7%81%E4%BF%A1%E8%81%8A%E5%A4%A9%E4%BC%9A%E8%AF%9D%E5%88%97%E8%A1%A8
+// FYI: https://developer.kookapp.cn/doc/http/user-chat#%E8%8E%B7%E5%8F%96%E7%A7%81%E4%BF%A1%E8%81%8A%E5%A4%A9%E4%BC%9A%E8%AF%9D%E5%88%97%E8%A1%A8
 func (s *Session) UserChatList(page *PageSetting) (ucs []*UserChat, meta *PageInfo, err error) {
 	var response []byte
 	response, meta, err = s.RequestWithPage("GET", EndpointUserChatList, page)
@@ -478,7 +478,7 @@ func (s *Session) UserChatList(page *PageSetting) (ucs []*UserChat, meta *PageIn
 
 // UserChatView returns a detailed user chat.
 //
-// FYI: https://developer.kaiheila.cn/doc/http/user-chat#%E8%8E%B7%E5%8F%96%E7%A7%81%E4%BF%A1%E8%81%8A%E5%A4%A9%E4%BC%9A%E8%AF%9D%E8%AF%A6%E6%83%85
+// FYI: https://developer.kookapp.cn/doc/http/user-chat#%E8%8E%B7%E5%8F%96%E7%A7%81%E4%BF%A1%E8%81%8A%E5%A4%A9%E4%BC%9A%E8%AF%9D%E8%AF%A6%E6%83%85
 func (s *Session) UserChatView(chatCode string) (uc *UserChat, err error) {
 	var response []byte
 	u, _ := url.Parse(EndpointUserChatView)
@@ -498,7 +498,7 @@ func (s *Session) UserChatView(chatCode string) (uc *UserChat, err error) {
 }
 
 // UserChatCreate creates a direct chat session.
-// FYI: https://developer.kaiheila.cn/doc/http/user-chat#%E5%88%9B%E5%BB%BA%E7%A7%81%E4%BF%A1%E8%81%8A%E5%A4%A9%E4%BC%9A%E8%AF%9D
+// FYI: https://developer.kookapp.cn/doc/http/user-chat#%E5%88%9B%E5%BB%BA%E7%A7%81%E4%BF%A1%E8%81%8A%E5%A4%A9%E4%BC%9A%E8%AF%9D
 func (s *Session) UserChatCreate(UserID string) (uc *UserChat, err error) {
 	var response []byte
 	response, err = s.Request("POST", EndpointUserChatCreate, struct {
@@ -516,7 +516,7 @@ func (s *Session) UserChatCreate(UserID string) (uc *UserChat, err error) {
 }
 
 // UserChatDelete deletes a direct chat session.
-// FYI: https://developer.kaiheila.cn/doc/http/user-chat#%E5%88%9B%E5%BB%BA%E7%A7%81%E4%BF%A1%E8%81%8A%E5%A4%A9%E4%BC%9A%E8%AF%9D
+// FYI: https://developer.kookapp.cn/doc/http/user-chat#%E5%88%9B%E5%BB%BA%E7%A7%81%E4%BF%A1%E8%81%8A%E5%A4%A9%E4%BC%9A%E8%AF%9D
 func (s *Session) UserChatDelete(ChatCode string) (err error) {
 	_, err = s.Request("POST", EndpointUserChatDelete, struct {
 		ChatCode string `json:"chat_code"`
@@ -576,7 +576,7 @@ type DirectMessageResp struct {
 
 // DirectMessageList returns the messages in direct chat.
 //
-// FYI: https://developer.kaiheila.cn/doc/http/direct-message#%E8%8E%B7%E5%8F%96%E7%A7%81%E4%BF%A1%E8%81%8A%E5%A4%A9%E6%B6%88%E6%81%AF%E5%88%97%E8%A1%A8
+// FYI: https://developer.kookapp.cn/doc/http/direct-message#%E8%8E%B7%E5%8F%96%E7%A7%81%E4%BF%A1%E8%81%8A%E5%A4%A9%E6%B6%88%E6%81%AF%E5%88%97%E8%A1%A8
 func (s *Session) DirectMessageList(options ...DirectMessageListOption) (dmrs []*DirectMessageResp, err error) {
 	var response []byte
 	u, _ := url.Parse(EndpointDirectMessageList)
@@ -603,7 +603,7 @@ type DirectMessageCreate struct {
 }
 
 // DirectMessageCreate creates a message in direct chat.
-// FYI: https://developer.kaiheila.cn/doc/http/direct-message#%E5%8F%91%E9%80%81%E7%A7%81%E4%BF%A1%E8%81%8A%E5%A4%A9%E6%B6%88%E6%81%AF
+// FYI: https://developer.kookapp.cn/doc/http/direct-message#%E5%8F%91%E9%80%81%E7%A7%81%E4%BF%A1%E8%81%8A%E5%A4%A9%E6%B6%88%E6%81%AF
 func (s *Session) DirectMessageCreate(create *DirectMessageCreate) (mr *MessageResp, err error) {
 	var response []byte
 	response, err = s.Request("POST", EndpointDirectMessageCreate, create)
@@ -621,14 +621,14 @@ func (s *Session) DirectMessageCreate(create *DirectMessageCreate) (mr *MessageR
 type DirectMessageUpdate MessageUpdateBase
 
 // DirectMessageUpdate updates a message in direct chat.
-// FYI: https://developer.kaiheila.cn/doc/http/direct-message#%E6%9B%B4%E6%96%B0%E7%A7%81%E4%BF%A1%E8%81%8A%E5%A4%A9%E6%B6%88%E6%81%AF
+// FYI: https://developer.kookapp.cn/doc/http/direct-message#%E6%9B%B4%E6%96%B0%E7%A7%81%E4%BF%A1%E8%81%8A%E5%A4%A9%E6%B6%88%E6%81%AF
 func (s *Session) DirectMessageUpdate(update *DirectMessageUpdate) (err error) {
 	_, err = s.Request("POST", EndpointDirectMessageUpdate, update)
 	return err
 }
 
 // DirectMessageDelete deletes a message in direct chat.
-// FYI: https://developer.kaiheila.cn/doc/http/direct-message#%E5%88%A0%E9%99%A4%E7%A7%81%E4%BF%A1%E8%81%8A%E5%A4%A9%E6%B6%88%E6%81%AF
+// FYI: https://developer.kookapp.cn/doc/http/direct-message#%E5%88%A0%E9%99%A4%E7%A7%81%E4%BF%A1%E8%81%8A%E5%A4%A9%E6%B6%88%E6%81%AF
 func (s *Session) DirectMessageDelete(msgID string) (err error) {
 	_, err = s.Request("POST", EndpointDirectMessageDelete, struct {
 		MsgID string `json:"msg_id"`
@@ -638,7 +638,7 @@ func (s *Session) DirectMessageDelete(msgID string) (err error) {
 
 // DirectMessageReactionList returns the list of the reacted users with a specific emoji to a message.
 //
-// FYI: https://developer.kaiheila.cn/doc/http/direct-message#%E8%8E%B7%E5%8F%96%E9%A2%91%E9%81%93%E6%B6%88%E6%81%AF%E6%9F%90%E5%9B%9E%E5%BA%94%E7%9A%84%E7%94%A8%E6%88%B7%E5%88%97%E8%A1%A8
+// FYI: https://developer.kookapp.cn/doc/http/direct-message#%E8%8E%B7%E5%8F%96%E9%A2%91%E9%81%93%E6%B6%88%E6%81%AF%E6%9F%90%E5%9B%9E%E5%BA%94%E7%9A%84%E7%94%A8%E6%88%B7%E5%88%97%E8%A1%A8
 func (s *Session) DirectMessageReactionList(msgID, emoji string) (us []*ReactedUser, err error) {
 	u, _ := url.Parse(EndpointDirectMessageReactionList)
 	q := u.Query()
@@ -659,7 +659,7 @@ func (s *Session) DirectMessageReactionList(msgID, emoji string) (us []*ReactedU
 
 // DirectMessageAddReaction add a reaction to a message as the bot.
 //
-// FYI: https://developer.kaiheila.cn/doc/http/direct-message#%E7%BB%99%E6%9F%90%E4%B8%AA%E6%B6%88%E6%81%AF%E6%B7%BB%E5%8A%A0%E5%9B%9E%E5%BA%94
+// FYI: https://developer.kookapp.cn/doc/http/direct-message#%E7%BB%99%E6%9F%90%E4%B8%AA%E6%B6%88%E6%81%AF%E6%B7%BB%E5%8A%A0%E5%9B%9E%E5%BA%94
 func (s *Session) DirectMessageAddReaction(msgID, emoji string) (err error) {
 	_, err = s.Request("POST", EndpointDirectMessageAddReaction, struct {
 		MsgID string `json:"msg_id"`
@@ -668,9 +668,9 @@ func (s *Session) DirectMessageAddReaction(msgID, emoji string) (err error) {
 	return err
 }
 
-// AssetCreate uploads attachments to khl server.
+// AssetCreate uploads attachments to kook server.
 //
-// FYI: https://developer.kaiheila.cn/doc/http/asset#%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6/%E5%9B%BE%E7%89%87
+// FYI: https://developer.kookapp.cn/doc/http/asset#%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6/%E5%9B%BE%E7%89%87
 func (s *Session) AssetCreate(name string, file []byte) (url string, err error) {
 	b := &bytes.Buffer{}
 	w := multipart.NewWriter(b)
@@ -707,7 +707,7 @@ func (s *Session) AssetCreate(name string, file []byte) (url string, err error) 
 
 // DirectMessageDeleteReaction deletes a reaction of a user from a message.
 //
-// FYI: https://developer.kaiheila.cn/doc/http/direct-message#%E5%88%A0%E9%99%A4%E6%B6%88%E6%81%AF%E7%9A%84%E6%9F%90%E4%B8%AA%E5%9B%9E%E5%BA%94
+// FYI: https://developer.kookapp.cn/doc/http/direct-message#%E5%88%A0%E9%99%A4%E6%B6%88%E6%81%AF%E7%9A%84%E6%9F%90%E4%B8%AA%E5%9B%9E%E5%BA%94
 func (s *Session) DirectMessageDeleteReaction(msgID, emoji string) (err error) {
 	_, err = s.Request("POST", EndpointDirectMessageDeleteReaction, struct {
 		MsgID string `json:"msg_id"`
@@ -717,7 +717,7 @@ func (s *Session) DirectMessageDeleteReaction(msgID, emoji string) (err error) {
 }
 
 // GuildList returns a list of guild that bot joins.
-// FYI: https://developer.kaiheila.cn/doc/http/guild#%E8%8E%B7%E5%8F%96%E5%BD%93%E5%89%8D%E7%94%A8%E6%88%B7%E5%8A%A0%E5%85%A5%E7%9A%84%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%88%97%E8%A1%A8
+// FYI: https://developer.kookapp.cn/doc/http/guild#%E8%8E%B7%E5%8F%96%E5%BD%93%E5%89%8D%E7%94%A8%E6%88%B7%E5%8A%A0%E5%85%A5%E7%9A%84%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%88%97%E8%A1%A8
 func (s *Session) GuildList(page *PageSetting) (gs []*Guild, meta *PageInfo, err error) {
 	var response []byte
 	response, meta, err = s.RequestWithPage("GET", EndpointGuildList, page)
@@ -732,7 +732,7 @@ func (s *Session) GuildList(page *PageSetting) (gs []*Guild, meta *PageInfo, err
 }
 
 // GuildView returns a detailed info for a guild.
-// FYI: https://developer.kaiheila.cn/doc/http/guild#%E8%8E%B7%E5%8F%96%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%AF%A6%E6%83%85
+// FYI: https://developer.kookapp.cn/doc/http/guild#%E8%8E%B7%E5%8F%96%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%AF%A6%E6%83%85
 func (s *Session) GuildView(guildID string) (g *Guild, err error) {
 	var response []byte
 	u, _ := url.Parse(EndpointGuildView)
@@ -815,7 +815,7 @@ type GuildUserListInfo struct {
 }
 
 // GuildUserList returns the list of users in a guild.
-// FYI: https://developer.kaiheila.cn/doc/http/guild#%E8%8E%B7%E5%8F%96%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%AD%E7%9A%84%E7%94%A8%E6%88%B7%E5%88%97%E8%A1%A8
+// FYI: https://developer.kookapp.cn/doc/http/guild#%E8%8E%B7%E5%8F%96%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%AD%E7%9A%84%E7%94%A8%E6%88%B7%E5%88%97%E8%A1%A8
 func (s *Session) GuildUserList(guildID string, page *PageSetting, options ...GuildUserListOption) (us []*User, guli *GuildUserListInfo, meta *PageInfo, err error) {
 	var response []byte
 	u, _ := url.Parse(EndpointGuildUserList)
@@ -863,14 +863,14 @@ type GuildNickname struct {
 }
 
 // GuildNickname changes the nickname of a user in a guild.
-// FYI: https://developer.kaiheila.cn/doc/http/guild#%E4%BF%AE%E6%94%B9%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%AD%E7%94%A8%E6%88%B7%E7%9A%84%E6%98%B5%E7%A7%B0
+// FYI: https://developer.kookapp.cn/doc/http/guild#%E4%BF%AE%E6%94%B9%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%AD%E7%94%A8%E6%88%B7%E7%9A%84%E6%98%B5%E7%A7%B0
 func (s *Session) GuildNickname(gn *GuildNickname) (err error) {
 	_, err = s.Request("POST", EndpointGuildNickName, gn)
 	return err
 }
 
 // GuildLeave let the bot leave a guild.
-// FYI: https://developer.kaiheila.cn/doc/http/guild#%E7%A6%BB%E5%BC%80%E6%9C%8D%E5%8A%A1%E5%99%A8
+// FYI: https://developer.kookapp.cn/doc/http/guild#%E7%A6%BB%E5%BC%80%E6%9C%8D%E5%8A%A1%E5%99%A8
 func (s *Session) GuildLeave(guildID string) (err error) {
 	_, err = s.Request("POST", EndpointGuildLeave, struct {
 		GuildID string `json:"guild_id"`
@@ -879,7 +879,7 @@ func (s *Session) GuildLeave(guildID string) (err error) {
 }
 
 // GuildKickout force a user to leave a guild.
-// FYI: https://developer.kaiheila.cn/doc/http/guild#%E8%B8%A2%E5%87%BA%E6%9C%8D%E5%8A%A1%E5%99%A8
+// FYI: https://developer.kookapp.cn/doc/http/guild#%E8%B8%A2%E5%87%BA%E6%9C%8D%E5%8A%A1%E5%99%A8
 func (s *Session) GuildKickout(guildID, targetID string) (err error) {
 	_, err = s.Request("POST", EndpointGuildKickout, struct {
 		GuildID  string `json:"guild_id"`
@@ -895,7 +895,7 @@ type GuildMuteList struct {
 }
 
 // GuildMuteList returns the list of users got mutes in mic or earphone.
-// FYI: https://developer.kaiheila.cn/doc/http/guild#%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9D%99%E9%9F%B3%E9%97%AD%E9%BA%A6%E5%88%97%E8%A1%A8
+// FYI: https://developer.kookapp.cn/doc/http/guild#%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9D%99%E9%9F%B3%E9%97%AD%E9%BA%A6%E5%88%97%E8%A1%A8
 func (s *Session) GuildMuteList(guildID string) (gml *GuildMuteList, err error) {
 	var response []byte
 	u, _ := url.Parse(EndpointGuildMuteList)
@@ -931,21 +931,21 @@ type GuildMuteSetting struct {
 }
 
 // GuildMuteCreate revokes a users privilege of using mic or headset.
-// FYI: https://developer.kaiheila.cn/doc/http/guild#%E6%B7%BB%E5%8A%A0%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9D%99%E9%9F%B3%E6%88%96%E9%97%AD%E9%BA%A6
+// FYI: https://developer.kookapp.cn/doc/http/guild#%E6%B7%BB%E5%8A%A0%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9D%99%E9%9F%B3%E6%88%96%E9%97%AD%E9%BA%A6
 func (s *Session) GuildMuteCreate(gms *GuildMuteSetting) (err error) {
 	_, err = s.Request("POST", EndpointGuildMuteCreate, gms)
 	return err
 }
 
 // GuildMuteDelete re-grants a users privilege of using mic or headset.
-// FYI: https://developer.kaiheila.cn/doc/http/guild#%E5%88%A0%E9%99%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9D%99%E9%9F%B3%E6%88%96%E9%97%AD%E9%BA%A6
+// FYI: https://developer.kookapp.cn/doc/http/guild#%E5%88%A0%E9%99%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%9D%99%E9%9F%B3%E6%88%96%E9%97%AD%E9%BA%A6
 func (s *Session) GuildMuteDelete(gms *GuildMuteSetting) (err error) {
 	_, err = s.Request("POST", EndpointGuildMuteDelete, gms)
 	return err
 }
 
 // GuildRoleList returns the roles in a guild.
-// FYI: https://developer.kaiheila.cn/doc/http/guild-role#%E8%8E%B7%E5%8F%96%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%A7%92%E8%89%B2%E5%88%97%E8%A1%A8
+// FYI: https://developer.kookapp.cn/doc/http/guild-role#%E8%8E%B7%E5%8F%96%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%A7%92%E8%89%B2%E5%88%97%E8%A1%A8
 func (s *Session) GuildRoleList(guildID string, page *PageSetting) (rs []*Role, meta *PageInfo, err error) {
 	var response []byte
 	u, _ := url.Parse(EndpointGuildRoleList)
@@ -965,7 +965,7 @@ func (s *Session) GuildRoleList(guildID string, page *PageSetting) (rs []*Role, 
 
 // GuildRoleCreate creates a role for a guild.
 //
-// FYI: https://developer.kaiheila.cn/doc/http/guild-role#%E5%88%9B%E5%BB%BA%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%A7%92%E8%89%B2
+// FYI: https://developer.kookapp.cn/doc/http/guild-role#%E5%88%9B%E5%BB%BA%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%A7%92%E8%89%B2
 func (s *Session) GuildRoleCreate(name, guildID string) (r *Role, err error) {
 	var response []byte
 	response, err = s.Request("POST", EndpointGuildRoleCreate, struct {
@@ -985,7 +985,7 @@ func (s *Session) GuildRoleCreate(name, guildID string) (r *Role, err error) {
 
 // GuildRoleUpdate updates a role for a guild.
 //
-// FYI: https://developer.kaiheila.cn/doc/http/guild-role#%E6%9B%B4%E6%96%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%A7%92%E8%89%B2
+// FYI: https://developer.kookapp.cn/doc/http/guild-role#%E6%9B%B4%E6%96%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%A7%92%E8%89%B2
 func (s *Session) GuildRoleUpdate(guildID string, role *Role) (r *Role, err error) {
 	var response []byte
 	response, err = s.Request("POST", EndpointGuildRoleUpdate, struct {
@@ -1007,7 +1007,7 @@ func (s *Session) GuildRoleUpdate(guildID string, role *Role) (r *Role, err erro
 
 // GuildRoleDelete deletes a role from a guild.
 //
-// FYI: https://developer.kaiheila.cn/doc/http/guild-role#%E5%88%A0%E9%99%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%A7%92%E8%89%B2
+// FYI: https://developer.kookapp.cn/doc/http/guild-role#%E5%88%A0%E9%99%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%A7%92%E8%89%B2
 func (s *Session) GuildRoleDelete(guildID, roleID string) (err error) {
 	_, err = s.Request("POST", EndpointGuildRoleDelete, struct {
 		GuildID string `json:"guild_id"`
@@ -1025,14 +1025,14 @@ type GuildRoleResp struct {
 
 // GuildRoleGrant grants a role to a user.
 //
-// FYI: https://developer.kaiheila.cn/doc/http/guild-role#%E8%B5%8B%E4%BA%88%E7%94%A8%E6%88%B7%E8%A7%92%E8%89%B2
+// FYI: https://developer.kookapp.cn/doc/http/guild-role#%E8%B5%8B%E4%BA%88%E7%94%A8%E6%88%B7%E8%A7%92%E8%89%B2
 func (s *Session) GuildRoleGrant(guildID, userID string, roleID int64) (grr *GuildRoleResp, err error) {
 	return s.guildRoleGrantRevoke(guildID, userID, roleID, true)
 }
 
 // GuildRoleRevoke revokes a role from a user.
 //
-// FYI: https://developer.kaiheila.cn/doc/http/guild-role#%E5%88%A0%E9%99%A4%E7%94%A8%E6%88%B7%E8%A7%92%E8%89%B2
+// FYI: https://developer.kookapp.cn/doc/http/guild-role#%E5%88%A0%E9%99%A4%E7%94%A8%E6%88%B7%E8%A7%92%E8%89%B2
 func (s *Session) GuildRoleRevoke(guildID, userID string, roleID int64) (grr *GuildRoleResp, err error) {
 	return s.guildRoleGrantRevoke(guildID, userID, roleID, false)
 }
@@ -1075,7 +1075,7 @@ type IntimacyIndexResp struct {
 
 // IntimacyIndex returns the intimacy info for a user.
 //
-// FYI: https://developer.kaiheila.cn/doc/http/intimacy#%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E4%BA%B2%E5%AF%86%E5%BA%A6
+// FYI: https://developer.kookapp.cn/doc/http/intimacy#%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E4%BA%B2%E5%AF%86%E5%BA%A6
 func (s *Session) IntimacyIndex(userID string) (iir *IntimacyIndexResp, err error) {
 	var response []byte
 	u, _ := url.Parse(EndpointIntimacyIndex)
@@ -1104,7 +1104,7 @@ type IntimacyUpdate struct {
 
 // IntimacyUpdate updates the intimacy info for a user.
 //
-// FYI: https://developer.kaiheila.cn/doc/http/intimacy#%E6%9B%B4%E6%96%B0%E7%94%A8%E6%88%B7%E4%BA%B2%E5%AF%86%E5%BA%A6
+// FYI: https://developer.kookapp.cn/doc/http/intimacy#%E6%9B%B4%E6%96%B0%E7%94%A8%E6%88%B7%E4%BA%B2%E5%AF%86%E5%BA%A6
 func (s *Session) IntimacyUpdate(iu *IntimacyUpdate) (err error) {
 	_, err = s.Request("POST", EndpointIntimacyUpdate, iu)
 	return err
@@ -1119,7 +1119,7 @@ type GuildEmojiResp struct {
 
 // GuildEmojiList returns the list of emojis in a guild
 //
-// FYI: https://developer.kaiheila.cn/doc/http/guild-emoji#%E8%8E%B7%E5%8F%96%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%A1%A8%E6%83%85%E5%88%97%E8%A1%A8
+// FYI: https://developer.kookapp.cn/doc/http/guild-emoji#%E8%8E%B7%E5%8F%96%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%A1%A8%E6%83%85%E5%88%97%E8%A1%A8
 func (s *Session) GuildEmojiList(guildID string, page *PageSetting) (gers []*GuildEmojiResp, meta *PageInfo, err error) {
 	var response []byte
 	u, _ := url.Parse(EndpointGuildEmojiList)
@@ -1139,7 +1139,7 @@ func (s *Session) GuildEmojiList(guildID string, page *PageSetting) (gers []*Gui
 
 // GuildEmojiCreate uploads emoji to guild.
 //
-// FYI: https://developer.kaiheila.cn/doc/http/guild-emoji#%E5%88%9B%E5%BB%BA%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%A1%A8%E6%83%85
+// FYI: https://developer.kookapp.cn/doc/http/guild-emoji#%E5%88%9B%E5%BB%BA%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%A1%A8%E6%83%85
 func (s *Session) GuildEmojiCreate(name, guildID string, emoji []byte) (ger *GuildEmojiResp, err error) {
 	b := &bytes.Buffer{}
 	w := multipart.NewWriter(b)
@@ -1191,7 +1191,7 @@ func (s *Session) GuildEmojiCreate(name, guildID string, emoji []byte) (ger *Gui
 
 // GuildEmojiUpdate updates an emoji's info in a guild.
 //
-// FYI: https://developer.kaiheila.cn/doc/http/guild-emoji#%E6%9B%B4%E6%96%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%A1%A8%E6%83%85
+// FYI: https://developer.kookapp.cn/doc/http/guild-emoji#%E6%9B%B4%E6%96%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%A1%A8%E6%83%85
 func (s *Session) GuildEmojiUpdate(name, id string) (err error) {
 	_, err = s.Request("POST", EndpointGuildEmojiUpdate, struct {
 		Name string `json:"name"`
@@ -1202,7 +1202,7 @@ func (s *Session) GuildEmojiUpdate(name, id string) (err error) {
 
 // GuildEmojiDelete deletes an emoji from a guild.
 //
-// FYI: https://developer.kaiheila.cn/doc/http/guild-emoji#%E5%88%A0%E9%99%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%A1%A8%E6%83%85
+// FYI: https://developer.kookapp.cn/doc/http/guild-emoji#%E5%88%A0%E9%99%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%A1%A8%E6%83%85
 func (s *Session) GuildEmojiDelete(id string) (err error) {
 	_, err = s.Request("POST", EndpointGuildEmojiDelete, struct {
 		ID string `json:"id"`
@@ -1238,7 +1238,7 @@ type InviteListResp struct {
 
 // InviteList lists invite links of a guild.
 //
-// FYI: https://developer.kaiheila.cn/doc/http/invite#%E8%8E%B7%E5%8F%96%E9%82%80%E8%AF%B7%E5%88%97%E8%A1%A8
+// FYI: https://developer.kookapp.cn/doc/http/invite#%E8%8E%B7%E5%8F%96%E9%82%80%E8%AF%B7%E5%88%97%E8%A1%A8
 func (s *Session) InviteList(page *PageSetting, options ...InviteListOption) (ilrs []*InviteListResp, meta *PageInfo, err error) {
 	u, _ := url.Parse(EndpointInviteList)
 	q := u.Query()
@@ -1300,7 +1300,7 @@ const (
 
 // InviteCreate creates an invite link.
 //
-// FYI: https://developer.kaiheila.cn/doc/http/invite#%E5%88%9B%E5%BB%BA%E9%82%80%E8%AF%B7%E9%93%BE%E6%8E%A5
+// FYI: https://developer.kookapp.cn/doc/http/invite#%E5%88%9B%E5%BB%BA%E9%82%80%E8%AF%B7%E9%93%BE%E6%8E%A5
 func (s *Session) InviteCreate(ic *InviteCreate) (URL string, err error) {
 	var response []byte
 	response, err = s.Request("POST", EndpointInviteCreate, ic)
@@ -1326,7 +1326,7 @@ type InviteDelete struct {
 
 // InviteDelete deletes an invite link.
 //
-// FYI: https://developer.kaiheila.cn/doc/http/invite#%E5%88%A0%E9%99%A4%E9%82%80%E8%AF%B7%E9%93%BE%E6%8E%A5
+// FYI: https://developer.kookapp.cn/doc/http/invite#%E5%88%A0%E9%99%A4%E9%82%80%E8%AF%B7%E9%93%BE%E6%8E%A5
 func (s *Session) InviteDelete(id *InviteDelete) (err error) {
 	_, err = s.Request("POST", EndpointInviteDelete, id)
 	return err
@@ -1342,7 +1342,7 @@ type BlacklistItem struct {
 
 // BlacklistList lists the users in blacklist.
 //
-// FYI: https://developer.kaiheila.cn/doc/http/blacklist
+// FYI: https://developer.kookapp.cn/doc/http/blacklist
 func (s *Session) BlacklistList(guildID string, page *PageSetting) (bi []*BlacklistItem, meta *PageInfo, err error) {
 	u, _ := url.Parse(EndpointBlacklistList)
 	q := u.Query()
@@ -1370,7 +1370,7 @@ type BlacklistCreate struct {
 
 // BlacklistCreate adds user to blacklist
 //
-// FYI: https://developer.kaiheila.cn/doc/http/blacklist#%E5%8A%A0%E5%85%A5%E9%BB%91%E5%90%8D%E5%8D%95
+// FYI: https://developer.kookapp.cn/doc/http/blacklist#%E5%8A%A0%E5%85%A5%E9%BB%91%E5%90%8D%E5%8D%95
 func (s *Session) BlacklistCreate(bc *BlacklistCreate) (err error) {
 	_, err = s.Request("POST", EndpointBlacklistCreate, bc)
 	return err
@@ -1378,7 +1378,7 @@ func (s *Session) BlacklistCreate(bc *BlacklistCreate) (err error) {
 
 // BlacklistDelete removes user from blacklist
 //
-// FYI: https://developer.kaiheila.cn/doc/http/blacklist#%E7%A7%BB%E9%99%A4%E9%BB%91%E5%90%8D%E5%8D%95
+// FYI: https://developer.kookapp.cn/doc/http/blacklist#%E7%A7%BB%E9%99%A4%E9%BB%91%E5%90%8D%E5%8D%95
 func (s *Session) BlacklistDelete(guildID, targetID string) (err error) {
 	_, err = s.Request("POST", EndpointBlacklistDelete, struct {
 		GuildID  string `json:"guild_id"`
@@ -1388,7 +1388,7 @@ func (s *Session) BlacklistDelete(guildID, targetID string) (err error) {
 }
 
 // UserMe returns the bot info.
-// FYI: https://developer.kaiheila.cn/doc/http/user#%E8%8E%B7%E5%8F%96%E5%BD%93%E5%89%8D%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF
+// FYI: https://developer.kookapp.cn/doc/http/user#%E8%8E%B7%E5%8F%96%E5%BD%93%E5%89%8D%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF
 func (s *Session) UserMe() (u *User, err error) {
 	var response []byte
 	response, err = s.Request("GET", EndpointUserMe, nil)
@@ -1404,7 +1404,7 @@ func (s *Session) UserMe() (u *User, err error) {
 }
 
 // UserView returns a user's info
-// FYI: https://developer.kaiheila.cn/doc/http/user#%E8%8E%B7%E5%8F%96%E7%9B%AE%E6%A0%87%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF
+// FYI: https://developer.kookapp.cn/doc/http/user#%E8%8E%B7%E5%8F%96%E7%9B%AE%E6%A0%87%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF
 func (s *Session) UserView(userID string, options ...UserViewOption) (u *User, err error) {
 	var response []byte
 	ur, _ := url.Parse(EndpointUserView)
@@ -1462,7 +1462,7 @@ const (
 	GameTypeProcess
 )
 
-// Game is a game item registered at khl.
+// Game is a game item registered at kook.
 type Game struct {
 	ID          int64    `json:"id"`
 	Name        string   `json:"name"`
@@ -1495,7 +1495,7 @@ type GameCreate struct {
 	Icon        string `json:"icon,omitempty"`
 }
 
-// GameCreate creates a new Game in khl.
+// GameCreate creates a new Game in kook.
 func (s *Session) GameCreate(gc *GameCreate) (g *Game, err error) {
 	var resp []byte
 	resp, err = s.Request("POST", EndpointGameCreate, gc)
@@ -1516,7 +1516,7 @@ type GameUpdate struct {
 	Icon string `json:"icon,omitempty"`
 }
 
-// GameUpdate updates the Game info in khl
+// GameUpdate updates the Game info in kook
 func (s *Session) GameUpdate(gu *GameUpdate) (g *Game, err error) {
 	var resp []byte
 	resp, err = s.Request("POST", EndpointGameUpdate, gu)
@@ -1530,7 +1530,7 @@ func (s *Session) GameUpdate(gu *GameUpdate) (g *Game, err error) {
 	return g, nil
 }
 
-// GameDelete deletes the Game info in khl
+// GameDelete deletes the Game info in kook
 func (s *Session) GameDelete(id int64) (err error) {
 	_, err = s.Request("POST", EndpointGameDelete, struct {
 		ID int64 `json:"id"`

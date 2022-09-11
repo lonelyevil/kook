@@ -1,4 +1,4 @@
-package khl
+package kook
 
 import (
 	"bytes"
@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-// New creates a khl session with default settings
+// New creates a kook session with default settings
 func New(token string, l Logger, o ...SessionOption) (s *Session) {
 	s = &Session{
 		Client:       &http.Client{Timeout: 30 * time.Second},

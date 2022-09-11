@@ -1,4 +1,4 @@
-module github.com/lonelyevil/khl/tools/cmd/eventhandler
+module github.com/lonelyevil/kook/tools/cmd/eventhandler
 
 go 1.16
 

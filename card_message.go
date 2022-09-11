@@ -1,4 +1,4 @@
-package khl
+package kook
 
 import (
 	"encoding/json"
@@ -22,7 +22,7 @@ func (c CardMessage) BuildMessage() (s string, err error) {
 func (c CardMessage) MustBuildMessage() string {
 	s, err := c.BuildMessage()
 	if err != nil {
-		panic(`khl.CardMessage.BuildMessage:` + err.Error())
+		panic(`kook.CardMessage.BuildMessage:` + err.Error())
 	}
 	return s
 }

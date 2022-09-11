@@ -1,4 +1,4 @@
-package khl
+package kook
 
 import (
 	"bytes"

@@ -1,4 +1,4 @@
-package khl
+package kook
 
 import (
 	"encoding/json"
@@ -255,7 +255,7 @@ type EventDataResumeAck struct {
 	SessionID string `json:"session_id"`
 }
 
-// Identify is the struct for the initial settings sent to kaiheila.
+// Identify is the struct for the initial settings sent to kookapp.
 type Identify struct {
 	Token        string
 	Compress     bool
@@ -349,12 +349,12 @@ type EmojiItem struct {
 	Name string `json:"name"`
 }
 
-// IsEqual compares standard emoji string with khl's emoji representation.
+// IsEqual compares standard emoji string with kook's emoji representation.
 func (e *EmojiItem) IsEqual(s string) bool {
 	return e.Convert() == s
 }
 
-// Convert converts khl's emoji to standard emoji.
+// Convert converts kook's emoji to standard emoji.
 func (e *EmojiItem) Convert() string {
 	if !strings.HasPrefix(e.ID, "[#") {
 		return e.ID
@@ -407,7 +407,7 @@ type ReactionItem struct {
 	Me    bool      `json:"me"`
 }
 
-// MilliTimeStamp is the timestamp used in kaiheila API.
+// MilliTimeStamp is the timestamp used in kookapp API.
 type MilliTimeStamp int64
 
 // ToTime converts the timestamp to golang's time.Time.

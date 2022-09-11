@@ -1,8 +1,8 @@
-package khl
+package kook
 
 import "encoding/json"
 
-// In this file is all weird solutions for silly KHL official developers.
+// In this file is all weird solutions for silly Kook official developers.
 
 // UnmarshalJSON deals with untyped mention in custom message in event.
 func (m *EventCustomMessage) UnmarshalJSON(bytes []byte) error {

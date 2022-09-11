@@ -7,8 +7,8 @@ import (
 	"strings"
 	"syscall"
 
-	"github.com/lonelyevil/khl"
-	"github.com/lonelyevil/khl/log_adapter/plog"
+	"github.com/lonelyevil/kook"
+	"github.com/lonelyevil/kook/log_adapter/plog"
 	"github.com/phuslu/log"
 )
 
@@ -17,7 +17,7 @@ func main() {
 		Level:  log.TraceLevel,
 		Writer: &log.ConsoleWriter{},
 	}
-	s := khl.New(os.Getenv("BOTAPI"), plog.NewLogger(&l))
+	s := kook.New(os.Getenv("BOTAPI"), plog.NewLogger(&l))
 	s.AddHandler(messageHan)
 	s.Open()
 	// Wait here until CTRL-C or other term signal is received.
@@ -26,21 +26,21 @@ func main() {
 	signal.Notify(sc, os.Interrupt, syscall.SIGTERM)
 	<-sc
 
-	// Cleanly close down the KHL session.
+	// Cleanly close down the Kook session.
 	s.Close()
 }
 
-func messageHan(ctx *khl.KmarkdownMessageContext) {
-	if ctx.Common.Type != khl.MessageTypeKMarkdown || ctx.Extra.Author.Bot {
+func messageHan(ctx *kook.KmarkdownMessageContext) {
+	if ctx.Common.Type != kook.MessageTypeKMarkdown || ctx.Extra.Author.Bot {
 		return
 	}
 	if strings.Contains(ctx.Common.Content, "ping") {
-		ctx.Session.MessageCreate(&khl.MessageCreate{
-			MessageCreateBase: khl.MessageCreateBase{
+		ctx.Session.MessageCreate(&kook.MessageCreate{
+			MessageCreateBase: kook.MessageCreateBase{
 				TargetID: ctx.Common.TargetID,
 				Content:  "pong",
 				Quote:    ctx.Common.MsgID,
-				Type:     khl.MessageTypeKMarkdown,
+				Type:     kook.MessageTypeKMarkdown,
 			},
 		})
 	}

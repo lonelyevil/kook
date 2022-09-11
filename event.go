@@ -1,4 +1,4 @@
-package khl
+package kook
 
 // EventHandler is the interface for objects handling event.
 type EventHandler interface {

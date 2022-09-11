@@ -1,4 +1,4 @@
-module github.com/lonelyevil/khl
+module github.com/lonelyevil/kook
 
 go 1.16
 

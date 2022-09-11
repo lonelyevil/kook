@@ -1,4 +1,4 @@
-package khl
+package kook
 
 // Reply is a helper function for replying to a message.
 //

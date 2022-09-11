@@ -1,11 +1,11 @@
-package khl
+package kook
 
 import (
 	"encoding/json"
 	"strconv"
 )
 
-// RestError is the error type for errors from khl
+// RestError is the error type for errors from kook
 type RestError struct {
 	Code    int             `json:"code"`
 	Message string          `json:"message"`
