@@ -1537,12 +1537,44 @@ func (s *Session) GameDelete(id int64) (err error) {
 	return err
 }
 
-// GameActivity begins playing a game.
-func (s *Session) GameActivity(id int64) (err error) {
-	_, err = s.Request("POST", EndpointGameActivity, struct {
+// MusicSoftware is the types for predefined music software.
+type MusicSoftware string
+
+const (
+	MusicSoftwareCloudMusic MusicSoftware = "cloudmusic"
+	MusicSoftwareQQMusic    MusicSoftware = "qqmusic"
+	MusicSoftwareKuGou      MusicSoftware = "kugou"
+)
+
+// GameActivityMusicBody is the necessary data for music activity.
+type GameActivityMusicBody struct {
+	Software  MusicSoftware `json:"software,omitempty"`
+	Singer    string        `json:"singer,omitempty"`
+	MusicName string        `json:"music_name,omitempty"`
+}
+
+// GameActivity begins playing a game or music. Pass a GameActivityMusicBody to select music activity.
+func (s *Session) GameActivity(id int64, payloads ...interface{}) (err error) {
+	payload := struct {
 		ID       int64 `json:"id"`
 		DataType int   `json:"data_type"`
-	}{ID: id, DataType: 1})
+		*GameActivityMusicBody
+	}{}
+	payload.ID = id
+	payload.DataType = 1
+	for _, item := range payloads {
+		if i, ok := item.(*GameActivityMusicBody); ok {
+			payload.GameActivityMusicBody = i
+			payload.DataType = 2
+			break
+		}
+		if i, ok := item.(GameActivityMusicBody); ok {
+			payload.GameActivityMusicBody = &i
+			payload.DataType = 2
+			break
+		}
+	}
+	_, err = s.Request("POST", EndpointGameActivity, payload)
 	return err
 }
 
