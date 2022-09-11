@@ -440,6 +440,24 @@ func (s *Session) ChannelUserGetJoinedChannel(guildID, userID string, page *Page
 	return us, meta, nil
 }
 
+// ChannelUserList returns a list of users in a voice channel.
+func (s *Session) ChannelUserList(channelID string) (us []*User, err error) {
+	var response []byte
+	u, _ := url.Parse(EndpointChannelUserList)
+	q := u.Query()
+	q.Set("channel_id", channelID)
+	u.RawQuery = q.Encode()
+	response, err = s.Request("GET", u.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(response, &us)
+	if err != nil {
+		return nil, err
+	}
+	return us, nil
+}
+
 // UserChatList returns a list of user chats that bot owns.
 //
 // Note: for User in TargetInfo, only ID, Username, Online, Avatar is filled
