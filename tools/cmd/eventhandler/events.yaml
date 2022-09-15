@@ -68,6 +68,7 @@ templates:
       MentionHere: bool
       Author: User
       Kmarkdown: Kmarkdown
+      Quote: '*Quote'
 events:
   updated_guild:
     name: GuildUpdate
