@@ -3,7 +3,7 @@ module github.com/lonelyevil/kook/log_adapter/zap
 go 1.17
 
 require (
-	github.com/lonelyevil/kook v0.0.28
+	github.com/lonelyevil/kook v0.0.29
 	go.uber.org/zap v1.21.0
 )
 
