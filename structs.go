@@ -519,4 +519,5 @@ type Quote struct {
 	Content  string         `json:"content"`
 	CreateAt MilliTimeStamp `json:"create_at"`
 	Author   *User          `json:"author"`
+	RongID   string         `json:"rong_id"`
 }
