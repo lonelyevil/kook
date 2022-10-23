@@ -55,6 +55,7 @@ var (
 	EndpointChannelUserList             = urlJoin(EndpointChannel, "user-list")
 
 	EndpointMessageList           = urlJoin(EndpointMessage, "list")
+	EndpointMessageView           = urlJoin(EndpointMessage, "view")
 	EndpointMessageCreate         = urlJoin(EndpointMessage, "create")
 	EndpointMessageUpdate         = urlJoin(EndpointMessage, "update")
 	EndpointMessageDelete         = urlJoin(EndpointMessage, "delete")

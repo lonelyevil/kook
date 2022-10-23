@@ -104,6 +104,26 @@ func (s *Session) MessageList(targetID string, options ...MessageListOption) (ms
 	return ms, nil
 }
 
+// MessageView returns a detailed message.
+//
+// FYI: https://developer.kookapp.cn/doc/http/message#%E8%8E%B7%E5%8F%96%E9%A2%91%E9%81%93%E8%81%8A%E5%A4%A9%E6%B6%88%E6%81%AF%E8%AF%A6%E6%83%85
+func (s *Session) MessageView(msgId string) (m *DetailedChannelMessage, err error) {
+	var response []byte
+	u, _ := url.Parse(EndpointChannelView)
+	q := u.Query()
+	q.Add("msg_id", msgId)
+	u.RawQuery = q.Encode()
+	response, err = s.Request("GET", u.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(response, &m)
+	if err != nil {
+		return nil, err
+	}
+	return
+}
+
 // MessageCreateBase is the common arguments for message creation.
 type MessageCreateBase struct {
 	Type     MessageType `json:"type,omitempty"`
