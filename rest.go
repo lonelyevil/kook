@@ -76,6 +76,13 @@ func MessageListWithFlag(flag MessageListFlag) MessageListOption {
 	}
 }
 
+// MessageListWithPageSize adds optional `page_size` argument to MessageList request.
+func MessageListWithPageSize(size int) MessageListOption {
+	return func(values url.Values) {
+		values.Set("page_size", strconv.Itoa(size))
+	}
+}
+
 // MessageList returns a list of messages of a channel.
 // FYI: https://developer.kookapp.cn/doc/http/message#%E8%8E%B7%E5%8F%96%E9%A2%91%E9%81%93%E8%81%8A%E5%A4%A9%E6%B6%88%E6%81%AF%E5%88%97%E8%A1%A8
 func (s *Session) MessageList(targetID string, options ...MessageListOption) (ms []*DetailedChannelMessage, err error) {
