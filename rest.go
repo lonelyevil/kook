@@ -116,7 +116,7 @@ func (s *Session) MessageList(targetID string, options ...MessageListOption) (ms
 // FYI: https://developer.kookapp.cn/doc/http/message#%E8%8E%B7%E5%8F%96%E9%A2%91%E9%81%93%E8%81%8A%E5%A4%A9%E6%B6%88%E6%81%AF%E8%AF%A6%E6%83%85
 func (s *Session) MessageView(msgId string) (m *DetailedChannelMessage, err error) {
 	var response []byte
-	u, _ := url.Parse(EndpointChannelView)
+	u, _ := url.Parse(EndpointMessageView)
 	q := u.Query()
 	q.Add("msg_id", msgId)
 	u.RawQuery = q.Encode()
@@ -1666,7 +1666,7 @@ func (s *Session) request(method, url string, data interface{}, sequence int) (r
 			}
 		}
 	}
-	//s.log(LogTrace, "Api Request %s %s\n", method, url)
+	// s.log(LogTrace, "Api Request %s %s\n", method, url)
 	e := s.Logger.Trace().Str("method", method).Str("url", url)
 	e = addCaller(e)
 	if len(body) != 0 {
@@ -1688,7 +1688,7 @@ func (s *Session) request(method, url string, data interface{}, sequence int) (r
 	e = addCaller(s.Logger.Trace())
 	for k, v := range req.Header {
 		e = e.Strs(k, v)
-		//s.log(LogTrace, "Api Request Header %s = %+v\n", k, v)
+		// s.log(LogTrace, "Api Request Header %s = %+v\n", k, v)
 	}
 	e.Msg("http api request headers")
 	resp, err := s.Client.Do(req)
@@ -1700,7 +1700,7 @@ func (s *Session) request(method, url string, data interface{}, sequence int) (r
 		err2 := resp.Body.Close()
 		if err2 != nil {
 			addCaller(s.Logger.Error()).Msg("error closing resp body")
-			//s.log(LogError, "error closing resp body")
+			// s.log(LogError, "error closing resp body")
 		}
 	}()
 
@@ -1715,25 +1715,25 @@ func (s *Session) request(method, url string, data interface{}, sequence int) (r
 		Str("status", resp.Status).
 		Bytes("body", respByte).
 		Msg("http response")
-	//s.log(LogTrace, "Api Response Status %s\n", resp.Status)
+	// s.log(LogTrace, "Api Response Status %s\n", resp.Status)
 	e = s.Logger.Trace()
 	e = addCaller(e)
 	for k, v := range resp.Header {
 		e = e.Strs(k, v)
-		//s.log(LogTrace, "Api Response Header %s = %+v\n", k, v)
+		// s.log(LogTrace, "Api Response Header %s = %+v\n", k, v)
 	}
 	e.Msg("http response headers")
-	//s.log(LogTrace, "Api Response Body %s", respByte)
+	// s.log(LogTrace, "Api Response Body %s", respByte)
 	var r EndpointGeneralResponse
 	err = json.Unmarshal(respByte, &r)
 	if err != nil {
 		addCaller(s.Logger.Error()).Err("err", err).Msg("response unmarshal error")
-		//s.log(LogError, "Api Response Unmarshal Error %s", err)
+		// s.log(LogError, "Api Response Unmarshal Error %s", err)
 		return
 	}
 	if r.Code != 0 {
 		addCaller(s.Logger.Error()).Int("code", r.Code).Str("error_msg", r.Message).Msg("api response error")
-		//s.log(LogError, "Api Response Error Code %d, Message %s", r.Code, r.Message)
+		// s.log(LogError, "Api Response Error Code %d, Message %s", r.Code, r.Message)
 		return nil, newRestErrorFromGeneralResp(&r)
 	}
 	response = r.Data
