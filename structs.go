@@ -88,25 +88,25 @@ const (
 
 // User is the struct for a user. Some property may missing.
 type User struct {
-	ID             string         `json:"id"`
-	Username       string         `json:"username"`
-	IdentifyNum    string         `json:"identify_num"`
-	Online         bool           `json:"online"`
-	Status         UserStatus     `json:"status"`
-	Avatar         string         `json:"avatar"`
-	VipAvatar      string         `json:"vip_avatar"`
-	Bot            bool           `json:"bot"`
-	MobileVerified bool           `json:"mobile_verified"`
-	System         bool           `json:"system"`
-	MobilePrefix   string         `json:"mobile_prefix"`
-	Mobile         string         `json:"mobile"`
-	InviteCount    int64          `json:"invite_count"`
-	Nickname       string         `json:"nickname"`
-	Roles          []int64        `json:"roles"`
-	FullName       string         `json:"full_name"`
-	IsVip          bool           `json:"is_vip"`
-	JoinedAt       MilliTimeStamp `json:"joined_at"`
-	ActiveTime     MilliTimeStamp `json:"active_time"`
+	ID          string     `json:"id"`
+	Username    string     `json:"username"`
+	IdentifyNum string     `json:"identify_num"`
+	Online      bool       `json:"online"`
+	Status      UserStatus `json:"status"`
+	Avatar      string     `json:"avatar"`
+	VipAvatar   string     `json:"vip_avatar"`
+	Bot         bool       `json:"bot"`
+	// MobileVerified bool           `json:"mobile_verified"`
+	System       bool           `json:"system"`
+	MobilePrefix string         `json:"mobile_prefix"`
+	Mobile       string         `json:"mobile"`
+	InviteCount  int64          `json:"invite_count"`
+	Nickname     string         `json:"nickname"`
+	Roles        []int64        `json:"roles"`
+	FullName     string         `json:"full_name"`
+	IsVip        bool           `json:"is_vip"`
+	JoinedAt     MilliTimeStamp `json:"joined_at"`
+	ActiveTime   MilliTimeStamp `json:"active_time"`
 }
 
 // Guild is the struct for a server/guild(服务器).
