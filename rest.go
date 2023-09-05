@@ -971,6 +971,71 @@ func (s *Session) GuildMuteDelete(gms *GuildMuteSetting) (err error) {
 	return err
 }
 
+// GuildBoostHistoryOption is the optional arguments for GuildBoostHistory requests.
+type GuildBoostHistoryOption func(values url.Values)
+
+// GuildBoostHistoryWithStartTime adds optional `start_time` argument to GuildBoostHistory request.
+func GuildBoostHistoryWithStartTime(t int64) GuildBoostHistoryOption {
+	return func(values url.Values) {
+		values.Set("start_time", strconv.FormatInt(t, 10))
+	}
+}
+
+// GuildBoostHistoryWithEndTime adds optional `end_time` argument to GuildBoostHistory request.
+func GuildBoostHistoryWithEndTime(t int64) GuildBoostHistoryOption {
+	return func(values url.Values) {
+		values.Set("end_time", strconv.FormatInt(t, 10))
+	}
+}
+
+// GuildBoostHistoryItem is the historical supporter' info.
+type GuildBoostHistoryItem struct {
+	UserID    string         `json:"user_id"`
+	GuildID   string         `json:"guild_id"`
+	StartTime MilliTimeStamp `json:"start_time"`
+	EndTime   MilliTimeStamp `json:"end_time"`
+	User      *User          `json:"user"`
+}
+
+// GuildBoostHistory returns the boost history.
+// FYI: https://developer.kookapp.cn/doc/http/guild#%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%8A%A9%E5%8A%9B%E5%8E%86%E5%8F%B2
+func (s *Session) GuildBoostHistory(guildID string, page *PageSetting, options ...GuildBoostHistoryOption) (hs []*GuildBoostHistoryItem, meta *PageInfo, err error) {
+	var resp []byte
+	u, _ := url.Parse(EndpointGuildBoostHistory)
+	q := u.Query()
+	q.Set("guild_id", guildID)
+	for _, item := range options {
+		item(q)
+	}
+	if page != nil {
+		if page.Page != nil {
+			q.Add("page", strconv.Itoa(*page.Page))
+		}
+		if page.PageSize != nil {
+			q.Add("page_size", strconv.Itoa(*page.PageSize))
+		}
+		if page.Sort != nil {
+			q.Add("sort", *page.Sort)
+		}
+	}
+	u.RawQuery = q.Encode()
+	resp, err = s.Request("GET", u.String(), nil)
+	if err != nil {
+		return nil, nil, err
+	}
+	g := &GeneralListData{}
+	err = json.Unmarshal(resp, g)
+	if err != nil {
+		return nil, nil, err
+	}
+	err = json.Unmarshal(g.Items, &hs)
+	if err != nil {
+		return nil, nil, err
+	}
+	return hs, &g.Meta, nil
+
+}
+
 // GuildRoleList returns the roles in a guild.
 // FYI: https://developer.kookapp.cn/doc/http/guild-role#%E8%8E%B7%E5%8F%96%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%A7%92%E8%89%B2%E5%88%97%E8%A1%A8
 func (s *Session) GuildRoleList(guildID string, page *PageSetting) (rs []*Role, meta *PageInfo, err error) {
