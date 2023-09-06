@@ -1569,6 +1569,7 @@ type Game struct {
 // GameListOption is the type for optional arguments for GameList request.
 type GameListOption func(values url.Values)
 
+// GameListWithType filters the type of game in GameList request.
 func GameListWithType(t GameType) GameListOption {
 	return func(values url.Values) {
 		values.Set("type", strconv.Itoa(int(t)))
