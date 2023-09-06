@@ -458,6 +458,15 @@ func (s *Session) ChannelRoleDelete(crd *ChannelRoleDelete) (err error) {
 	return err
 }
 
+// ChannelRoleSync syncs the roles' permissions.
+// FYI: https://developer.kookapp.cn/doc/http/channel#%E5%90%8C%E6%AD%A5%E9%A2%91%E9%81%93%E8%A7%92%E8%89%B2%E6%9D%83%E9%99%90
+func (s *Session) ChannelRoleSync(cid string) (err error) {
+	_, err = s.Request("POST", EndpointChannelRoleDelete, struct {
+		ChannelID string `json:"channel_id"`
+	}{cid})
+	return err
+}
+
 // UserInVoiceChannel is a user in a voice channel
 type UserInVoiceChannel struct {
 	ID                   string                    `json:"id"`
