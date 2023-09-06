@@ -312,6 +312,34 @@ func (s *Session) ChannelCreate(cc *ChannelCreate) (c *Channel, err error) {
 	return c, err
 }
 
+// ChannelUpdate is the arguments for updating a channel's settings.
+type ChannelUpdate struct {
+	ChannelID    string `json:"channel_id"`
+	Name         string `json:"name,omitempty"`
+	Level        int    `json:"level,omitempty"`
+	ParentID     string `json:"parent_id,omitempty"`
+	Topic        string `json:"topic,omitempty"`
+	SlowMode     int    `json:"slow_mode,omitempty"`
+	LimitAmount  int    `json:"limit_amount,omitempty"`
+	VoiceQuality string `json:"voice_quality,omitempty"`
+	Password     string `json:"password,omitempty"`
+}
+
+// ChannelUpdate updates a channel's settings.
+// FYI: https://developer.kookapp.cn/doc/http/channel#%E7%BC%96%E8%BE%91%E9%A2%91%E9%81%93
+func (s *Session) ChannelUpdate(cu *ChannelUpdate) (c *Channel, err error) {
+	var response []byte
+	response, err = s.Request("POST", EndpointChannelUpdate, cu)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(response, &c)
+	if err != nil {
+		return nil, err
+	}
+	return c, err
+}
+
 // ChannelDelete deletes a channel.
 // FYI: https://developer.kookapp.cn/doc/http/channel#%E5%88%A0%E9%99%A4%E9%A2%91%E9%81%93
 func (s *Session) ChannelDelete(channelID string) (err error) {
