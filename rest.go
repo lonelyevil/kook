@@ -1566,10 +1566,25 @@ type Game struct {
 	Icon        string   `json:"icon"`
 }
 
+// GameListOption is the type for optional arguments for GameList request.
+type GameListOption func(values url.Values)
+
+func GameListWithType(t GameType) GameListOption {
+	return func(values url.Values) {
+		values.Set("type", strconv.Itoa(int(t)))
+	}
+}
+
 // GameList lists the games registered.
-func (s *Session) GameList(page *PageSetting) (gs []*Game, meta *PageInfo, err error) {
+func (s *Session) GameList(page *PageSetting, options ...GameListOption) (gs []*Game, meta *PageInfo, err error) {
 	var resp []byte
-	resp, meta, err = s.RequestWithPage("GET", EndpointGame, page)
+	ur, _ := url.Parse(EndpointGame)
+	q := ur.Query()
+	for _, item := range options {
+		item(q)
+	}
+	ur.RawQuery = q.Encode()
+	resp, meta, err = s.RequestWithPage("GET", ur.String(), page)
 	if err != nil {
 		return nil, nil, err
 	}
