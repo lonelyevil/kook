@@ -107,6 +107,8 @@ type User struct {
 	IsVip        bool           `json:"is_vip"`
 	JoinedAt     MilliTimeStamp `json:"joined_at"`
 	ActiveTime   MilliTimeStamp `json:"active_time"`
+	Os           string         `json:"os"`
+	Banner       string         `json:"banner"`
 }
 
 // Guild is the struct for a server/guild(服务器).
