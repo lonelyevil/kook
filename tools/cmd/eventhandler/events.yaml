@@ -69,6 +69,10 @@ templates:
       Author: User
       Kmarkdown: Kmarkdown
       Quote: '*Quote'
+  EmojiItem:
+    body:
+      ID: str
+      Name: str
 events:
   updated_guild:
     name: GuildUpdate
@@ -214,6 +218,15 @@ events:
       TargetID: str
       GuildID: str
       UserInfo: User
+  added_emoji:
+    name: EmojiAdded
+    template: EmojiItem
+  updated_emoji:
+    name: EmojiAdded
+    template: EmojiItem
+  removed_emoji:
+    name: EmojiAdded
+    template: EmojiItem
   1:
     name: TextMessage
     body:
