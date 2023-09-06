@@ -990,11 +990,11 @@ func GuildBoostHistoryWithEndTime(t int64) GuildBoostHistoryOption {
 
 // GuildBoostHistoryItem is the historical supporter' info.
 type GuildBoostHistoryItem struct {
-	UserID    string         `json:"user_id"`
-	GuildID   string         `json:"guild_id"`
-	StartTime MilliTimeStamp `json:"start_time"`
-	EndTime   MilliTimeStamp `json:"end_time"`
-	User      *User          `json:"user"`
+	UserID    string `json:"user_id"`
+	GuildID   string `json:"guild_id"`
+	StartTime int64  `json:"start_time"`
+	EndTime   int64  `json:"end_time"`
+	User      *User  `json:"user"`
 }
 
 // GuildBoostHistory returns the boost history.
