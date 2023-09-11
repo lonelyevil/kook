@@ -402,6 +402,7 @@ type DetailedChannelMessage struct {
 		MentionPart     []*User `json:"mention_part"`
 		MentionRolePart []*Role `json:"mention_role_part"`
 	} `json:"mention_info"`
+	ChannelID string `json:"channel_id"`
 }
 
 // ReactionItem is the reactions for a emoji to a message.
