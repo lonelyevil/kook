@@ -268,13 +268,28 @@ func (s *Session) ChannelList(guildID string, page *PageSetting) (cs []*Channel,
 	return cs, meta, nil
 }
 
+// ChannelViewOption is the type for optional arguments for ChannelView request.
+type ChannelViewOption func(values url.Values)
+
+// ChannelViewWithNeedChildren adds optional `need_children` argument to ChannelView request.
+func ChannelViewWithNeedChildren(needChildren bool) ChannelViewOption {
+	return func(values url.Values) {
+		if needChildren {
+			values.Set("need_children", "1")
+		}
+	}
+}
+
 // ChannelView returns the detailed information for a channel.
 // FYI: https://developer.kookapp.cn/doc/http/channel#%E8%8E%B7%E5%8F%96%E9%A2%91%E9%81%93%E8%AF%A6%E6%83%85
-func (s *Session) ChannelView(channelID string) (c *Channel, err error) {
+func (s *Session) ChannelView(channelID string, options ...ChannelViewOption) (c *Channel, err error) {
 	var response []byte
 	u, _ := url.Parse(EndpointChannelView)
 	q := u.Query()
 	q.Set("target_id", channelID)
+	for _, item := range options {
+		item(q)
+	}
 	u.RawQuery = q.Encode()
 	response, err = s.Request("GET", u.String(), nil)
 	if err != nil {
