@@ -197,6 +197,7 @@ type Channel struct {
 	ServerURL            string                    `json:"server_url"`
 	HasPassword          bool                      `json:"has_password"`
 	VoiceQuality         string                    `json:"voice_quality"`
+	Children             []string                  `json:"children"`
 }
 
 // PermissionOverwrite is the struct for where needs to customize permission for a role in a channel.
