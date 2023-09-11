@@ -661,6 +661,23 @@ func (s *Session) DirectMessageList(options ...DirectMessageListOption) (dmrs []
 	return dmrs, nil
 }
 
+// DirectMessageView returns the specified message.
+// FYI: https://developer.kookapp.cn/doc/http/direct-message#%E8%8E%B7%E5%8F%96%E7%A7%81%E4%BF%A1%E8%81%8A%E5%A4%A9%E6%B6%88%E6%81%AF%E8%AF%A6%E6%83%85
+func (s *Session) DirectMessageView(chatCode, msgID string) (dmr *DirectMessageResp, err error) {
+	var response []byte
+	u, _ := url.Parse(EndpointDirectMessageView)
+	q := u.Query()
+	q.Set("chat_code", chatCode)
+	q.Set("msg_id", msgID)
+	u.RawQuery = q.Encode()
+	response, err = s.Request("GET", u.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+	err = json.Unmarshal(response, &dmr)
+	return
+}
+
 // DirectMessageCreate is the struct for settings of creating a message in direct chat.
 type DirectMessageCreate struct {
 	MessageCreateBase

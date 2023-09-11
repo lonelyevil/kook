@@ -73,6 +73,7 @@ var (
 	EndpointUserChatDelete = urlJoin(EndpointUserChat, "delete")
 
 	EndpointDirectMessageList           = urlJoin(EndpointDirectMessage, "list")
+	EndpointDirectMessageView           = urlJoin(EndpointDirectMessage, "view")
 	EndpointDirectMessageCreate         = urlJoin(EndpointDirectMessage, "create")
 	EndpointDirectMessageUpdate         = urlJoin(EndpointDirectMessage, "update")
 	EndpointDirectMessageDelete         = urlJoin(EndpointDirectMessage, "delete")
