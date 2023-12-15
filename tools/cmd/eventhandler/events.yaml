@@ -222,10 +222,10 @@ events:
     name: EmojiAdded
     template: EmojiItem
   updated_emoji:
-    name: EmojiAdded
+    name: EmojiUpdated
     template: EmojiItem
   removed_emoji:
-    name: EmojiAdded
+    name: EmojiRemoved
     template: EmojiItem
   1:
     name: TextMessage
