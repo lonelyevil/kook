@@ -309,7 +309,7 @@ func (c CardMessageInvite) MarshalJSON() ([]byte, error) {
 	return json.Marshal(struct {
 		Type string `json:"type"`
 		fakeCardMessageInvite
-	}{"container", fakeCardMessageInvite(c)})
+	}{"invite", fakeCardMessageInvite(c)})
 }
 
 // CardMessageElementText is the type for 元素-普通文本.
